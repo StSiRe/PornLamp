@@ -1,4 +1,6 @@
 
+#include "Strip.h"
+
 #define stripPinR 15
 #define stripPinG 16
 #define stripPinB 18
@@ -12,10 +14,12 @@ enum channels
 
 void setup() 
 {
-    ledcsetup(0, stripFrequency, stripResolution);
     ledcAttachPin(stripPinR,RED);
     ledcAttachPin(stripPinG,GREEN);
     ledcAttachPin(stripPinB,BLUE);
+    ledcSetup(RED, stripFrequency, stripResolution);
+    ledcSetup(GREEN, stripFrequency, stripResolution);
+    ledcSetup(BLUE, stripFrequency, stripResolution);
 }
 
 void loop() {
