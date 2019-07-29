@@ -7,23 +7,19 @@
 #define stripFrequency 5000
 #define stripResolution 8
 
-enum channels 
-{
-  RED, GREEN, BLUE
-};
+Strip strip(stripPinR, stripPinG, stripPinB);
 
 void setup() 
 {
-    ledcAttachPin(stripPinR,RED);
-    ledcAttachPin(stripPinG,GREEN);
-    ledcAttachPin(stripPinB,BLUE);
-    ledcSetup(RED, stripFrequency, stripResolution);
-    ledcSetup(GREEN, stripFrequency, stripResolution);
-    ledcSetup(BLUE, stripFrequency, stripResolution);
+    strip.Init(stripFrequency,stripResolution);
 }
 
-void loop() {
-  ledcWrite(RED,255);
-  ledcWrite(GREEN,255);
-  ledcWrite(BLUE,255);
+void loop() 
+{
+  strip.setRGB(0xFF,0xFF,0xFF);
+  unsigned long curTime = millis();
+  while(millis() - curTime < 1000);
+  strip.rainbow();
+  curTime = millis();
+  while(millis() - curTime < 26000);
 }
