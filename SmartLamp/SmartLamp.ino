@@ -5,18 +5,21 @@
 #define stripFrequency 5000
 #define stripResolution 8
 
+enum channels 
+{
+  RED, GREEN, BLUE
+};
+
 void setup() 
 {
     ledcsetup(0, stripFrequency, stripResolution);
-    ledcAttachPin(stripPinR,0);
-    ledcAttachPin(stripPinG,1);
-    ledcAttachPin(stripPinB,2);
-    // ноль в обоих местах канал шим. Отдельную переменную не выделяю так как шим 
-    //будет использоватся только один и поидее менять номер этого канала нам не прийдется
+    ledcAttachPin(stripPinR,RED);
+    ledcAttachPin(stripPinG,GREEN);
+    ledcAttachPin(stripPinB,BLUE);
 }
 
 void loop() {
-  ledcWrite(0,255);
-  ledcWrite(1,255);
-  ledcWrite(2,255);
+  ledcWrite(RED,255);
+  ledcWrite(GREEN,255);
+  ledcWrite(BLUE,255);
 }
