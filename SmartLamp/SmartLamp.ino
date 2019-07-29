@@ -1,10 +1,16 @@
-void setup() {
-  // put your setup code here, to run once:
-//Fuuuuuck!
-//Trash
+
+#define stripPin 5
+#define stripFrequency 10000
+#define stripResolution 8
+
+void setup() 
+{
+    ledcsetup(0, stripFrequency, stripResolution);
+    ledcAttachPin(stripPin,0);
+    // ноль в обоих местах канал шим. Отдельную переменную не выделяю так как шим 
+    //будет использоватся только один и поидее менять номер этого канала нам не прийдется
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+  ledcWrite(0,255);
 }
