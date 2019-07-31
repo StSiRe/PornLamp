@@ -7,7 +7,7 @@ class Strip
 {
   public:
     //***********ИНИЦИАЛИЗАЦИЯ***********
-    Strip(byte stripPinR, byte stripPinG, byte stripPinB); // 
+    Strip(byte stripPinR, byte stripPinG, byte stripPinB); // конструктор принимает управляющие пины
     void Init(int stripFrequency, byte stripResolution); // инициализация основных настроек ленты
     
     //*********СЛУЖЕБНЫЕ_ФУНКЦИИ*********
@@ -17,6 +17,7 @@ class Strip
 
     //*************ЭФФЕКТЫ***************
     void rainbow(int delayTime = 100);
+    void sunrise();
   private:
     void hueToRGB(uint8_t hue, uint8_t brightness); // функция преобразования цветовых стандартов
     bool readyToWork; // флаг готовности ленты для работы

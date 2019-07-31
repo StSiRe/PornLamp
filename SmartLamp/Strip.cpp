@@ -111,7 +111,38 @@ void Strip::rainbow(int delayTime)
   for (byte color = 0; color < 255; color++) 
   {    
     setHUE(color, 255); 
-    unsigned long curTime = millis();
-    while(millis() - curTime < delayTime);
+    vTaskDelay(delayTime);
   };
 }
+
+void Strip::sunrise()
+{
+  
+  for(int brt = 0; brt <= 255; brt++)
+  {
+     setRGB(brt,min(brt,200),0);
+     delay(50);
+  }
+  for(byte brt = 0; brt <= 255; brt++)
+  {
+     setRGB(0xFF,min(200 + brt, 255),brt);
+     //strip.setRGB(0xFF,0xC8,0x00);
+     delay(100);
+  }
+  delay(10000);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
