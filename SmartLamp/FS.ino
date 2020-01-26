@@ -7,7 +7,7 @@ void FS_init(void) {
 }
 }
 
-
+/*
 bool loadConfig() {
   // Открываем файл для чтения
   File configFile = SPIFFS.open("/config.json", "r");
@@ -62,4 +62,4 @@ bool saveConfig() {
   // Записываем строку json в файл 
   json.printTo(configFile);
   return true;
-  }
+  }*/

@@ -11,7 +11,7 @@ void initWiFi()
   else
   {
     connectWiFi();
-    strip.rainbow();
+    //Matrix
   }
 }
 bool connectWiFi()
