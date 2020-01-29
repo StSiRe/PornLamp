@@ -1,31 +1,26 @@
-#include <Arduino.h>
 #include <FastLED.h>
-
 #define BRIGHTNESS 64
 #define COLOR_ORDER GRB
-#define CHIPSET WS2811
+#define CHIPSET WS2812
 #define LED_PIN 12
 
-const uint8_t Height = 16;
-const uint8_t Width = 16;
+const int Height = 16;
+const int Width = 16;
 #define NUM_LEDS (Width * Height)
 const bool  MatrixSerpentineLayout = true;
 CRGB leds_plus_safety_pixel[ NUM_LEDS + 1];
-CRGB* const leds( leds_plus_safety_pixel + 1);
+CRGB* const leds(leds_plus_safety_pixel + 1);
 
-//--------------------SPIZJENO---------------------
-uint16_t XY( uint8_t x, uint8_t y)
+int XY( int x, int y)
 {
-  uint16_t i;
-  
+  int i;  
   if( MatrixSerpentineLayout == false) {
     i = (y * Width) + x;
   }
-
   if( MatrixSerpentineLayout == true) {
     if( y & 0x01) {
       // Odd rows run backwards
-      uint8_t reverseX = (Width - 1) - x;
+      int reverseX = (Width - 1) - x;
       i = (y * Width) + reverseX;
     } else {
       // Even rows run forwards
@@ -34,13 +29,17 @@ uint16_t XY( uint8_t x, uint8_t y)
   }
   return i;
 }
-//------------------------------------------
 
 void initMatrix()
 {
   FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalSMD5050);
   FastLED.setBrightness(BRIGHTNESS);
 }
+
+
+
+
+
 
 void WiFiConnectionProcess() //two blue stripes moves from border to center
 {
@@ -70,7 +69,6 @@ void WiFiConnectionProcess() //two blue stripes moves from border to center
     delay(1);
   }
 }
-
 void WiFiConnectionSuccess()//green space expending to center
 {
   FastLED.clear();
@@ -93,12 +91,28 @@ void WiFiConnectionSuccess()//green space expending to center
   FastLED.clear();
   FastLED.show();
 }
-
-void Start()
+void LampOn()
 {
   FastLED.clear();
   FastLED.show();
-  for(int i = Height - 1; i >= 0; i--)
+  for(int i = Height; i > 0; i--)
+  {
+    for(int j = 0; j < Width; j++)
+    {
+      leds[XY(i,j)] = CRGB::White;
+    }
+    FastLED.show();
+    delay(150);
+  }
+  delay(500); 
+  FastLED.clear();
+  FastLED.show();
+}
+void LampOff()
+{
+  FastLED.clear();
+  FastLED.show();
+  for(int i = 0; i > Height; i++)
   {
     for(int j = 0; j < Width; j++)
     {
@@ -110,20 +124,4 @@ void Start()
   delay(1500); 
   FastLED.clear();
   FastLED.show();
-}
-
-
-
-void setup() {
-  initMatrix();
-}
-
-void loop() {
-  Start();
-  delay(1000);
-  WiFiConnectionProcess();
-  WiFiConnectionProcess();
-  WiFiConnectionProcess();
-  WiFiConnectionSuccess();
-  delay(2000);
 }

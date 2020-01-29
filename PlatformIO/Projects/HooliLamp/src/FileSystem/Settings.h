@@ -1,8 +1,19 @@
 bool getWiFiConfigState()
 {
-    return false;
+    return true;
 }
-void setWiFiConfigState()
+
+//0- non initialization; 1- setup complete
+void setWiFiConfigState(int state)
 {
     //anything
+}
+void setWiFiSettings(String ssid,String password)
+{
+
+}
+
+void saveSettings()
+{
+
 }

@@ -1,5 +1,6 @@
 #include<WiFi.h>
 #include<SPIFFS.h>
+#include<FileSystem/Settings.h>
 
 #include<ESPAsyncWebServer.h>
 AsyncWebServer server(80);
@@ -9,7 +10,8 @@ extern void WriteLine(String text);
 extern char* ToChar(String command);
 extern bool Debug;
 extern String Ssid,Password;
-
+extern void setWiFiSettings(String ssid,String password);
+extern void Reset();
 //Создает точку доступа для первичной настройки
 void CreateAP(String ssid,String password)
 {
@@ -47,6 +49,9 @@ void InitServer()
           Password = request->getParam("password")->value();
         }
         WriteLine(Password);   
+        setWiFiConfigState(1);
+        setWiFiSettings(Ssid,Password);
+        Reset();
     });
 
     server.begin();

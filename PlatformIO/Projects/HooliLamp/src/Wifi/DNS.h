@@ -1,5 +1,5 @@
 #include<ESPmDNS.h>
-extern void WriteLine(String text)
+extern void WriteLine(String text);
 //Инициализирует DNS сервер,и подключает к 80 порту
 bool ConfigMDNS()
 {

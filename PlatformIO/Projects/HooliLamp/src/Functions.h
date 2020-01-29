@@ -1,3 +1,6 @@
+extern void saveSettings();
+extern void CloseFS();
+extern void LampOff();
 bool Debug = true;
 //Выводит текст в консоль,если отладка разрешена
 void WriteLine(String text)
@@ -14,4 +17,16 @@ char* ToChar(String command){
         return p;
     }
     return NULL;
+}
+
+//Reboot with animation and saving data
+void Reset()
+{
+  LampOff();
+  WriteLine("Functions:Starting reboot procedure");
+  saveSettings();
+  CloseFS();
+  //ShowGoodbye animation
+  vTaskDelay(1000/15);
+  ESP.restart();
 }

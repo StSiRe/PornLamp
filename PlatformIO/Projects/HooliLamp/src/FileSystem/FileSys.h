@@ -19,3 +19,10 @@ void ConfigFS()
     WriteLine("Please upload the system files.");    
     //Надо будет сделать автоматическую загрузку с собственного сервера
 }
+
+void CloseFS()
+{
+    WriteLine("Closing FS");
+    SPIFFS.end();
+    WriteLine("FS is closed");
+}
