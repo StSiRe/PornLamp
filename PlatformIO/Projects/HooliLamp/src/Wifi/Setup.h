@@ -12,6 +12,8 @@ extern bool Debug;
 extern String Ssid,Password;
 extern void setWiFiSettings(String ssid,String password);
 extern void Reset();
+extern void WiFiConnectionProcess();
+extern void WiFiConnectionSuccess();
 //Создает точку доступа для первичной настройки
 void CreateAP(String ssid,String password)
 {

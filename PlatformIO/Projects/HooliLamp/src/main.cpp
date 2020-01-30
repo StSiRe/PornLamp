@@ -5,7 +5,7 @@
 #include<FileSystem/FileSys.h>
 #include<Wifi/Wifi.h>
 #include<Led/Display.h>
-
+#include<Led/Animations.h>
 //String Ssid="Hooli.Lamp",Password="12345678";
 String Ssid="520",Password="intel5689";
 
@@ -15,9 +15,11 @@ extern char* ToChar(String command);
 extern void ConfigFS();
 extern void WiFiStart();
 extern void initMatrix();
-extern void LampOn();
 
-extern void Fire();
+extern void LampOn();
+extern void ChangeAnimation(String animationName);
+
+
 void setup()
 {
   Serial.begin(115200);
@@ -31,5 +33,8 @@ void setup()
 
 void loop()
 {
-
+  ChangeAnimation("WiFiConnectionProcess");
+  vTaskDelay(2000/portTICK_PERIOD_MS);
+  ChangeAnimation("WiFiConnectionSuccess");
+  vTaskDelay(2000/portTICK_PERIOD_MS);
 }
