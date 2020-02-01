@@ -12,8 +12,10 @@ bool _updateRequied = false;
 String _currentAnimation = "";
 xTaskHandle Animation;
 
+#define BRIGHT_SPEED 5
+
 //Анимация при включении лампы
-void LampOn()
+void LampOff()
 {
   FastLED.clear();
   FastLED.show();
@@ -31,7 +33,7 @@ void LampOn()
   FastLED.show();
 }
 //Анимация при выключении лампы
-void LampOff()
+void LampOn()
 {
   FastLED.clear();
   FastLED.show();
@@ -48,7 +50,7 @@ void LampOff()
   FastLED.show();
 }
 //Анимация ожидания подключения к WiFi
-void WiFiConnectionProcess() //two blue stripes moves from border to center
+/*void WiFiConnectionProcess() //two blue stripes moves from border to center
 {
   FastLED.clear();
   for(int i = 1; i < Width - 1; i++)
@@ -91,6 +93,56 @@ void WiFiConnectionSuccess()//green space expending to center
 
       leds[XY(j,i)] = CRGB::Green;//--------------  Main stripe
       leds[XY(j,(Width-1) - i)] = CRGB::Green;
+    }
+    FastLED.show();
+    vTaskDelay(150/portTICK_RATE_MS);
+  }
+  vTaskDelay(1500/portTICK_RATE_MS);
+  FastLED.clear();
+  FastLED.show();
+}*/
+
+void WiFiConnectionProcess() //two blue stripes moves from border to center
+{
+  FastLED.clear();
+  for(int i = 0; i < Width; i++)
+  {
+    for(int j = 0; j < Height; j++)
+    {
+      for(int bright = 0; bright < 255; bright += BRIGHT_SPEED)
+      {
+        leds[XY(j,i)] = CHSV(165,255,bright);
+      }
+    }
+    FastLED.show();
+    vTaskDelay(25/portTICK_RATE_MS);
+    for(int j = 0; j < Height; j++)
+    {
+      for(int bright = 0; bright < 255; bright -= BRIGHT_SPEED)
+      {
+        leds[XY(j,i)] = CHSV(165,255,bright);
+      }
+    }
+    FastLED.show();
+    delay(1);
+  }
+}
+
+//Подключено к WiFi успешно
+void WiFiConnectionSuccess()//green space expending to center
+{
+  FastLED.clear();
+  FastLED.show();
+  for(int i = 0; i < Width/2; i++)
+  {
+    delay(1);
+    for(int j = 0; j < Height; j++)
+    {
+      for(int bright = 0; bright < 255; bright += BRIGHT_SPEED)
+      {
+        leds[XY(j,i)] = CHSV(90,255,bright);
+        leds[XY(j,(Width-1) - i)] = CHSV(90,255,bright);
+      }
     }
     FastLED.show();
     vTaskDelay(150/portTICK_RATE_MS);
