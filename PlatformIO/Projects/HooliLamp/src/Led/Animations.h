@@ -15,7 +15,7 @@ xTaskHandle Animation;
 #define BRIGHT_SPEED 5
 
 //Анимация при включении лампы
-void LampOff()
+void LampOn()
 {
   FastLED.clear();
   FastLED.show();
@@ -33,7 +33,7 @@ void LampOff()
   FastLED.show();
 }
 //Анимация при выключении лампы
-void LampOn()
+void LampOff()
 {
   FastLED.clear();
   FastLED.show();
@@ -107,20 +107,20 @@ void WiFiConnectionProcess() //two blue stripes moves from border to center
   FastLED.clear();
   for(int i = 0; i < Width; i++)
   {
-    for(int j = 0; j < Height; j++)
+    for(int bright = 0; bright < 0xFF; bright += BRIGHT_SPEED)
     {
-      for(int bright = 0; bright < 255; bright += BRIGHT_SPEED)
+      for(int j = 0; j < Height; j++)
       {
-        leds[XY(j,i)] = CHSV(165,255,bright);
+        leds[XY(j,i)] = CHSV(165,0xFF,bright);
       }
     }
     FastLED.show();
     vTaskDelay(25/portTICK_RATE_MS);
-    for(int j = 0; j < Height; j++)
+    for(int bright = 0; bright < 0xFF; bright -= BRIGHT_SPEED)
     {
-      for(int bright = 0; bright < 255; bright -= BRIGHT_SPEED)
+      for(int j = 0; j < Height; j++)
       {
-        leds[XY(j,i)] = CHSV(165,255,bright);
+        leds[XY(j,i)] = CHSV(165,0xFF,bright);
       }
     }
     FastLED.show();
@@ -136,20 +136,40 @@ void WiFiConnectionSuccess()//green space expending to center
   for(int i = 0; i < Width/2; i++)
   {
     delay(1);
-    for(int j = 0; j < Height; j++)
+    for(int bright = 0; bright < 0xFF; bright += BRIGHT_SPEED)
     {
-      for(int bright = 0; bright < 255; bright += BRIGHT_SPEED)
+      for(int j = 0; j < Height; j++)
       {
-        leds[XY(j,i)] = CHSV(90,255,bright);
-        leds[XY(j,(Width-1) - i)] = CHSV(90,255,bright);
+        leds[XY(j,i)] = CHSV(90,0xFF,bright);
+        leds[XY(j,(Width-1) - i)] = CHSV(90,0xFF,bright);
       }
+      FastLED.show();
+      vTaskDelay(1/portTICK_RATE_MS);
     }
-    FastLED.show();
     vTaskDelay(150/portTICK_RATE_MS);
   }
   vTaskDelay(1500/portTICK_RATE_MS);
   FastLED.clear();
   FastLED.show();
+}
+
+void Rainbow()
+{
+  for(short correction = 0 ; correction < 256; correction++)
+  {
+    for (short i = 0; i < Height; i++)
+    {
+      for(short hue = 0; hue < 0x10; hue++)
+      {
+        for(short j = 0; j < Width; j--)
+        {
+          leds[XY(i,j)] = CHSV(15*i + hue + correction ,0xFF,0xFF);
+        }
+        FastLED.show();
+        vTaskDelay(1/portTICK_RATE_MS);
+      }
+    }
+  }
 }
 
 void TaskAnimation(void *pvParameter)

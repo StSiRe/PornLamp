@@ -3,11 +3,12 @@
 #define COLOR_ORDER GRB
 #define CHIPSET WS2812
 #define LED_PIN 12
+#define NUM_LEDS (Width * Height)
 
 const int Height = 16;
 const int Width = 16;
-#define NUM_LEDS (Width * Height)
 const bool  MatrixSerpentineLayout = true;
+
 CRGB leds_plus_safety_pixel[ NUM_LEDS + 1];
 CRGB* const leds(leds_plus_safety_pixel + 1);
 
