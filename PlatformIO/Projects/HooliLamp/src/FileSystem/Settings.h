@@ -1,6 +1,6 @@
 bool getWiFiConfigState()
 {
-    return true;
+    return false;
 }
 
 //0- non initialization; 1- setup complete
