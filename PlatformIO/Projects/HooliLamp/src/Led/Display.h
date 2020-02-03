@@ -35,6 +35,11 @@ void initMatrix()
   FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalSMD5050);
   FastLED.setBrightness(BRIGHTNESS);
 }
+void SetBrightness(int brightness)
+{
+  FastLED.setBrightness(brightness);
+  FastLED.show();
+}
 
 
 
