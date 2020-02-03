@@ -1,5 +1,8 @@
 #include<FastLED.h>
 #include<Led/Fire.h>
+#include<Led/SystemAnimations.h>
+#include<string.h>
+
 
 extern CRGB leds_plus_safety_pixel[];
 extern CRGB* const leds;
@@ -7,115 +10,101 @@ extern const int Height;
 extern const int Width;
 extern int XY(int x,int y);
 extern void fireRoutine();
-#define BRIGHT_SPEED 5
+extern void LampOn();
+extern void LampOff();
+extern void WiFiConnectionProcess();
+extern void WiFiConnectionSuccess();
+extern void WriteLine(String text);
 
 String _currentAnimation = "";
-int currentAnimationNum =  0;
+int currentAnimationNum =  10;
 xTaskHandle Animation;
+String AnimationModes[]  = {
+    "LampOn",
+    "LampOff",
+    "WiFiConnectionProcess",
+    "WiFiConnectionSuccess",
+    "Fire",
+    "Rainbow"
+};
 
-//Анимация при включении лампы
-void LampOn()
-{
-  FastLED.clear();
-  FastLED.show();
-  for(int i = Height; i >= 0; i--)
-  {
-    for(int j = 0; j < Width; j++)
-    {
-      leds[XY(i,j)] = CRGB::White;
-    }
-    FastLED.show();
-    vTaskDelay(150/portTICK_RATE_MS);
-  }
-  vTaskDelay(2000/portTICK_RATE_MS);
-  FastLED.clear();
-  FastLED.show();
-}
-//Анимация при выключении лампы
-void LampOff()
-{
-  FastLED.clear();
-  FastLED.show();
-  for(int i = 0; i >= Height; i++)
-  {
-    for(int j = 0; j < Width; j++)
-    {
-      leds[XY(i,j)] = CRGB::White;
-    }
-    FastLED.show();
-    vTaskDelay(150/portTICK_RATE_MS);
-  }
-  FastLED.clear();
-  FastLED.show();
-}
-void WiFiConnectionProcess() //two blue stripes moves from border to center
-{
-  FastLED.clear();
-  for(int i = 0; i < Width; i++)
-  {
-    for(int bright = 0; bright < 0xFF; bright += BRIGHT_SPEED)
-    {
-      for(int j = 0; j < Height; j++)
-      {
-        leds[XY(j,i)] = CHSV(165,0xFF,bright);
-      }
-    }
-    FastLED.show();
-    vTaskDelay(25/portTICK_RATE_MS);
-    for(int bright = 0; bright < 0xFF; bright -= BRIGHT_SPEED)
-    {
-      for(int j = 0; j < Height; j++)
-      {
-        leds[XY(j,i)] = CHSV(165,0xFF,bright);
-      }
-    }
-    FastLED.show();
-    delay(1);
-  }
-}
-
-//Подключено к WiFi успешно
-void WiFiConnectionSuccess()//green space expending to center
-{
-  FastLED.clear();
-  FastLED.show();
-  for(int i = 0; i < Width/2; i++)
-  {
-    delay(1);
-    for(int bright = 0; bright < 0xFF; bright += BRIGHT_SPEED)
-    {
-      for(int j = 0; j < Height; j++)
-      {
-        leds[XY(j,i)] = CHSV(90,0xFF,bright);
-        leds[XY(j,(Width-1) - i)] = CHSV(90,0xFF,bright);
-      }
-      FastLED.show();
-      vTaskDelay(1/portTICK_RATE_MS);
-    }
-    vTaskDelay(150/portTICK_RATE_MS);
-  }
-  vTaskDelay(1500/portTICK_RATE_MS);
-  FastLED.clear();
-  FastLED.show();
-}
-
-void RainbowV()
-{
-  for(short correction = 0 ; correction < 256; correction++)
-  {
-    for (short i = 0; i < Height; i++)
-    {
-      for(short hue = 0; hue < 0x10; hue++)
-      {
-        for(short j = 0; j < Width; j--)
+void fadeScreen()
+{ 
+    for(int k =0;k<16;k++)
+    {  
+        for(int i=0;i< Width;i++)
         {
-          leds[XY(i,j)] = CHSV(15*i + hue + correction ,0xFF,0xFF);
+            for(int j=0;j< Height;j++)
+            {
+                if(leds[XY(i,j)].r >= 40 || leds[XY(i,j)].g >= 40 || leds[XY(i,j)].b >= 40) 
+                {
+                    leds[XY(i,j)].fadeToBlackBy(16);
+                }
+                else
+                {
+                    leds[XY(i,j)] = 0;
+                }   
+            }
         }
         FastLED.show();
         vTaskDelay(1/portTICK_RATE_MS);
-      }
     }
+}
+void Sparks() {
+  for (byte i = 0; i < 40; i++) {
+    byte x = random(0, Width);
+    byte y = random(0, Height);
+    if (leds[XY(x,y)] == CRGB(0,0,0))
+      leds[getPixelNumber(x, y)] = CHSV(random(0, 255), 255, 255);
+      delay(5);
+    FastLED.show();
   }
+  fadeScreen();
+}
+
+//Для анимаций типа хуя
+byte hue;
+//Горизонтальная радуга 
+void RainbowH()
+{    
+  hue += 2;
+  for (byte j = 0; j < Height; j++) 
+  {
+    CHSV thisColor = CHSV((byte)(hue + j * 30), 255, 255);
+    for (byte i = 0; i < Width; i++)
+      leds[XY(i,j)] = thisColor;
+  }
+  FastLED.show();
+  delay(10);
+}
+//Вертикальная радуга
+void RainbowV()
+{    
+  hue += 2;
+  for (byte j = 0; j < Height; j++) 
+  {
+    CHSV thisColor = CHSV((byte)(hue + j * 30), 255, 255);
+    for (byte i = 0; i < Width; i++)
+      leds[XY(j,i)] = thisColor;
+  }
+  FastLED.show();
+  delay(10);
+}
+//хуя анимация для всей матрицы
+void HueAnimation()
+{
+    for(int hue;hue< 256;hue++)
+    {
+        for(int i=0;i<Height;i++)
+        {
+            for(int j=0;j< Width;j++)
+            {
+                leds[XY(j,i)] = CHSV(hue,255,255);
+            }
+        }
+        FastLED.show();
+        delay(25);
+    }
 }
 
 void TaskAnimation(void *pvParameter)
@@ -128,25 +117,29 @@ void TaskAnimation(void *pvParameter)
         }
         else if(_currentAnimation == "WiFiConnectionSuccess")
         {
-            WiFiConnectionSuccess();
-        }        
-        
-        else if(_currentAnimation == "Fire")
+            WiFiConnectionSuccess();       
+        }
+        else if(_currentAnimation == "Fire" || currentAnimationNum == 0)
         {
             fireRoutine();
-            delay(5);//Задержка,или же скорость
+            vTaskDelay(5/portTICK_RATE_MS);
             FastLED.show();
         }
-        else if(_currentAnimation == "Rainbow")
+        
+        else if(_currentAnimation == "Rainbow" || currentAnimationNum == 1)
         {
-            
+            RainbowV();
+        }
+        else if(_currentAnimation == "Hue" || currentAnimationNum == 2)
+        {
+            HueAnimation();
         }
         
-        /*
-        else if(_currentAnimation == "")
+        else if(_currentAnimation == "Sparks" || currentAnimationNum == 3)
         {
-
+            Sparks();
         }
+        /*
         else if(_currentAnimation == "")
         {
 
@@ -155,18 +148,29 @@ void TaskAnimation(void *pvParameter)
         {
             LampOn();
         }
-        delay(1);
+        vTaskDelay(1/portTICK_RATE_MS);
     }
     vTaskDelete(NULL);
 }
-
-
+/*
+int strAnim2Num(String name)
+{
+    for (size_t i = 0; i < sizeof(AnimationModes)/sizeof(AnimationModes[0]); i++)
+    {
+        if(AnimationModes[i] == name) return sizeof(AnimationModes)/sizeof(AnimationModes[0]) - i;
+    }
+    return -1;
+}*/
 void ChangeAnimation(String animationName)
 {
+    //WriteLine("Changing Animation" + animationName);
+    
     if(Animation!= NULL)
         vTaskDelete(Animation);
+    //delay(500);
     xTaskCreatePinnedToCore(TaskAnimation,"Animation",2048,NULL,1,&Animation,1);
     _currentAnimation=animationName;
+    //currentAnimationNum = strAnim2Num(animationName);
 }
 
 

@@ -1,7 +1,7 @@
 #include <FastLED.h>
-#define BRIGHTNESS 255
+#define BRIGHTNESS 32
 #define COLOR_ORDER GRB
-#define CHIPSET WS2812
+#define CHIPSET WS2812B
 #define LED_PIN 12
 
 const int Height = 16;

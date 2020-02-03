@@ -27,6 +27,7 @@ void CreateAP(String ssid,String password)
     IPAddress IP = WiFi.softAPIP();
     if(Debug)
         Serial.println(IP);
+    WiFiConnectionProcess();    
 }
 
 
@@ -51,6 +52,7 @@ void InitServer()
           Password = request->getParam("password")->value();
         }
         WriteLine(Password);   
+        WiFiConnectionSuccess();
         setWiFiConfigState(1);
         setWiFiSettings(Ssid,Password);
         Reset();

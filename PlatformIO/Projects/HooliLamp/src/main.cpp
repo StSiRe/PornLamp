@@ -6,8 +6,8 @@
 #include<Wifi/Wifi.h>
 #include<Led/Display.h>
 #include<Led/Animations.h>
-//String Ssid="Hooli.Lamp",Password="12345678";
-String Ssid="521",Password="intel5689";
+String Ssid="Hooli.Lamp",Password="12345678";
+//String Ssid="521",Password="12345678";
 
 
 extern void WriteLine(String text);
@@ -24,20 +24,36 @@ void setup()
   Serial.begin(115200);
   WriteLine("Hooli.Lamp is loading...");
   initMatrix();
-  LampOn();
-  ConfigFS();
-  WiFiStart();
-
-
-
-  ChangeAnimation("WiFiConnectionProcess");
-  vTaskDelay(5000/portTICK_PERIOD_MS);
-  ChangeAnimation("WiFiConnectionSuccess");
-  vTaskDelay(5000/portTICK_PERIOD_MS);
-  ChangeAnimation("WiFiConnectionProcess");
+  //LampOn();
+  //ConfigFS();
+  //WiFiStart();
+  ChangeAnimation("Sparks");
+  vTaskDelay(10000/portTICK_RATE_MS);
+  ChangeAnimation("Fire");
+  vTaskDelay(10000/portTICK_RATE_MS);
+  ChangeAnimation("Rainbow");
+  vTaskDelay(10000/portTICK_RATE_MS);
+  ChangeAnimation("Hue");
+  vTaskDelay(10000/portTICK_RATE_MS);
 }
 
 
 void loop()
-{
+{  
+  /*
+  ChangeAnimation("Sparks");
+  delay(5000);
+  ChangeAnimation("Fire");
+  delay(5000);
+  ChangeAnimation("Rainbow");
+  delay(5000);
+  ChangeAnimation("Hue");
+  delay(5000);*/
+  while(true){
+    FastLED.clear();
+    FastLED.clearData();
+  ChangeAnimation("WiFiConnectionSuccess");
+  delay(5000);
+  ChangeAnimation("WiFiConnectionProcess");
+  delay(5000);}
 }

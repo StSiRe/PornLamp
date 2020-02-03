@@ -28,12 +28,12 @@ void WiFiViewer(void *pvParameter)
         {
             waitingTimer= 0;
             WriteLine("WiFi viewer task deleted");
-            //WiFiConnectionSuccess();
+            WiFiConnectionSuccess();
             vTaskDelete(NULL);//Удаляем эту задачу
         }
         else
         {
-            //WiFiConnectionProcess();
+            WiFiConnectionProcess();
             waitingTimer++;
             if(waitingTimer == 120 * 3)//120 per munite and wait 4 minute
             {
@@ -80,7 +80,7 @@ void WiFiStart()
         return;
     }
     ConfigWiFi();
-    //LoadServer();
+    ConfigServer();
 }
 
 
