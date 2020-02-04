@@ -10,7 +10,7 @@ void ConfigFS()
     if (tmp)
     {
         WriteLine("FileSystem is mounted without errors");
-        float percentage  = (float)SPIFFS.usedBytes/(float)SPIFFS.totalBytes*100;
+        float percentage  = (float)SPIFFS.usedBytes()/(float)SPIFFS.totalBytes()*100;
         WriteLine(String(percentage)+ " Free space");
         return;
     }

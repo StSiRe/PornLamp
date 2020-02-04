@@ -1,47 +1,87 @@
 #include<SPIFFS.h>
 #include<ArduinoJson.h>
-#define FS SPIFFS 
-
+bool ConfigState = false;
 extern void WriteLine(String text);
+extern String Ssid,Password;
 void LoadData()
 {
-    if(FS.exists("/Settings.json"))
+    if(SPIFFS.exists("/Settings.json"))
     {
         WriteLine("File not exists.System`ll create new file");
         File set = SPIFFS.open("/Settings.json","w");
-        set.write(0);
+        set.print("");
         WriteLine("File created");
     }
 
-    File settings = FS.open("/Settings.json");
+    File settings = SPIFFS.open("/Settings.json");
     if(!settings)
     {
         WriteLine("System can`t open settings file");
+        return;
     }
 
     size_t size =  settings.size();
-    if(size > 1024) {WriteLine("File is so big"); return;}
+    if(size > 1024) {
+        WriteLine("File is so big"); 
+        return;
+    }
+
+    DynamicJsonDocument doc(256);
+    DeserializationError error = deserializeJson(doc, settings.readString());
+    if(error)
+    {
+        WriteLine("Deserialisation failed.Settings will be stand standart");
+
+    }
+    bool _ConfigState = doc["ConfigState"];
+    ConfigState = _ConfigState;
+
+    String _ssid = doc["WiFiSsid"];
+    if(_ssid != NULL && _ssid != "")
+        Ssid = _ssid;
+
+    String _password = doc["WiFiPassword"];
+    if(_password != NULL && _password != "")
+        Password = _password;
 
 
-    DynamicJsonDocument
 
 }
 bool getWiFiConfigState()
 {
-    return false;
+    return ConfigState;
 }
 
 //0- non initialization; 1- setup complete
-void setWiFiConfigState(int state)
+void setWiFiConfigState(bool state)
 {
-    //anything
+    ConfigState = state;
 }
 void setWiFiSettings(String ssid,String password)
 {
-
+    Ssid = ssid;
+    Password = password;
 }
 
 void saveSettings()
 {
+    File settings = SPIFFS.open("/Settings.json","w");
+    if(!settings)
+    {
+        WriteLine("System can`t open settings file");
+        return;
+    }
 
+    DynamicJsonDocument doc(256);
+    doc["ConfigState"] = ConfigState;
+    doc["WiFiPassword"] = Ssid;
+    doc["WiFiSsid"] = Password;
+
+    String json;
+    serializeJson(doc,json);
+
+    if(settings.print(json))
+    {
+        WriteLine("Success saving data!");
+    }    
 }

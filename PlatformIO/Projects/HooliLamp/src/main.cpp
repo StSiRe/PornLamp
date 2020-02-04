@@ -24,36 +24,21 @@ void setup()
   Serial.begin(115200);
   WriteLine("Hooli.Lamp is loading...");
   initMatrix();
-  //LampOn();
-  //ConfigFS();
-  //WiFiStart();
-  ChangeAnimation("Sparks");
-  vTaskDelay(10000/portTICK_RATE_MS);
-  ChangeAnimation("Fire");
-  vTaskDelay(10000/portTICK_RATE_MS);
-  ChangeAnimation("Rainbow");
-  vTaskDelay(10000/portTICK_RATE_MS);
-  ChangeAnimation("Hue");
-  vTaskDelay(10000/portTICK_RATE_MS);
+  LampOn();
+  ConfigFS();
+  WiFiStart();
+
 }
 
 
 void loop()
-{  
-  /*
+{    
   ChangeAnimation("Sparks");
-  delay(5000);
+  vTaskDelay(10000/portTICK_RATE_MS);
   ChangeAnimation("Fire");
-  delay(5000);
+  vTaskDelay(10000/portTICK_RATE_MS);
   ChangeAnimation("Rainbow");
-  delay(5000);
+  vTaskDelay(10000/portTICK_RATE_MS);
   ChangeAnimation("Hue");
-  delay(5000);*/
-  while(true){
-    FastLED.clear();
-    FastLED.clearData();
-  ChangeAnimation("WiFiConnectionSuccess");
-  delay(5000);
-  ChangeAnimation("WiFiConnectionProcess");
-  delay(5000);}
+  vTaskDelay(10000/portTICK_RATE_MS);
 }
