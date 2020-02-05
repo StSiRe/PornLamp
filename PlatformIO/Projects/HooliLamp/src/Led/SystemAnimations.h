@@ -5,7 +5,7 @@ extern CRGB* const leds;
 extern const int Height;
 extern const int Width;
 extern int XY(int x,int y);
-#define BRIGHT_SPEED 5
+#define BRIGHT_SPEED 4
 
 
 void LampOn()
@@ -46,30 +46,31 @@ void WiFiConnectionProcess() //two blue stripes moves from border to center
 {
   FastLED.clear();
   FastLED.show();
-  for (size_t i = 0; i < Width/2; i++)
+  for (size_t i = 0; i < Width/2 - 1; i++)
   {
       FastLED.clear();
-      size_t anti = Width - i -1;
-      for(int k=0;k < 256;k+=5)
+      size_t anti = Width - i - 1;
+      for(int k=0; k < 256; k += BRIGHT_SPEED)
       {
         for (size_t j = 0; j < Height; j++)
         {
-            leds[XY(j,i)] = CHSV(240,255,255 -k);
-            leds[XY(j,anti)] = CHSV(240,255,255 -k);
+            leds[XY(j,i)] = CHSV(170,255,255 -k);
+            leds[XY(j,anti)] = CHSV(170,255,255 -k);
         }
         for (size_t j = 0; j < Height; j++)
         {
-          if(i > 0 && anti > 0)
-            leds[XY(j,i - 1)] = CHSV(240,255,k);
-            leds[XY(j,anti - 1)] = CHSV(240,255,k);
+          //if(i > 0 && anti > 0)
+            leds[XY(j,i + 1)] = CHSV(170,255,k);
+            leds[XY(j,anti - 1)] = CHSV(170,255,k);
         }
         FastLED.show();
         vTaskDelay(5/portTICK_RATE_MS);
       }
-      vTaskDelay(50/portTICK_RATE_MS);
+      //vTaskDelay(7/portTICK_RATE_MS);
   }
   FastLED.clear();
   FastLED.show();
+  FastLED.clearData();
 }
 
 //Подключено к WiFi успешно

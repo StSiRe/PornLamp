@@ -32,23 +32,21 @@ void fadeScreen()
 { 
     for(int k =0;k<16;k++)
     {  
-        for(int i=0;i< Width;i++)
+        for(int i=0;i< Width * Height;i++)
         {
-            for(int j=0;j< Height;j++)
-            {
-                if(leds[XY(i,j)].r >= 40 || leds[XY(i,j)].g >= 40 || leds[XY(i,j)].b >= 40) 
+                if(leds[i].r >= 40 || leds[i].g >= 40 || leds[i].b >= 40) 
                 {
-                    leds[XY(i,j)].fadeToBlackBy(16);
+                    leds[i].fadeToBlackBy(16);
                 }
                 else
                 {
-                    leds[XY(i,j)] = 0;
+                    leds[i] = 0;
                 }   
-            }
         }
         FastLED.show();
         vTaskDelay(1/portTICK_RATE_MS);
     }
+    FastLED.clearData();
 }
 void Sparks() {
   for (byte i = 0; i < 40; i++) {
@@ -60,10 +58,11 @@ void Sparks() {
     FastLED.show();
   }
   fadeScreen();
+  FastLED.clearData();
 }
 
 //Для анимаций типа хуя
-byte hue;
+byte hue = 0;
 //Горизонтальная радуга 
 void RainbowH()
 {    
@@ -76,6 +75,7 @@ void RainbowH()
   }
   FastLED.show();
   delay(10);
+  FastLED.clearData();
 }
 //Вертикальная радуга
 void RainbowV()
@@ -89,18 +89,16 @@ void RainbowV()
   }
   FastLED.show();
   delay(10);
+  FastLED.clearData();
 }
 //хуя анимация для всей матрицы
 void HueAnimation()
 {
-    for(int hue;hue< 256;hue++)
+    for(int hue; hue< 256; hue++)
     {
-        for(int i=0;i<Height;i++)
+        for(int i=0; i< Height * Width; i++)
         {
-            for(int j=0;j< Width;j++)
-            {
-                leds[XY(j,i)] = CHSV(hue,255,255);
-            }
+                leds[i] = CHSV(hue,255,255);
         }
         FastLED.show();
         delay(25);
