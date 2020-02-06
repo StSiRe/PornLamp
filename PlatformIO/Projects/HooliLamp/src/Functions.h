@@ -19,14 +19,22 @@ char* ToChar(String command){
     return NULL;
 }
 
+//Ожидание в некоторое время
+//Used vTaskDelay()
+void Delay(int milliseconds)
+{
+  vTaskDelay(milliseconds/portTICK_PERIOD_MS);
+}
+
 //Reboot with animation and saving data
 void Reset()
 {
-  LampOff();
   WriteLine("Functions:Starting reboot procedure");
   saveSettings();
   CloseFS();
-  //ShowGoodbye animation
-  vTaskDelay(1000/15);
+  LampOff();
+  Delay(1000);
   ESP.restart();
 }
+
+

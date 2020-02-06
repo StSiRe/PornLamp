@@ -1,10 +1,11 @@
 #include<FastLED.h>
 
-extern CRGB leds_plus_safety_pixel[];
+//extern CRGB leds_plus_safety_pixel[];
 extern CRGB* const leds;
 extern const int Height;
 extern const int Width;
 extern int XY(int x,int y);
+extern void Delay(int milliseconds);
 int ledCount= Height*Width;
 const int lines = 16;
 int colorCorrectValue = 100;
@@ -146,7 +147,7 @@ void drawFrame(int pcnt) {
   }
 }
 
-void fireRoutine() {
+void Fire() {
   if (loadingFlag) {
     loadingFlag = false;
     generateLine();
@@ -158,4 +159,6 @@ void fireRoutine() {
   }
   drawFrame(pcnt);
   pcnt += 30;
+  Delay(5);
+  FastLED.show();
 }

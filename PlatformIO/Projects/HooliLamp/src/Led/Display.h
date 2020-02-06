@@ -2,7 +2,7 @@
 #define BRIGHTNESS 32
 #define COLOR_ORDER GRB
 #define CHIPSET WS2812B
-#define LED_PIN 12
+#define LED_PIN 14
 
 const int Height = 16;
 const int Width = 16;
@@ -30,7 +30,7 @@ int XY( int x, int y)
   return i;
 }
 
-void initMatrix()
+void InitMatrix()
 {
   FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalSMD5050);
   FastLED.setBrightness(BRIGHTNESS);
