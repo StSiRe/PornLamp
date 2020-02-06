@@ -5,7 +5,7 @@ extern void WriteLine(String text);
 extern String Ssid,Password;
 void LoadData()
 {
-    if(SPIFFS.exists("/Settings.json"))
+    if(!SPIFFS.exists("/Settings.json"))
     {
         WriteLine("File not exists.System`ll create new file");
         File set = SPIFFS.open("/Settings.json","w");
@@ -25,25 +25,25 @@ void LoadData()
         WriteLine("File is so big"); 
         return;
     }
-
+    WriteLine(settings.readString());
+    String json = settings.readString();
     DynamicJsonDocument doc(256);
-    DeserializationError error = deserializeJson(doc, settings.readString());
+    DeserializationError error = deserializeJson(doc, json);
     if(error)
     {
         WriteLine("Deserialisation failed.Settings will be stand standart");
-
     }
     bool _ConfigState = doc["ConfigState"];
     ConfigState = _ConfigState;
 
     String _ssid = doc["WiFiSsid"];
-    if(_ssid != NULL && _ssid != "")
+    if(_ssid != NULL && _ssid != "" && _ssid != "null")
         Ssid = _ssid;
 
     String _password = doc["WiFiPassword"];
-    if(_password != NULL && _password != "")
+    if(_password != NULL && _password != "" && _password != "null")
         Password = _password;
-
+    WriteLine(_password + " " + _ssid);
 
 
 }
@@ -79,9 +79,11 @@ void saveSettings()
 
     String json;
     serializeJson(doc,json);
-
     if(settings.print(json))
     {
         WriteLine("Success saving data!");
-    }    
+    }
+    WriteLine(settings.readString());
+    WriteLine(json);
+    settings.close();
 }
