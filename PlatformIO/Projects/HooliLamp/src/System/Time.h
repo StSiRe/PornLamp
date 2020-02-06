@@ -21,7 +21,7 @@ tm GetTime()
     struct tm timeinfo;
     if(!getLocalTime(&timeinfo)){
         WriteLine("Failed to obtain time");
-        return;
+        return timeinfo;
     }
     return timeinfo;
 }

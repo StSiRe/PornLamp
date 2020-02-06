@@ -23,18 +23,27 @@ void InitLamp()
 {
   WriteLine("Hooli.Lamp is loading...");
   InitMatrix();
-  InitAnimations();
+  //InitAnimations();
   
   //LampOn();
   //ConfigFS();
   //LoadData();
   //WiFiStart();
-  InitTime();
+  //InitTime();
 }
 void setup()
 {
   Serial.begin(115200);
   InitLamp();  
+
+  
+  /*SetBrightness(255);
+  for(int i=0;i<256;i++)
+  {
+    leds[i] = CRGB(255,255,170);
+  }
+  FastLED.show();
+  Delay(10000);*/
 }
 
 

@@ -47,10 +47,14 @@ void LoadData()
 
 
 }
+
+//Возвращает состояние инициализации WIFi и прочего
+//true - пароль и имя точки доступа заданы; false - первичная настройка еще не пройдена
 bool getWiFiConfigState()
 {
     return ConfigState;
 }
+
 
 int GetUTC()
 {
