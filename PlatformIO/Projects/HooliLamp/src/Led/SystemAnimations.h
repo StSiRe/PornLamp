@@ -42,6 +42,7 @@ void LampOff()
   FastLED.clear();
   FastLED.show();
 }
+//8*256 = 2048 ms = 2 s
 void WiFiConnectionProcess() //two blue stripes moves from border to center
 {
   FastLED.clear();
@@ -59,14 +60,12 @@ void WiFiConnectionProcess() //two blue stripes moves from border to center
         }
         for (size_t j = 0; j < Height; j++)
         {
-          //if(i > 0 && anti > 0)
             leds[XY(j,i + 1)] = CHSV(170,255,k);
             leds[XY(j,anti - 1)] = CHSV(170,255,k);
         }
         FastLED.show();
         vTaskDelay(5/portTICK_RATE_MS);
       }
-      //vTaskDelay(7/portTICK_RATE_MS);
   }
   FastLED.clear();
   FastLED.show();

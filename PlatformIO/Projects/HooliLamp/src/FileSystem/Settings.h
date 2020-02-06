@@ -52,6 +52,11 @@ bool getWiFiConfigState()
     return ConfigState;
 }
 
+int GetUTC()
+{
+    return 3;
+}
+
 //0- non initialization; 1- setup complete
 void setWiFiConfigState(bool state)
 {

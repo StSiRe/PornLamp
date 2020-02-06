@@ -6,30 +6,35 @@
 #include<Wifi/Wifi.h>
 #include<Led/Display.h>
 #include<Led/Animations.h>
+#include<System/Time.h>
 String Ssid="Hooli.Lamp",Password="12345678";
 //String Ssid="521",Password="12345678";
 
 
-extern void WriteLine(String text);
-extern char* ToChar(String command);
-extern void ConfigFS();
-extern void WiFiStart();
-extern void initMatrix();
+//extern void WriteLine(String text);
+//extern char* ToChar(String command);
+//extern void ConfigFS();
+//extern void WiFiStart();
+//extern void initMatrix();
 
 extern void LampOn();
 extern void ChangeAnimation(String animationName);
-
-void setup()
+void InitLamp()
 {
-  Serial.begin(115200);
   WriteLine("Hooli.Lamp is loading...");
   InitMatrix();
   InitAnimations();
+  
   //LampOn();
   //ConfigFS();
   //LoadData();
   //WiFiStart();
-  
+  InitTime();
+}
+void setup()
+{
+  Serial.begin(115200);
+  InitLamp();  
 }
 
 
