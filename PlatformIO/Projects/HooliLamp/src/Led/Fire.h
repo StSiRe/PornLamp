@@ -1,6 +1,6 @@
 #include<FastLED.h>
 
-//extern CRGB leds_plus_safety_pixel[];
+
 extern CRGB* const leds;
 extern const int Height;
 extern const int Width;
