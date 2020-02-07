@@ -5,6 +5,7 @@
 #include<Led/SystemAnimations.h>
 #include<Led/Rainbow.h>
 #include<Led/Sparks.h>
+#include<Led/MatrixAnimation.h>
 
 #include<string.h>
 //extern CRGB leds_plus_safety_pixel[];
@@ -19,7 +20,7 @@ extern void WiFiConnectionProcess();
 extern void WiFiConnectionSuccess();
 extern void WriteLine(String text);
 extern void Delay(int milliseconds);
-
+bool _updateReqied = false;
 
 
 String _currentAnimation = "";
@@ -32,6 +33,7 @@ String AnimationModes[]  = {
     "WiFiConnectionSuccess",
     "Fire",
     "Rainbow"
+    "MatrixAnimation"
 };
 
 
@@ -43,6 +45,12 @@ void TaskAnimation(void *pvParameter)
 {
     for (;;)
     {
+        if(_updateReqied)
+        {
+            _updateReqied=false;
+            FastLED.clear();
+            FastLED.show();
+        }
         if(_currentAnimation == "WiFiConnectionProcess")
         {
             WiFiConnectionProcess();
@@ -67,6 +75,10 @@ void TaskAnimation(void *pvParameter)
         else if(_currentAnimation == "Sparks" || currentAnimationNum == 3)
         {
             Sparks();
+        } 
+        else if(_currentAnimation == "MatrixAnimation")
+        {
+            matrixRoutine();
         }
         /*
         else if(_currentAnimation == "")
@@ -97,6 +109,7 @@ void ChangeAnimation(String animationName)
 {
     WriteLine("Changing Animation to: " + animationName);
     _currentAnimation=animationName;
+    _updateReqied=true;
     //currentAnimationNum = strAnim2Num(animationName);
 }
 //Инициализирует и запускает поток для анимаций

@@ -1,5 +1,5 @@
 #include <FastLED.h>
-#define BRIGHTNESS 32
+#define BRIGHTNESS 64
 #define COLOR_ORDER GRB
 #define CHIPSET WS2812B
 #define LED_PIN 12

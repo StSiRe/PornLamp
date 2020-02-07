@@ -23,7 +23,7 @@ void InitLamp()
 {
   WriteLine("Hooli.Lamp is loading...");
   InitMatrix();
-  //InitAnimations();
+  InitAnimations();
   
   //LampOn();
   //ConfigFS();
@@ -49,10 +49,9 @@ void setup()
 
 void loop()
 {  
-  ChangeAnimation("Fire");
-  vTaskDelay(5000/portTICK_RATE_MS);
-  ChangeAnimation("Rainbow");
-  vTaskDelay(5000/portTICK_RATE_MS);
-  ChangeAnimation("Hue");
-  vTaskDelay(5000/portTICK_RATE_MS);
+  ChangeAnimation("MatrixAnimation");
+  Delay(5000);
+  ChangeAnimation("Fire");Delay(5000);
+  ChangeAnimation("Rainbow");Delay(5000);
+  ChangeAnimation("Hue");Delay(5000);
 }
