@@ -8,18 +8,6 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  .icon
-  {
-    position: relative;
-    z-index: 1;
-    background: #FFFFFF;
-    max-width: 40%;
-    max-height: 40%;
-    margin: 0;
-    text-align: center;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-    border-radius: 10%;
-  }
   .form {
     position: relative;
     z-index: 1;
@@ -29,7 +17,7 @@ body {
     padding: 45px;
     text-align: center;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-    border-radius: 6%;
+    border-radius: 3.5%;
   }
   .page {
     width: 360px;
