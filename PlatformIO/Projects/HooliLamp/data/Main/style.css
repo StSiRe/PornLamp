@@ -117,7 +117,7 @@ body {
   .slider.round:before {
     border-radius: 50%;
   }
-  #imageLogo {
+  .image{
     text-align: center;
  }
  .wrapper{
