@@ -78,7 +78,7 @@ void TaskAnimation(void *pvParameter)
         } 
         else if(_currentAnimation == "MatrixAnimation")
         {
-            matrixRoutine();
+            MatrixRoutine();
         }
         /*
         else if(_currentAnimation == "")

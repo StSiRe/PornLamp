@@ -8,11 +8,27 @@ extern int XY(int x,int y);
 #define BRIGHT_SPEED 4
 
 
+void ToWhite()
+{
+    for(int k =0;k<16;k++)
+    {  
+        for(int i=0;i< Width * Height;i++)
+        {
+            if(leds[i].r >= 200 || leds[i].g >= 200 || leds[i].b >= 200) 
+                leds[i].fadeLightBy(16);
+            else
+                leds[i] = CRGB::White;
+        }
+        FastLED.show();
+        Delay(10);
+    }
+}
+
 void LampOn()
 {
   FastLED.clear();
   FastLED.show();
-  for(int i = Height; i >= 0; i--)
+  for(int i = 0; i < Height; i++)
   {
     for(int j = 0; j < Width; j++)
     {
@@ -30,11 +46,12 @@ void LampOff()
 {
   FastLED.clear();
   FastLED.show();
-  for(int i = 0; i >= Height; i++)
+  ToWhite();
+  for(int i = Height - 1; i >= 0; i--)
   {
     for(int j = 0; j < Width; j++)
     {
-      leds[XY(i,j)] = CRGB::White;
+      leds[XY(i,j)] = CRGB::Black;
     }
     FastLED.show();
     vTaskDelay(150/portTICK_RATE_MS);

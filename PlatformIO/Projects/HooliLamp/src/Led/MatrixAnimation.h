@@ -9,7 +9,7 @@ extern void Delay(int milliseconds);
 
 //TODO: time of working
 
-void matrixRoutine()
+void MatrixRoutine()
 {
    for(int row = 0; row < Width; row++)
    { 
