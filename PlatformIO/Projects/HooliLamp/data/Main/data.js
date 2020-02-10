@@ -3,6 +3,8 @@ function Animations()   {
     ClearElements();
     var main = document.getElementById("main");
     var fragment = document.createDocumentFragment();
+    
+    
     fragment.appendChild(CreateForm(CreateButton(),CreateButton(),CreateImage("Music")));
     main.appendChild(fragment);
 }
@@ -16,7 +18,11 @@ function ClearElements()
     var page = document.getElementsByClassName("page");
     page[0].appendChild(doc);
 }
-
+function CreateText(text)   {
+    var div = document.createElement("p");
+    div.innerText = text;
+    return div
+}
 function CreateButton() {
     var div = document.createElement("label");
     div.classList.add("switch");
