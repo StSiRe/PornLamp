@@ -1,46 +1,51 @@
 
-function Animations()
-{
+function Animations()   {
+    ClearElements();
     var main = document.getElementById("main");
     var fragment = document.createDocumentFragment();
-    var element = CreateForm(CreateButton());
-    fragment.appendChild(element);
-    fragment.appendChild(CreateForm(CreateImage("logo")));
-    element1 = CreateForm(CreateImage("logo").innerHTML+ CreateButton().innerHTML);
-    fragment.appendChild(element1);
+    fragment.appendChild(CreateForm(CreateButton(),CreateButton(),CreateImage("Music")));
     main.appendChild(fragment);
 }
-function CreateButton()
+///Очищает полностью экран от элементов
+function ClearElements()
 {
+    var main = document.getElementById("main");
+    main.remove();
+    var doc = document.createElement("div");
+    doc.setAttribute("id","main");
+    var page = document.getElementsByClassName("page");
+    page[0].appendChild(doc);
+}
+
+function CreateButton() {
     var div = document.createElement("label");
-    div.className = "switch";
+    div.classList.add("switch");
     var div1 = document.createElement("input");
     div1.type = "checkbox";
     var div2 = document.createElement("span");
-    div2.className = "slider round";
-    div1.appendChild(div2);
+    div2.classList.add("slider","round");
     div.appendChild(div1);
-    /*
-    <label class="switch">
-            <input type="checkbox">
-            <span class="slider round"></span>
-          </label>
-    */
+    div.appendChild(div2);
     return div;
 }
-function CreateForm(innerHTML)
-{
+function CreateForm(...childs) {
     var div = document.createElement("div");
-    div.innerHTML = "<div class='form'>"+
-                    innerHTML.innerHTML+
-                    "</div>";
+    div.className="form";
+    if(childs != null){
+        for (let index = 0; index < childs.length; index++) {
+            div.appendChild(childs[index]);            
+        }
+    }
     return div;
 }
-function CreateImage(path)
-{
+function CreateImage(path)  {
+    if(path == null){
+        return null;
+    }        
     var div = document.createElement("div");
-    div.innerHTML = "<div class = 'image'>" +
-                    "<img src = 'Images/"+path+".png'>"
-                    "</div>";
+    div.className="image";
+    var div1 = document.createElement("img");
+    div1.src = "Images/"+ path + ".png";
+    div.appendChild(div1);
     return div;
 }

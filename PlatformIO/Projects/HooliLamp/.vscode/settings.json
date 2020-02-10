@@ -14,5 +14,6 @@
         "sstream": "cpp",
         "streambuf": "cpp",
         "regex": "cpp"
-    }
+    },
+    "git.ignoreLimitWarning": true
 }
