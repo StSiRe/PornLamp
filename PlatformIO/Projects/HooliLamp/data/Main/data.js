@@ -3,10 +3,20 @@ function Animations()   {
     ClearElements();
     var main = document.getElementById("main");
     var fragment = document.createDocumentFragment();
-    
-    
-    fragment.appendChild(CreateForm(CreateButton(),CreateButton(),CreateImage("Music")));
+    fragment.appendChild(CreateForm(
+        Separator(),
+        CreateImage("Animations"),
+        Separator(),
+        CreateText("Анимации:"),
+        CreateToogleButton("11","BOC()")  ,
+        Separator()
+    ));    
     main.appendChild(fragment);
+}
+
+function BOC()
+{
+    alert("Fuck you!");
 }
 ///Очищает полностью экран от элементов
 function ClearElements()
@@ -18,14 +28,23 @@ function ClearElements()
     var page = document.getElementsByClassName("page");
     page[0].appendChild(doc);
 }
+
 function CreateText(text)   {
-    var div = document.createElement("p");
+    var div = document.createElement("text");
     div.innerText = text;
     return div
 }
-function CreateButton() {
+
+function Separator()   {
+    var div = document.createElement("p");
+    return div
+}
+//Получает свой собственный id, и ссылку на обработкик взаимодействия
+function CreateToogleButton(id,onClickHandler) {
     var div = document.createElement("label");
     div.classList.add("switch");
+    div.id = id;
+    div.setAttribute("onclick",onClickHandler);
     var div1 = document.createElement("input");
     div1.type = "checkbox";
     var div2 = document.createElement("span");
