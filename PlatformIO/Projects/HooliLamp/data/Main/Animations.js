@@ -9,6 +9,8 @@ function Animations()   {
         Separator(),
         CreateText("Анимации:"),
         CreateToogleButton("PowerMode","PowerModeButton()"),
+        Separator(),
+        CreateProgressBar(),
         Separator()
     ));    
     main.appendChild(fragment);
@@ -32,9 +34,13 @@ function ClearElements()
 
 function CreateProgressBar(id,onClickHandler)
 {
-    var div = document.createElement("slider");
+    var div = document.createElement("input");
     div.classList.add("progress");
     div.setAttribute("oninput",onClickHandler);
+    div.type = "range";
+    div.min = "0";
+    div.max = "100";
+    return div;
 }
 function CreateText(text)   {
     var div = document.createElement("text");
