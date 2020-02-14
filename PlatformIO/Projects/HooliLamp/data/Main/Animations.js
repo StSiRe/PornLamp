@@ -7,19 +7,42 @@ function Animations()   {
         Separator(),
         CreateImage("Animations"),
         Separator(),
-        CreateText("Анимации:"),
+        CreateText("Powee Mode:"),
         CreateToogleButton("PowerMode","PowerModeButton()"),
         Separator(),
-        CreateProgressBar(),
-        Separator()
+        
+        CreateWrapper(
+            CreateImage("Animations/sun"),
+            CreateProgressBar("Brightness","SetBrightness()")
+        )
     ));    
     main.appendChild(fragment);
 }
-
+function CreateWrapper(...childs)
+{
+    var div = document.createElement("div");
+    div.classList.add("wrapper");
+    div.appendChild(childs[0]);
+    div.appendChild(childs[1]);
+    return div;
+}
+function SetBrightness()
+{
+    var element = document.getElementById("Brightness");
+    var value = element.value;
+    alert(value);
+}
 function PowerModeButton()
 {
     var button = document.getElementById("PowerMode");
-    alert(button.checked); 
+    if(button.checked)
+    {        
+        alert("On"); 
+    }
+    else
+    {
+        alert("Off");
+    }
 }
 ///Очищает полностью экран от элементов
 function ClearElements()

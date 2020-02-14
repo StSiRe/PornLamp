@@ -156,7 +156,7 @@ body {
  .wrapper{
    display:flex;
  }
- .iconLeft{
+ .leftElement{
    float: left;
    position: relative;
     background: #FFFFFF;
@@ -165,7 +165,7 @@ body {
     margin-left: 7.5px;
     padding: 20px;
  }
-.iconRight{
+.rightElement{
   float: right;
   width: 180px;
   position: relative;
@@ -174,9 +174,4 @@ body {
   border-radius: 10%;
   margin-right: 7.5px;
   padding: 20px;
-}
-.textButton{
-  width: 100%;
-  height: auto;
-  
 }
