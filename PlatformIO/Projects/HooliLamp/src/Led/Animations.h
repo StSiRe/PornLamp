@@ -32,8 +32,9 @@ String AnimationModes[]  = {
     "WiFiConnectionProcess",
     "WiFiConnectionSuccess",
     "Fire",
-    "Rainbow"
-    "MatrixAnimation"
+    "Rainbow",
+    "MatrixAnimation",
+    "Penis"
 };
 
 
@@ -79,6 +80,10 @@ void TaskAnimation(void *pvParameter)
         else if(_currentAnimation == "MatrixAnimation")
         {
             MatrixRoutine();
+        }
+        else if(_currentAnimation == "Penis")
+        {
+            Penis();
         }
         /*
         else if(_currentAnimation == "")

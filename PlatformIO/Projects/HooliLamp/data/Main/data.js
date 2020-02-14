@@ -7,7 +7,7 @@ function Animations()   {
         Separator(),
         CreateImage("Animations"),
         Separator(),
-        CreateText("Анимации:"),
+        CreateText("State: "),
         CreateToogleButton("11","BOC()")  ,
         Separator()
     ));    
@@ -16,7 +16,7 @@ function Animations()   {
 
 function BOC()
 {
-    alert("Fuck you!");
+    
 }
 ///Очищает полностью экран от элементов
 function ClearElements()
