@@ -50,8 +50,16 @@ void setup()
 void loop()
 {  
   ChangeAnimation("MatrixAnimation");
+<<<<<<< HEAD
   Delay(5000);
   ChangeAnimation("Fire");Delay(5000);
   ChangeAnimation("Rainbow");Delay(5000);
   ChangeAnimation("Hue");Delay(5000);
 }
+=======
+  Delay(10000);
+  ChangeAnimation("Fire");Delay(5000);
+  ChangeAnimation("Rainbow");Delay(5000);
+  ChangeAnimation("Hue");Delay(5000);
+}
+>>>>>>> 480e674851add6205d717fbfe2def178fd43f1c4
