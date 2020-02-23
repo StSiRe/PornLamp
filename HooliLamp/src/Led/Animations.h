@@ -8,18 +8,21 @@
 #include<Led/MatrixAnimation.h>
 
 #include<string.h>
-//extern CRGB leds_plus_safety_pixel[];
 extern CRGB* const leds;
 extern const int Height;
 extern const int Width;
 extern int XY(int x,int y);
-extern void fireRoutine();
-extern void LampOn();
-extern void LampOff();
-extern void WiFiConnectionProcess();
-extern void WiFiConnectionSuccess();
+//extern void fireRoutine();
+//extern void LampOn();
+//extern void LampOff();
+//extern void WiFiConnectionProcess();
+//extern void WiFiConnectionSuccess();
+
+
 extern void WriteLine(String text);
 extern void Delay(int milliseconds);
+
+
 bool _updateReqied = false;
 
 
@@ -33,6 +36,7 @@ String AnimationModes[]  = {
     "WiFiConnectionSuccess",
     "Fire",
     "Rainbow",
+    "RainbowH"
     "MatrixAnimation",
     "Penis"
 };
@@ -60,10 +64,13 @@ void TaskAnimation(void *pvParameter)
         {
             WiFiConnectionSuccess();       
         }
+        else if(_currentAnimation == "LampOn")
+        {
+            LampOn();
+        }
         else if(_currentAnimation == "Fire" || currentAnimationNum == 0)
         {
-            Fire();
-            
+            Fire();            
         }        
         else if(_currentAnimation == "Rainbow" || currentAnimationNum == 1)
         {
@@ -77,22 +84,21 @@ void TaskAnimation(void *pvParameter)
         {
             Sparks();
         } 
-        else if(_currentAnimation == "MatrixAnimation")
+        else if(_currentAnimation == "MatrixAnimation" || currentAnimationNum == 4)
         {
             MatrixRoutine();
         }
-        else if(_currentAnimation == "Penis")
+        else if(_currentAnimation == "RainbowH" || currentAnimationNum == 5)
+        {
+            RainbowH();
+        }
+        else if(_currentAnimation == "Penis" || currentAnimationNum == 6)
         {
             Penis();
         }
-        /*
-        else if(_currentAnimation == "")
-        {
-
-        }*/
         else
         {
-            Fire();
+            LampOn();
         }
         Delay(1);
     }
@@ -126,3 +132,12 @@ void InitAnimations()
     WriteLine("Animation Task was initializated.");
 }
 
+//Удаляет поток анимаций.После этого требуется заново проинициализировать анимации
+void StopAnimations()
+{
+    if(Animation!= NULL)
+    {        
+        WriteLine("Warning: Stopping animations");
+        vTaskDelete(Animation);
+    }
+}

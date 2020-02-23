@@ -7,28 +7,23 @@
 #include<Led/Display.h>
 #include<Led/Animations.h>
 #include<System/Time.h>
+#include<System/Status.h>
+
+
 String Ssid="Hooli.Lamp",Password="12345678";
 //String Ssid="521",Password="12345678";
 
-
-//extern void WriteLine(String text);
-//extern char* ToChar(String command);
-//extern void ConfigFS();
-//extern void WiFiStart();
-//extern void initMatrix();
-
-extern void LampOn();
 extern void ChangeAnimation(String animationName);
 void InitLamp()
 {
   WriteLine("Hooli.Lamp is loading...");
+  InitSystemWD();
   InitMatrix();
   InitAnimations();
-  
-  //LampOn();
-  //ConfigFS();
-  //LoadData();
-  //WiFiStart();
+  ChangeAnimation("LampOn");
+  ConfigFS();
+  LoadData();
+  WiFiStart();
   //InitTime();
 }
 void setup()
@@ -50,16 +45,17 @@ void setup()
 void loop()
 {  
   ChangeAnimation("MatrixAnimation");
-<<<<<<< HEAD
-  Delay(5000);
-  ChangeAnimation("Fire");Delay(5000);
-  ChangeAnimation("Rainbow");Delay(5000);
-  ChangeAnimation("Hue");Delay(5000);
-}
-=======
   Delay(10000);
-  ChangeAnimation("Fire");Delay(5000);
-  ChangeAnimation("Rainbow");Delay(5000);
-  ChangeAnimation("Hue");Delay(5000);
+  ChangeAnimation("Rainbow");
+  Delay(10000);
+  ChangeAnimation("RainbowH");
+  Delay(10000);
+
+  ChangeAnimation("Fire");
+  Delay(10000);
+  ChangeAnimation("Hue");
+  Delay(10000);
+
+  ChangeAnimation("Sparks");
+  Delay(10000);
 }
->>>>>>> 480e674851add6205d717fbfe2def178fd43f1c4

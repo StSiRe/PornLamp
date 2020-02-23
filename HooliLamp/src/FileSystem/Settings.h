@@ -25,14 +25,16 @@ void LoadData()
         WriteLine("File is so big"); 
         return;
     }
+
+
     WriteLine(settings.readString());
+
+
     String json = settings.readString();
     DynamicJsonDocument doc(256);
-    DeserializationError error = deserializeJson(doc, json);
-    if(error)
-    {
-        WriteLine("Deserialisation failed.Settings will be stand standart");
-    }
+    deserializeJson(doc, json);
+
+
     bool _ConfigState = doc["ConfigState"];
     ConfigState = _ConfigState;
 

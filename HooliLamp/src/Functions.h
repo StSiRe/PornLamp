@@ -1,6 +1,8 @@
 extern void saveSettings();
 extern void CloseFS();
+extern void ClearFastLED();
 extern void LampOff();
+extern void StopAnimations();
 bool Debug = true;
 //Выводит текст в консоль,если отладка разрешена
 void WriteLine(String text)
@@ -32,6 +34,8 @@ void Reset()
   WriteLine("Functions:Starting reboot procedure");
   saveSettings();
   CloseFS();
+  ClearFastLED();
+  StopAnimations();
   LampOff();
   Delay(1000);
   ESP.restart();

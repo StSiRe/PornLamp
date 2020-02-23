@@ -50,6 +50,6 @@ void HueAnimation()
         leds[i] = CHSV(huec,255,255);
     }
     FastLED.show();
-    Delay(10);
-    huec+=2;
+    Delay(25);
+    huec++;
 }
