@@ -1,19 +1,17 @@
 #include<WiFi.h>
 #include<SPIFFS.h>
 #include<FileSystem/Settings.h>
-
 #include<ESPAsyncWebServer.h>
 AsyncWebServer server(80);
-
+String _ssid,_password;
 
 extern void WriteLine(String text);
 extern char* ToChar(String command);
 extern bool Debug;
-extern String Ssid,Password;
 extern void setWiFiSettings(String ssid,String password);
 extern void Reset();
-extern void WiFiConnectionProcess();
-extern void WiFiConnectionSuccess();
+extern void ChangeAnimation(String animationName);
+extern void Delay(int milliseconds);
 //Создает точку доступа для первичной настройки
 void CreateAP(String ssid,String password)
 {
@@ -26,11 +24,22 @@ void CreateAP(String ssid,String password)
     WriteLine("AP IP:");
     IPAddress IP = WiFi.softAPIP();
     if(Debug)
+    {
         Serial.println(IP);
-    WiFiConnectionProcess();    
+    }
+    ChangeAnimation("WiFiConnectionProcess");     
 }
 
-
+void SaveData(void *pv)
+{
+    WriteLine("Saving ssid and password started");
+    ChangeAnimation("WiFiConnectionSuccess");  
+    Delay(1000);
+    setWiFiConfigState(1);
+    setWiFiSettings(_ssid,_password);
+    Reset();
+    vTaskDelete(NULL);//Нахуй не сделаось,но пусть будет
+}
 void InitServer()
 {
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -45,17 +54,15 @@ void InitServer()
         request->send(SPIFFS, "/Registration/Ok/index.html", "text/html");
         // GET input1 value on <ESP_IP>/get?input1=<inputMessage>
         if (request->hasParam("ssid")) {
-          Ssid = request->getParam("ssid")->value();
+          _ssid = request->getParam("ssid")->value();
         }
-        WriteLine(Ssid);
+        WriteLine(_ssid);
         if (request->hasParam("password")) {
-          Password = request->getParam("password")->value();
+          _password = request->getParam("password")->value();
         }
-        WriteLine(Password);   
-        WiFiConnectionSuccess();
-        setWiFiConfigState(1);
-        setWiFiSettings(Ssid,Password);
-        Reset();
+        WriteLine(_password);   
+        
+        xTaskCreate(SaveData,"Ssid Saver",8096,NULL,1,NULL);
     });
 
     server.begin();

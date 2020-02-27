@@ -27,13 +27,18 @@ void LoadData()
     }
 
 
-    WriteLine(settings.readString());
+    //WriteLine(settings.readString());
 
 
     String json = settings.readString();
-    DynamicJsonDocument doc(256);
-    deserializeJson(doc, json);
-
+    WriteLine("Data: " + json);
+    DynamicJsonDocument doc(1024);
+    auto error = deserializeJson(doc, json);
+    if(error)
+    {
+        WriteLine("Have problem with ");
+        Serial.println(error.c_str());
+    }
 
     bool _ConfigState = doc["ConfigState"];
     ConfigState = _ConfigState;
@@ -85,8 +90,8 @@ void saveSettings()
 
     DynamicJsonDocument doc(256);
     doc["ConfigState"] = ConfigState;
-    doc["WiFiPassword"] = Ssid;
-    doc["WiFiSsid"] = Password;
+    doc["WiFiPassword"] = Password;
+    doc["WiFiSsid"] = Ssid;
 
     String json;
     serializeJson(doc,json);

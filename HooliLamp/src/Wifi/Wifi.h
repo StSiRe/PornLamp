@@ -64,6 +64,7 @@ void onWiFiConnected(WiFiEvent_t event, WiFiEventInfo_t info)
     WiFi.onEvent(onWiFiDisconnected,SYSTEM_EVENT_STA_DISCONNECTED);//Событие -  если нас вдруг отключили    
     WriteLine(WiFi.localIP().toString());
     ConfigMDNS();//Надо будет проверить - получилось ли 
+    
 }
 void ConfigWiFi()
 {    

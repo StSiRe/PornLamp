@@ -1,5 +1,5 @@
 #include<HTTPClient.h>//Нахуй не надо - но без него не работает аудио...
-#include <Arduino.h>
+#include<Arduino.h>
 #include<Audio/mp3.h>
 #include<Functions.h>
 #include<FileSystem/FileSys.h>
@@ -11,9 +11,7 @@
 
 
 String Ssid="Hooli.Lamp",Password="12345678";
-//String Ssid="521",Password="12345678";
 
-extern void ChangeAnimation(String animationName);
 void InitLamp()
 {
   WriteLine("Hooli.Lamp is loading...");
@@ -24,38 +22,18 @@ void InitLamp()
   ConfigFS();
   LoadData();
   WiFiStart();
-  //InitTime();
+  Delay(1000);
+  InitTime();
 }
 void setup()
 {
   Serial.begin(115200);
-  InitLamp();  
-
-  
-  /*SetBrightness(255);
-  for(int i=0;i<256;i++)
-  {
-    leds[i] = CRGB(255,255,170);
-  }
-  FastLED.show();
-  Delay(10000);*/
+  InitLamp();
+  WriteLine("Initialization is success!");
 }
 
 
 void loop()
-{  
-  ChangeAnimation("MatrixAnimation");
-  Delay(10000);
-  ChangeAnimation("Rainbow");
-  Delay(10000);
-  ChangeAnimation("RainbowH");
-  Delay(10000);
-
-  ChangeAnimation("Fire");
-  Delay(10000);
-  ChangeAnimation("Hue");
-  Delay(10000);
-
-  ChangeAnimation("Sparks");
-  Delay(10000);
+{
+  Delay(50);//As WatchDog
 }

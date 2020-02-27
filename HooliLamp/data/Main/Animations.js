@@ -1,4 +1,3 @@
-
 function Animations()   {
     ClearElements();
     var main = document.getElementById("main");
@@ -12,7 +11,7 @@ function Animations()   {
         Separator(),
         
         CreateWrapper(
-            CreateImage("Animations/sun"),
+            CreateImage("Animations/Brightness"),
             CreateProgressBar("Brightness","SetBrightness()")
         )
     ));    
