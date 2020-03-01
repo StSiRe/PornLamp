@@ -1,12 +1,23 @@
-#include<FastLED.h>
-
-
-extern CRGB* const leds;
-extern const int Height;
-extern const int Width;
+#include <NeoPixelBrightnessBus.h>
+extern NeoPixelBrightnessBus<NeoGrbFeature, NeoEsp32I2s1800KbpsMethod> strip;
 extern int XY(int x,int y);
 extern void Delay(int milliseconds);
-
+RgbColor Wheel(uint8_t WheelPos) 
+{
+  WheelPos = 255 - WheelPos;
+  if(WheelPos < 85) 
+  {
+    return RgbColor(255 - WheelPos * 3, 0, WheelPos * 3);
+  } else if(WheelPos < 170) 
+  {
+    WheelPos -= 85;
+    return RgbColor(0, WheelPos * 3, 255 - WheelPos * 3);
+  } else 
+  {
+    WheelPos -= 170;
+    return RgbColor(WheelPos * 3, 255 - WheelPos * 3, 0);
+  }
+}
 
 
 //Для анимаций типа хуя
@@ -15,41 +26,42 @@ byte hue = 0;
 void RainbowH()
 {    
   hue += 2;
-  for (byte j = 0; j < Height; j++) 
+  for (byte j = 0; j < 16; j++) 
   {
-    CHSV thisColor = CHSV((byte)(hue + j * 30), 255, 255);
-    for (byte i = 0; i < Width; i++)
-      leds[XY(i,j)] = thisColor;
+    auto color = Wheel(hue + j * 30);
+    for (byte i = 0; i < 16; i++)
+    {
+      strip.SetPixelColor(XY(i, j),color);
+    }  
   }
-  FastLED.show();
+  strip.Show();
   Delay(10);
-  FastLED.clearData();
 }
-//Вертикальная радуга
 void RainbowV()
 {    
   hue += 2;
-  for (byte j = 0; j < Height; j++) 
+  for (byte j = 0; j < 16; j++) 
   {
-    CHSV thisColor = CHSV((byte)(hue + j * 30), 255, 255);
-    for (byte i = 0; i < Width; i++)
-      leds[XY(j,i)] = thisColor;
-  }
-  FastLED.show();
-  Delay(10);
-  FastLED.clearData();
-}
-
-
-byte huec = 0;
-//хуя анимация для всей матрицы
-void HueAnimation()
-{
-    for(int i=0; i< Height * Width; i++)
+    auto color = Wheel(hue + j * 30);
+    for (byte i = 0; i < 16; i++)
     {
-        leds[i] = CHSV(huec,255,255);
-    }
-    FastLED.show();
-    Delay(25);
-    huec++;
+      strip.SetPixelColor(XY(j, i),color);
+    }  
+  }
+  strip.Show();
+  Delay(10);
+}
+void Hue()
+{
+  hue += 2;
+  auto color = Wheel(hue);
+  for (byte j = 0; j < 16; j++) 
+  {
+    for (byte i = 0; i < 16; i++)
+    {
+      strip.SetPixelColor(XY(j, i),color);
+    }  
+  }
+  strip.Show();
+  Delay(10);
 }

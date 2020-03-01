@@ -1,12 +1,11 @@
-#include<FastLED.h>
-
-
-extern CRGB* const leds;
-extern const int Height;
-extern const int Width;
+#include <NeoPixelBrightnessBus.h>
+extern NeoPixelBrightnessBus<NeoGrbFeature, NeoEsp32I2s1800KbpsMethod> strip;
 extern int XY(int x,int y);
 extern void Delay(int milliseconds);
-int ledCount= Height*Width;
+
+const int Height = 16;
+const int Width = 16;
+int ledCount= Height*Widht;
 const int lines = 16;
 int colorCorrectValue = 100;
 bool loadingFlag = true;
@@ -117,7 +116,8 @@ void drawFrame(int pcnt) {
                        (uint8_t)max(0, nextv) // V
                      );
 
-        leds[getPixelNumber(x, y)] = color;
+        //leds[getPixelNumber(x, y)] = color;
+        strip.SetPixelColor(XY(x,y),color);
       } 
       else if (y == 8 && SPARKLES) {
         if (random(0, 20) == 0 && getPixColorXY(x, y - 1) != 0) drawPixelXY(x, y, getPixColorXY(x, y - 1));
@@ -143,7 +143,8 @@ void drawFrame(int pcnt) {
                    255,           // S
                    (uint8_t)(((100.0 - pcnt) * matrixValue[0][newX] + pcnt * line[newX]) / 100.0) // V
                  );
-    leds[getPixelNumber(newX, 0)] = color;
+    //leds[getPixelNumber(newX, 0)] = color;
+    strip.SetPixelColor(XY(newX,0),color);
   }
 }
 
@@ -160,5 +161,5 @@ void Fire() {
   drawFrame(pcnt);
   pcnt += 30;
   Delay(5);
-  FastLED.show();
+  strip.Show();
 }

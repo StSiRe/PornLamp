@@ -13,7 +13,8 @@
         "*.tcc": "cpp",
         "sstream": "cpp",
         "streambuf": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "functional": "cpp"
     },
     "git.ignoreLimitWarning": true
 }

@@ -1,8 +1,8 @@
 #include<WiFi.h>
 #include<SPIFFS.h>
 #include<FileSystem/Settings.h>
-#include<ESPAsyncWebServer.h>
-AsyncWebServer server(80);
+//#include<ESPAsyncWebServer.h>
+//AsyncWebServer server(80);
 String _ssid,_password;
 
 extern void WriteLine(String text);
@@ -10,7 +10,6 @@ extern char* ToChar(String command);
 extern bool Debug;
 extern void setWiFiSettings(String ssid,String password);
 extern void Reset();
-extern void ChangeAnimation(String animationName);
 extern void Delay(int milliseconds);
 //Создает точку доступа для первичной настройки
 void CreateAP(String ssid,String password)
@@ -26,14 +25,12 @@ void CreateAP(String ssid,String password)
     if(Debug)
     {
         Serial.println(IP);
-    }
-    ChangeAnimation("WiFiConnectionProcess");     
+    }  
 }
 
 void SaveData(void *pv)
 {
     WriteLine("Saving ssid and password started");
-    ChangeAnimation("WiFiConnectionSuccess");  
     Delay(1000);
     setWiFiConfigState(1);
     setWiFiSettings(_ssid,_password);
@@ -42,6 +39,7 @@ void SaveData(void *pv)
 }
 void InitServer()
 {
+    /*
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/Registration/Start/index.html", "text/html");
     });
@@ -62,8 +60,9 @@ void InitServer()
         }
         WriteLine(_password);   
         
-        xTaskCreate(SaveData,"Ssid Saver",8096,NULL,1,NULL);
+        xTaskCreatePinnedToCore(SaveData,"Ssid Saver",8096,NULL,1,NULL,0);
     });
 
     server.begin();
+    */
 }

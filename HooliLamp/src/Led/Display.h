@@ -1,16 +1,12 @@
-#include <FastLED.h>
-#define BRIGHTNESS 64
-#define COLOR_ORDER GRB
-#define CHIPSET WS2812B
-#define LED_PIN 12
+#include <NeoPixelBrightnessBus.h>
+const uint16_t PixelCount = 256;
+const uint16_t PixelPin = 12;
+NeoPixelBrightnessBus<NeoGrbFeature, NeoEsp32I2s1800KbpsMethod> strip(PixelCount, PixelPin);
 
 const int Height = 16;
 const int Width = 16;
-#define NUM_LEDS (Width * Height)
-const bool  MatrixSerpentineLayout = true;
-CRGB leds_plus_safety_pixel[ NUM_LEDS + 1];
-CRGB* const leds(leds_plus_safety_pixel + 1);
 
+const bool  MatrixSerpentineLayout = true;
 int XY( int x, int y)
 {
   int i;  
@@ -32,26 +28,12 @@ int XY( int x, int y)
 
 void InitMatrix()
 {
-  FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalSMD5050);
-  FastLED.setBrightness(BRIGHTNESS);
+  strip.Begin();
+  strip.SetBrightness(64);
+  strip.Show();
+  
 }
-
-//Устанавливает максимальную яркость на диодах
-void SetBrightness(int brightness)
+void ChangeBrightness(int brightness)
 {
-  FastLED.setBrightness(brightness);
-  FastLED.show();
+    //strip.SetBrightness(brightness);
 }
-
-//Очищает экран и полностью чистит буфер
-void ClearFastLED()
-{
-  FastLED.clear();
-  FastLED.clearData();
-  FastLED.show();
-}
-
-
-
-
-
