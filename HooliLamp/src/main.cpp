@@ -5,13 +5,13 @@
 #include<Wifi/Wifi.h>
 #include<Led/Display.h>
 #include<Led/Rainbow.h>
-
+#include<Audio/mp3.h>
 String Ssid="Hooli.Lamp",Password="12345678";
 void Task(void *p)
 {
   for(;;)
   {    
-    Hue();
+    RainbowV(); 
   }
 }
 void InitLamp()
@@ -28,6 +28,8 @@ void setup()
 {
   Serial.begin(115200);
   InitLamp();
+  mp3_setup("Sound/Startup.mp3");
+  mp3_play();
 }
 
 

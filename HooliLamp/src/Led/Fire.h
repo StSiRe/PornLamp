@@ -5,7 +5,7 @@ extern void Delay(int milliseconds);
 
 const int Height = 16;
 const int Width = 16;
-int ledCount= Height*Widht;
+int ledCount= Height*Width;
 const int lines = 16;
 int colorCorrectValue = 100;
 bool loadingFlag = true;

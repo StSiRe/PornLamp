@@ -1,5 +1,5 @@
 {
-    "Ssid": "null",
-    "Password": "null",
-    "IsConfigurated": false
+    "WiFiSsid": "Mi Phone",
+    "WiFiPassword": "12345678@",
+    "ConfigState": true
 }

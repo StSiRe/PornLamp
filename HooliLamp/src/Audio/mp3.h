@@ -52,7 +52,7 @@ void mp3_play()
     static bool mp3_stp = false;
     if(!mp3_stp)
     {
-        mp3_setup("zkzk.mp3");
+        mp3_setup("/Startup.mp3");
         mp3_stp = true;
     }
         
