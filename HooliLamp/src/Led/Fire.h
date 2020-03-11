@@ -3,8 +3,13 @@ extern NeoPixelBrightnessBus<NeoGrbFeature, NeoEsp32I2s1800KbpsMethod> strip;
 extern int XY(int x,int y);
 extern void Delay(int milliseconds);
 
+<<<<<<< HEAD
 extern const int Height;
 extern const int Width;
+=======
+const int Height = 16;
+const int Width = 16;
+>>>>>>> 7f0fb98841331e7954409bf1fc3b71fe15e2d87a
 int ledCount= Height*Width;
 const int lines = 16;
 int colorCorrectValue = 100;
