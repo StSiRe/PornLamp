@@ -3,13 +3,8 @@
 #include<Wifi/Server.h>
 #include<Wifi/DNS.h>
 extern void WriteLine(String text);
-extern bool getWiFiConfigState();
-extern void setWiFiConfigState();
-extern void CreateAP(String ssid,String password);
-extern void InitServer();
 extern char* ToChar(String command);
 extern String Ssid,Password;
-extern bool ConfigMDNS();
 extern void Reset();
 
 TaskHandle_t TaskWiFiViewer;

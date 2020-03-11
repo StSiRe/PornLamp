@@ -1,8 +1,8 @@
 #include<WiFi.h>
 #include<SPIFFS.h>
 #include<FileSystem/Settings.h>
-//#include<ESPAsyncWebServer.h>
-//AsyncWebServer server(80);
+#include<ESPAsyncWebServer.h>
+AsyncWebServer server(80);
 String _ssid,_password;
 
 extern void WriteLine(String text);
@@ -39,7 +39,6 @@ void SaveData(void *pv)
 }
 void InitServer()
 {
-    /*
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/Registration/Start/index.html", "text/html");
     });
@@ -60,9 +59,8 @@ void InitServer()
         }
         WriteLine(_password);   
         
-        xTaskCreatePinnedToCore(SaveData,"Ssid Saver",8096,NULL,1,NULL,0);
+        xTaskCreatePinnedToCore(SaveData,"WiFi Initialization",8192,NULL,1,NULL,0);
     });
 
     server.begin();
-    */
 }

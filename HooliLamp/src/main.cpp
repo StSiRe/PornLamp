@@ -4,14 +4,14 @@
 #include<FileSystem/FileSys.h>
 #include<Wifi/Wifi.h>
 #include<Led/Display.h>
-#include<Led/Rainbow.h>
+#include<Led/Fire.h>
 
 String Ssid="Hooli.Lamp",Password="12345678";
 void Task(void *p)
 {
   for(;;)
   {    
-    Hue();
+    Fire();
   }
 }
 void InitLamp()

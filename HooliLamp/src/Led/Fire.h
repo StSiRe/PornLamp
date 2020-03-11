@@ -3,9 +3,9 @@ extern NeoPixelBrightnessBus<NeoGrbFeature, NeoEsp32I2s1800KbpsMethod> strip;
 extern int XY(int x,int y);
 extern void Delay(int milliseconds);
 
-const int Height = 16;
-const int Width = 16;
-int ledCount= Height*Widht;
+extern const int Height;
+extern const int Width;
+int ledCount= Height*Width;
 const int lines = 16;
 int colorCorrectValue = 100;
 bool loadingFlag = true;
@@ -27,24 +27,40 @@ uint16_t getPixelNumber(int8_t x, int8_t y) {
   {
     return x*Height + y;
   }
+
+  //return ((16 - 1-y) * Width) + x;
+
 }
 
-void drawPixelXY(int8_t x, int8_t y, CRGB color) {
+void drawPixelXY(int8_t x, int8_t y, RgbColor color) {
   if (x < 0 || x > Width - 1 || y < 0 || y > Height - 1) return;
   int thisPixel = getPixelNumber(x, y);
   for (byte i = 0; i < 1; i++) {
-    leds[thisPixel + i] = color;
+    strip.SetPixelColor(thisPixel + i,color);
+    //Serial.println(thisPixel + i);
   }
 }
 
-uint32_t getPixColor(int thisSegm) {
-  if (thisSegm < 0 || thisSegm > ledCount - 1) return 0;
-  return (((uint32_t)leds[thisSegm].r << 16) | ((long)leds[thisSegm].g << 8 ) | (long)leds[thisSegm].b);
+/*
+//auto tmpColor = RgbColor(0,0,0);
+RgbColor getPixColor(int led) {
+  auto color = strip.GetPixelColor(led);
+  return RgbColor(color);
 }
+RgbColor getPixColorXY(int8_t x, int8_t y) {
+  return getPixColor(getPixelNumber(x, y));
+}
+*/
+uint32_t getPixColor(int thisSegm) {
+  int thisPixel = thisSegm;
+  if (thisPixel < 0 || thisPixel > ledCount - 1) return 0;
+  return (((uint32_t)strip.GetPixelColor(thisPixel).R << 16) | ((long)strip.GetPixelColor(thisPixel).G << 8 ) | (long)strip.GetPixelColor(thisPixel).B);
+}
+
+// функция получения цвета пикселя в матрице по его координатам
 uint32_t getPixColorXY(int8_t x, int8_t y) {
   return getPixColor(getPixelNumber(x, y));
 }
-
 
 #define SPARKLES 1        // вылетающие угольки вкл выкл
 unsigned char line[lines];
@@ -106,31 +122,49 @@ void drawFrame(int pcnt) {
       uint8_t newX = x;
       if (x > 15) newX = x - 15;
       if (y < 8) {
-        nextv =
-          (((100.0 - pcnt) * matrixValue[y][newX]
+        nextv = (((100.0 - pcnt) * matrixValue[y][newX]
             + pcnt * matrixValue[y - 1][newX]) / 100.0)
           - pgm_read_byte(&(valueMask[y][newX]));
-        CRGB color = CHSV(
-                       modes[1].scale * 2.5 + pgm_read_byte(&(hueMask[y][newX])) - colorCorrectValue, // H
-                       255, // S
-                       (uint8_t)max(0, nextv) // V
-                     );
-
-        //leds[getPixelNumber(x, y)] = color;
-        strip.SetPixelColor(XY(x,y),color);
+        auto color = RgbColor(HsbColor((float)(modes[1].scale * 2.5 + pgm_read_byte(&(hueMask[y][newX])) - colorCorrectValue) / (float)256,
+                       1, // S
+                       (float)max(0, nextv)/(float)256 // V
+                       ));
+        drawPixelXY(x,y,color);
       } 
+      /*
+      else if (y == 8 && SPARKLES) {
+        auto color = getPixColorXY(x,y-1);
+        Serial.print(color.R +  ":");
+        Serial.print(color.G +  ":");
+        Serial.println(color.B);
+        if (random(0, 20) == 0 && (10 + color.B + color.G) != 0)
+        {
+          drawPixelXY(x, y, RgbColor(255,255,255));
+        }
+        else 
+        {
+          drawPixelXY(x, y, RgbColor(0,0,0));
+        }
+
+      } 
+      else if (SPARKLES) {
+
+        // старая версия для яркости
+       // if (getPixColorXY(x, y - 1) > 0)
+       //   drawPixelXY(x, y, getPixColorXY(x, y - 1));
+       // else drawPixelXY(x, y, 0);
+
+      }*/
+
       else if (y == 8 && SPARKLES) {
         if (random(0, 20) == 0 && getPixColorXY(x, y - 1) != 0) drawPixelXY(x, y, getPixColorXY(x, y - 1));
         else drawPixelXY(x, y, 0);
-      } 
-      else if (SPARKLES) {
+      } else if (SPARKLES) {
 
         // старая версия для яркости
         if (getPixColorXY(x, y - 1) > 0)
           drawPixelXY(x, y, getPixColorXY(x, y - 1));
         else drawPixelXY(x, y, 0);
-
-      }
     }
   }
 
@@ -138,14 +172,14 @@ void drawFrame(int pcnt) {
   for (unsigned char x = 0; x < Width; x++) {
     uint8_t newX = x;
     if (x > 15) newX = x - 15;
-    CRGB color = CHSV(
-                   modes[1].scale * 2.5 + pgm_read_byte(&(hueMask[0][newX])) - colorCorrectValue, // H
-                   255,           // S
-                   (uint8_t)(((100.0 - pcnt) * matrixValue[0][newX] + pcnt * line[newX]) / 100.0) // V
-                 );
-    //leds[getPixelNumber(newX, 0)] = color;
-    strip.SetPixelColor(XY(newX,0),color);
+    auto color = RgbColor(HsbColor(
+                   (float)(modes[1].scale * 2.5 + pgm_read_byte(&(hueMask[0][newX])) - colorCorrectValue) / (float) 256, // H
+                   1,           // S
+                   (float)(((100.0 - pcnt) * matrixValue[0][newX] + pcnt * line[newX]) / 100.0) / (float) 256 // V
+                 ));
+    drawPixelXY(newX,0,color);
   }
+}
 }
 
 void Fire() {
@@ -160,6 +194,6 @@ void Fire() {
   }
   drawFrame(pcnt);
   pcnt += 30;
-  Delay(5);
+  Delay(15);
   strip.Show();
 }
