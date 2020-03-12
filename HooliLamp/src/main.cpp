@@ -5,13 +5,16 @@
 #include<Wifi/Wifi.h>
 #include<Led/Display.h>
 #include<Led/Fire.h>
+#include<Led/Rainbow.h>
+#include<Led/MatrixAnimation.h>
 
 String Ssid="Hooli.Lamp",Password="12345678";
 void Task(void *p)
 {
   for(;;)
   {
-    Fire();
+    //Fire();
+    MatrixRoutine();
   }
 }
 void InitLamp()
@@ -20,6 +23,7 @@ void InitLamp()
   ConfigFS();
   LoadData();
   WiFiStart();
+  delay(100);
   xTaskCreatePinnedToCore(Task,"ta",8192,NULL,3,NULL,1);
 }
 
