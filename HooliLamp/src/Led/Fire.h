@@ -1,18 +1,13 @@
 #include <NeoPixelBrightnessBus.h>
 extern NeoPixelBrightnessBus<NeoGrbFeature, NeoEsp32I2s1800KbpsMethod> strip;
-extern int XY(int x,int y);
+//extern int XY(int x,int y);
 extern void Delay(int milliseconds);
-
-<<<<<<< HEAD
 extern const int Height;
 extern const int Width;
-=======
-const int Height = 16;
-const int Width = 16;
->>>>>>> 7f0fb98841331e7954409bf1fc3b71fe15e2d87a
 int ledCount= Height*Width;
 const int lines = 16;
-int colorCorrectValue = 100;
+//200 - красивый синий 256(нежный голубой с зелеными угольками)
+int colorCorrectValue = 101;
 bool loadingFlag = true;
 #define MODE_AMOUNT 18
 //Большая шляпа
@@ -46,16 +41,13 @@ void drawPixelXY(int8_t x, int8_t y, RgbColor color) {
   }
 }
 
-/*
-//auto tmpColor = RgbColor(0,0,0);
-RgbColor getPixColor(int led) {
+RgbColor getPixColorRGB(int led) {
   auto color = strip.GetPixelColor(led);
   return RgbColor(color);
 }
-RgbColor getPixColorXY(int8_t x, int8_t y) {
-  return getPixColor(getPixelNumber(x, y));
+RgbColor getPixColorXYRGB(int8_t x, int8_t y) {
+  return getPixColorRGB(getPixelNumber(x, y));
 }
-*/
 uint32_t getPixColor(int thisSegm) {
   int thisPixel = thisSegm;
   if (thisPixel < 0 || thisPixel > ledCount - 1) return 0;
@@ -118,7 +110,8 @@ void shiftUp() {
   }
 }
 
-void drawFrame(int pcnt) {
+void drawFrame(int pcnt) 
+{
   int nextv;
 
   //each row interpolates with the one before it
@@ -130,61 +123,47 @@ void drawFrame(int pcnt) {
         nextv = (((100.0 - pcnt) * matrixValue[y][newX]
             + pcnt * matrixValue[y - 1][newX]) / 100.0)
           - pgm_read_byte(&(valueMask[y][newX]));
-        auto color = RgbColor(HsbColor((float)(modes[1].scale * 2.5 + pgm_read_byte(&(hueMask[y][newX])) - colorCorrectValue) / (float)256,
-                       1, // S
-                       (float)max(0, nextv)/(float)256 // V
-                       ));
+        float h =(modes[1].scale * 2.5 + pgm_read_byte(&(hueMask[y][newX])) - colorCorrectValue);
+        float v =max(0, nextv);
+        h /= 256;
+        v /= 256;
+        auto color = RgbColor(HsbColor(h, 1.0, v));
         drawPixelXY(x,y,color);
       } 
-      /*
       else if (y == 8 && SPARKLES) {
-        auto color = getPixColorXY(x,y-1);
-        Serial.print(color.R +  ":");
-        Serial.print(color.G +  ":");
-        Serial.println(color.B);
-        if (random(0, 20) == 0 && (10 + color.B + color.G) != 0)
-        {
-          drawPixelXY(x, y, RgbColor(255,255,255));
-        }
-        else 
-        {
-          drawPixelXY(x, y, RgbColor(0,0,0));
-        }
-
-      } 
-      else if (SPARKLES) {
-
-        // старая версия для яркости
-       // if (getPixColorXY(x, y - 1) > 0)
-       //   drawPixelXY(x, y, getPixColorXY(x, y - 1));
-       // else drawPixelXY(x, y, 0);
-
-      }*/
-
-      else if (y == 8 && SPARKLES) {
-        if (random(0, 20) == 0 && getPixColorXY(x, y - 1) != 0) drawPixelXY(x, y, getPixColorXY(x, y - 1));
+        if (random(0, 20) == 0 && getPixColorXY(x, y - 1) != 0) drawPixelXY(x, y, getPixColorXYRGB(x, y - 1));
         else drawPixelXY(x, y, 0);
       } else if (SPARKLES) {
 
         // старая версия для яркости
         if (getPixColorXY(x, y - 1) > 0)
-          drawPixelXY(x, y, getPixColorXY(x, y - 1));
+          drawPixelXY(x, y, getPixColorXYRGB(x, y - 1));
         else drawPixelXY(x, y, 0);
+      }
+    }
+
+    //first row interpolates with the "next" line
+    for (unsigned char x = 0; x < Width; x++) 
+    {
+      uint8_t newX = x;
+      if (x > 15) newX = x - 15;
+      /*
+      auto color = RgbColor(HsbColor(
+                    (float)(modes[1].scale * 2.5 + pgm_read_byte(&(hueMask[0][newX])) - colorCorrectValue) / (float) 256, // H
+                    1,           // S
+                    (float)(((100.0 - pcnt) * matrixValue[0][newX] + pcnt * line[newX]) / 100.0) / (float) 256 // V
+                  ));
+      drawPixelXY(newX,0,color);
+      */
+      float h = modes[1].scale * 2.5 + pgm_read_byte(&(hueMask[0][newX])) - colorCorrectValue;
+      
+      float v = (uint8_t)(((100.0 - pcnt) * matrixValue[0][newX] + pcnt * line[newX]) / 100.0);      
+      v = v/256.0;
+      h = h/256.0;      
+      auto color = RgbColor(HsbColor(h, 1, v));
+      strip.SetPixelColor(getPixelNumber(newX,0),color);
     }
   }
-
-  //first row interpolates with the "next" line
-  for (unsigned char x = 0; x < Width; x++) {
-    uint8_t newX = x;
-    if (x > 15) newX = x - 15;
-    auto color = RgbColor(HsbColor(
-                   (float)(modes[1].scale * 2.5 + pgm_read_byte(&(hueMask[0][newX])) - colorCorrectValue) / (float) 256, // H
-                   1,           // S
-                   (float)(((100.0 - pcnt) * matrixValue[0][newX] + pcnt * line[newX]) / 100.0) / (float) 256 // V
-                 ));
-    drawPixelXY(newX,0,color);
-  }
-}
 }
 
 void Fire() {

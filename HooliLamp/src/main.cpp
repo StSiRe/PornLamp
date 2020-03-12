@@ -4,23 +4,14 @@
 #include<FileSystem/FileSys.h>
 #include<Wifi/Wifi.h>
 #include<Led/Display.h>
-<<<<<<< HEAD
 #include<Led/Fire.h>
 
-=======
-#include<Led/Rainbow.h>
-#include<Audio/mp3.h>
->>>>>>> 7f0fb98841331e7954409bf1fc3b71fe15e2d87a
 String Ssid="Hooli.Lamp",Password="12345678";
 void Task(void *p)
 {
   for(;;)
-  {    
-<<<<<<< HEAD
+  {
     Fire();
-=======
-    RainbowV(); 
->>>>>>> 7f0fb98841331e7954409bf1fc3b71fe15e2d87a
   }
 }
 void InitLamp()
@@ -37,12 +28,10 @@ void setup()
 {
   Serial.begin(115200);
   InitLamp();
-  mp3_setup("Sound/Startup.mp3");
-  mp3_play();
 }
 
 
 void loop()
 {
-  delay(10);
+  delay(5000);
 }
