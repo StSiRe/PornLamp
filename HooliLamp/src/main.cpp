@@ -4,26 +4,18 @@
 #include<FileSystem/FileSys.h>
 #include<Wifi/Wifi.h>
 #include<Led/Display.h>
-#include<Led/Fire.h>
-<<<<<<< HEAD
 #include<Audio/Controller.h>
-=======
-#include<Led/Rainbow.h>
-#include<Led/MatrixAnimation.h>
->>>>>>> ebdb1f1b4cc99b22909cdb03745cbd71b026add2
+#include<System/Time.h>
+#include<Led/Sparks.h>
 
 String Ssid="Hooli.Lamp",Password="12345678";
 void Task(void *p)
 {
   for(;;)
   {
-<<<<<<< HEAD
-    mp3_play();
-    Delay(15);
-=======
+   //mp3_play();
     //Fire();
-    MatrixRoutine();
->>>>>>> ebdb1f1b4cc99b22909cdb03745cbd71b026add2
+    Sparks();
   }
 }
 void InitLamp()
@@ -31,13 +23,9 @@ void InitLamp()
   InitMatrix();
   ConfigFS();
   LoadData();
-<<<<<<< HEAD
-  WiFiStart();  
-=======
   WiFiStart();
-  delay(100);
+  
   xTaskCreatePinnedToCore(Task,"ta",8192,NULL,3,NULL,1);
->>>>>>> ebdb1f1b4cc99b22909cdb03745cbd71b026add2
 }
 
 
@@ -45,7 +33,7 @@ void setup()
 {
   Serial.begin(115200);
   InitLamp();
-  PlayAudio("/Startup.mp3");  
+  PlayAudio("/Sound/Notification.mp3");  
 }
 
 
