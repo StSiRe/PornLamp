@@ -27,9 +27,6 @@ uint16_t getPixelNumber(int8_t x, int8_t y) {
   {
     return x*Height + y;
   }
-
-  //return ((16 - 1-y) * Width) + x;
-
 }
 
 void drawPixelXY(int8_t x, int8_t y, RgbColor color) {
@@ -37,7 +34,6 @@ void drawPixelXY(int8_t x, int8_t y, RgbColor color) {
   int thisPixel = getPixelNumber(x, y);
   for (byte i = 0; i < 1; i++) {
     strip.SetPixelColor(thisPixel + i,color);
-    //Serial.println(thisPixel + i);
   }
 }
 
@@ -147,17 +143,8 @@ void drawFrame(int pcnt)
     {
       uint8_t newX = x;
       if (x > 15) newX = x - 15;
-      /*
-      auto color = RgbColor(HsbColor(
-                    (float)(modes[1].scale * 2.5 + pgm_read_byte(&(hueMask[0][newX])) - colorCorrectValue) / (float) 256, // H
-                    1,           // S
-                    (float)(((100.0 - pcnt) * matrixValue[0][newX] + pcnt * line[newX]) / 100.0) / (float) 256 // V
-                  ));
-      drawPixelXY(newX,0,color);
-      */
-      float h = modes[1].scale * 2.5 + pgm_read_byte(&(hueMask[0][newX])) - colorCorrectValue;
-      
-      float v = (uint8_t)(((100.0 - pcnt) * matrixValue[0][newX] + pcnt * line[newX]) / 100.0);      
+      float h = modes[1].scale * 2.5 + pgm_read_byte(&(hueMask[0][newX])) - colorCorrectValue;      
+      float v = ((100.0 - pcnt) * matrixValue[0][newX] + pcnt * line[newX]) / 100.0;      
       v = v/256.0;
       h = h/256.0;      
       auto color = RgbColor(HsbColor(h, 1, v));

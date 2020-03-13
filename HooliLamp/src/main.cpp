@@ -5,13 +5,15 @@
 #include<Wifi/Wifi.h>
 #include<Led/Display.h>
 #include<Led/Fire.h>
+#include<Audio/Controller.h>
 
 String Ssid="Hooli.Lamp",Password="12345678";
 void Task(void *p)
 {
   for(;;)
   {
-    Fire();
+    mp3_play();
+    Delay(15);
   }
 }
 void InitLamp()
@@ -19,8 +21,7 @@ void InitLamp()
   InitMatrix();
   ConfigFS();
   LoadData();
-  WiFiStart();
-  xTaskCreatePinnedToCore(Task,"ta",8192,NULL,3,NULL,1);
+  WiFiStart();  
 }
 
 
@@ -28,10 +29,12 @@ void setup()
 {
   Serial.begin(115200);
   InitLamp();
+  PlayAudio("/Startup.mp3");  
 }
 
 
 void loop()
-{
-  delay(5000);
+{ 
+  //PlayAudio("/Startup.mp3");
+  Delay(30000);
 }

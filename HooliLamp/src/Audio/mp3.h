@@ -1,4 +1,3 @@
-
 #include <SD.h>
 #include "AudioFileSourceSPIFFS.h"
 #include "AudioFileSourceID3.h"
@@ -49,12 +48,12 @@ void mp3_setup(String mp3_file)
 
 void mp3_play()
 {
-    static bool mp3_stp = false;
-    if(!mp3_stp)
-    {
-        mp3_setup("/Startup.mp3");
-        mp3_stp = true;
-    }
+    //static bool mp3_stp = false;
+    //if(!mp3_stp)
+    //{
+    //    mp3_setup("/Startup.mp3");
+    //    mp3_stp = true;
+    //}
         
     if (mp3->isRunning()) {
         if (!mp3->loop())
@@ -63,3 +62,10 @@ void mp3_play()
         }
     }
 }
+//void mp3_stop()
+//{
+//    if (!mp3->loop())
+//        {
+//            mp3->stop();
+//        }
+//}
