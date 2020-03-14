@@ -2,16 +2,13 @@
 #include<Led/Fire.h>
 #include<Led/SystemAnimations.h>
 #include<Led/Rainbow.h>
-//#include<Led/Sparks.h>
+#include<Led/Sparks.h>
 #include<Led/MatrixAnimation.h>
-//#include<Led/Display.h>
 
 #include<string.h>
 extern const int Height;
 extern const int Width;
 extern int XY(int x,int y);
-//extern void fireRoutine();
-//extern void LampOff();
 
 extern void WriteLine(String text);
 extern void Delay(int milliseconds);
@@ -19,6 +16,7 @@ extern void Delay(int milliseconds);
 bool _updateReqied = false;
 
 String _currentAnimation = "";
+String _previosAnimation = "";
 int currentAnimationNum =  10;
 xTaskHandle Animation;
 String AnimationModes[]  = {
@@ -32,12 +30,6 @@ String AnimationModes[]  = {
     "Matrix",
     "Penis"
 };
-
-
-
-
-
-
 void TaskAnimation(void *pvParameter)
 {
     for (;;)
@@ -74,7 +66,7 @@ void TaskAnimation(void *pvParameter)
         }        
         else if(_currentAnimation == "Sparks" || currentAnimationNum == 3)
         {
-            //Sparks();
+            Sparks();
         } 
         else if(_currentAnimation == "Matrix" || currentAnimationNum == 4)
         {
@@ -88,6 +80,14 @@ void TaskAnimation(void *pvParameter)
         {
             Penis();
         }
+        else if(_currentAnimation == "On")
+        {
+            _currentAnimation = _previosAnimation;
+        }
+        else if(_currentAnimation == "Off")
+        {
+            StripOff();
+        }
         else
         {
             LampOn();
@@ -96,25 +96,15 @@ void TaskAnimation(void *pvParameter)
     }
     vTaskDelete(NULL);
 }
-
-/*
-int strAnim2Num(String name)
-{
-    for (size_t i = 0; i < sizeof(AnimationModes)/sizeof(AnimationModes[0]); i++)
-    {
-        if(AnimationModes[i] == name) return sizeof(AnimationModes)/sizeof(AnimationModes[0]) - i;
-    }
-    return -1;
-}*/
-
 //Сменить анимацию по имени
 void ChangeAnimation(String animationName)
 {
     WriteLine("Changing Animation to: " + animationName);
+    _previosAnimation = _currentAnimation;
     _currentAnimation=animationName;
     _updateReqied = true;
-    //currentAnimationNum = strAnim2Num(animationName);
 }
+
 //Инициализирует и запускает поток для анимаций
 //Использовать перед ChangeAnimation!
 void InitAnimations()
