@@ -61,7 +61,9 @@ void AddAnimationHandlers()
         ChangeBrightness(res);
         //Serial.println(res);
     });
-
+    server.on("/Animations/Brightness.png", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/Main/Images/Brightness.png");
+    });
 }
 void AddSoundHandlers()
 {

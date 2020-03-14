@@ -11,7 +11,7 @@ function Animations()   {
         Separator(),
         
         CreateWrapper(
-            CreateImage("Animations/Brightness"),
+            CreateImage("Brightness"),
             CreateProgressBar("Brightness","SetBrightness()")
         )
     ));    
