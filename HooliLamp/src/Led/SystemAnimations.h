@@ -138,3 +138,11 @@ void Penis()
     strip.Show();
     Delay(100);
 }
+void StripOff()
+{
+  for(int i=0;i < Height * Width;i++)
+  {
+    strip.SetPixelColor(i,RgbColor(0,0,0));
+  }
+  strip.Show();
+}

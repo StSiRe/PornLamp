@@ -6,6 +6,7 @@ extern void WriteLine(String text);
 extern char* ToChar(String command);
 extern String Ssid,Password;
 extern void Reset();
+extern void ChangeAnimation(String animationName);
 
 TaskHandle_t TaskWiFiViewer;
 
@@ -21,12 +22,12 @@ void WiFiViewer(void *pvParameter)
         {
             waitingTimer= 0;
             WriteLine("WiFi viewer task deleted");
-            //WiFiConnectionSuccess();
+            ChangeAnimation("WiFiConnectionSuccess");
             vTaskDelete(NULL);//Удаляем эту задачу
         }
         else
         {
-           // WiFiConnectionProcess();
+            ChangeAnimation("WiFiConnectionProcess");
             waitingTimer++;
             if(waitingTimer == 120 * 3)//120 per munite and wait 4 minute
             {
@@ -65,7 +66,7 @@ void ConfigWiFi()
     WiFi.onEvent(onWiFiConnected,SYSTEM_EVENT_STA_CONNECTED);
     xTaskCreatePinnedToCore(WiFiViewer,"WiFi viewer",2048,NULL,1,&TaskWiFiViewer,0);
 }
-void WiFiStart()
+void InitWiFi()
 {
     if(!getWiFiConfigState())//Если система не была проинициализированна
     {

@@ -1,7 +1,3 @@
-
-function BOC()
-{
-}
 function LoadData()
 {
     let data = fetch("/settings");

@@ -5,31 +5,29 @@
 #include<Wifi/Wifi.h>
 #include<Led/Display.h>
 #include<Audio/Controller.h>
-#include<System/Time.h>
-#include<Led/Sparks.h>
 #include<Led/Animations.h>
+#include<System/Time.h>
 
 String Ssid="Hooli.Lamp",Password="12345678";
 
 void InitLamp()
 {
   InitMatrix();
+  InitAnimations();
+
   ConfigFS();
   LoadData();
-  WiFiStart();
-  InitAnimations();
-  
-}
 
-int Dolbayob = 3;
+  InitWiFi();
+  Delay(500);
+  InitTime();
+}
 void setup()
 {
   Serial.begin(115200);
   InitLamp();
   //PlayAudio("/Sound/Notification.mp3");  
 }
-
-
 void loop()
 { 
   //PlayAudio("/Startup.mp3");

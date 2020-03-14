@@ -6,17 +6,46 @@ function Animations()   {
         Separator(),
         CreateImage("Animations"),
         Separator(),
-        CreateText("Powee Mode:"),
+        CreateText("Power Mode:"),
         CreateToogleButton("PowerMode","PowerModeButton()"),
         Separator(),
         
         CreateWrapper(
-            CreateImage("Animations/Brightness"),
+            CreateImage("Brightness"),
             CreateProgressBar("Brightness","SetBrightness()")
         )
     ));    
     main.appendChild(fragment);
 }
+
+function SetBrightness()
+{
+    var element = document.getElementById("Brightness");
+    var value = element.value;
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('GET', '/Animations/Brightness?Brightness=' + value, false);
+
+    xhr.send();
+}
+function PowerModeButton()
+{
+    var button = document.getElementById("PowerMode");
+    var res = "";
+    if(button.control.checked)
+        res = "On";
+    else
+        res = "Off";
+    
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('GET', '/Animations/PowerMode?'+ res + '=' + res, false);
+
+    xhr.send();
+}
+
+
+
 function CreateWrapper(...childs)
 {
     var div = document.createElement("div");
@@ -24,24 +53,6 @@ function CreateWrapper(...childs)
     div.appendChild(childs[0]);
     div.appendChild(childs[1]);
     return div;
-}
-function SetBrightness()
-{
-    var element = document.getElementById("Brightness");
-    var value = element.value;
-    alert(value);
-}
-function PowerModeButton()
-{
-    var button = document.getElementById("PowerMode");
-    if(button.checked)
-    {        
-        alert("On"); 
-    }
-    else
-    {
-        alert("Off");
-    }
 }
 ///Очищает полностью экран от элементов
 function ClearElements()
@@ -58,6 +69,7 @@ function CreateProgressBar(id,onClickHandler)
 {
     var div = document.createElement("input");
     div.classList.add("progress");
+    div.id = id;
     div.setAttribute("oninput",onClickHandler);
     div.type = "range";
     div.min = "0";
