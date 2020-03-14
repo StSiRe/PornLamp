@@ -39,7 +39,7 @@ function PowerModeButton()
     
     var xhr = new XMLHttpRequest();
 
-    xhr.open('GET', '/Animations/PowerMode?'+ res + '=' + res, false);
+    xhr.open('GET', '/Animations/PowerMode?'+ "PowerMode" + '=' + res, false);
 
     xhr.send();
 }

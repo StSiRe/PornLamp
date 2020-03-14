@@ -80,14 +80,6 @@ void TaskAnimation(void *pvParameter)
         {
             Penis();
         }
-        else if(_currentAnimation == "On")
-        {
-            _currentAnimation = _previosAnimation;
-        }
-        else if(_currentAnimation == "Off")
-        {
-            StripOff();
-        }
         else
         {
             LampOn();

@@ -33,6 +33,7 @@ int XY( int x, int y)
   }
   return i;
 }
+
 //Инициализация матрицы
 void InitMatrix()
 {
@@ -40,6 +41,7 @@ void InitMatrix()
   strip.SetBrightness(Brightness);
   strip.Show();  
 }
+
 //Установить абсолютную яркость для всей матрицы
 void ChangeBrightness(int brightness)
 {
@@ -47,11 +49,27 @@ void ChangeBrightness(int brightness)
   strip.SetBrightness(Brightness);
 }
 
+//Очистить экран(на черный цвет)
 void ClearMatrix()
+{
+  CrearMatrixTo(RgbColor(0,0,0));
+}
+//Очищает экран заливая его указанным цветом
+void CrearMatrixTo(RgbColor color)
 {
   for(int i = 0; i < Height * Width; ++i)
   {
-    strip.SetPixelColor(i, RgbColor(0,0,0));
+    strip.SetPixelColor(i, color);
   }
   strip.Show();
+}
+//Выключает матрицу(Яркость - 0)
+void OffMatrix()
+{
+  strip.SetBrightness(0);
+}
+//Включает матрицу(ставит предыдущее значение яркости)
+void OnMatrix()
+{
+  strip.SetBrightness(Brightness);
 }

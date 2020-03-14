@@ -3,6 +3,8 @@
 #include <stdlib.h>
 
 extern void ChangeAnimation(String animationName);
+extern void OnMatrix();
+extern void OffMatrix();
 extern void ChangeBrightness(int brightness);
 extern char* ToChar(String command);
 void AddImagesHandlers()
@@ -38,14 +40,17 @@ void AddAnimationHandlers()
     server.on("/Animations/PowerMode", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(200,"text/html","Ok");
         String result = "On";
-        if (request->hasParam("On")) {
-          result = request->getParam("On")->value();
+        if (request->hasParam("PowerMode")) {
+            result = request->getParam("PowerMode")->value();
         }
-        if (request->hasParam("Off")) {
-          result = request->getParam("Off")->value();
+        if(result == "On")
+        {
+            OnMatrix();
         }
-        ChangeAnimation(result);
-        WriteLine("PowerMode: " + result);
+        else
+        {            
+            OffMatrix();
+        }
     });
 
     server.on("/Animations/Brightness", HTTP_GET, [](AsyncWebServerRequest *request){
