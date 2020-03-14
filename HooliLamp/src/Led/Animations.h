@@ -10,8 +10,6 @@
 extern const int Height;
 extern const int Width;
 extern int XY(int x,int y);
-//extern void fireRoutine();
-//extern void LampOff();
 
 extern void WriteLine(String text);
 extern void Delay(int milliseconds);
@@ -74,7 +72,7 @@ void TaskAnimation(void *pvParameter)
         }        
         else if(_currentAnimation == "Sparks" || currentAnimationNum == 3)
         {
-            //Sparks();
+            Sparks();
         } 
         else if(_currentAnimation == "Matrix" || currentAnimationNum == 4)
         {

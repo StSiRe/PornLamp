@@ -69,13 +69,13 @@ void WiFiConnectionProcess() //two blue stripes moves from border to center 8316
       {
         for (size_t j = 0; j < Height; j++)
         {
-          strip.SetPixelColor(XY(j,i), HsbColor(0.6,1,1 - k));
-          strip.SetPixelColor(XY(j,anti), HsbColor(0.6,1,1 - k));
+          strip.SetPixelColor(XY(i,j), HsbColor(0.6,1,1 - k));
+          strip.SetPixelColor(XY(anti,j), HsbColor(0.6,1,1 - k));
         }
         for (size_t j = 0; j < Height; j++)
         {
-          strip.SetPixelColor(XY(j,i + 1), HsbColor(0.6,1,k));
-          strip.SetPixelColor(XY(j,anti - 1), HsbColor(0.6,1,k));
+          strip.SetPixelColor(XY(i+1,j), HsbColor(0.6,1,k));
+          strip.SetPixelColor(XY(anti-1,j), HsbColor(0.6,1,k));
         }
         strip.Show();
         Delay(9);
@@ -92,8 +92,8 @@ void WiFiConnectionSuccess()//green space expending to center 7580ms
     {
       for(int j = 0; j < Height; j++)
       {
-        strip.SetPixelColor(XY(j,i), HsbColor(0.35,1,bright));
-        strip.SetPixelColor(XY(j,(Width-1) - i), HsbColor(0.35,1,bright));
+        strip.SetPixelColor(XY(i,j), HsbColor(0.35,1,bright));
+        strip.SetPixelColor(XY((Width-1) -i, j), HsbColor(0.35,1,bright));
       }
       strip.Show();
       Delay(10);
@@ -104,7 +104,7 @@ void WiFiConnectionSuccess()//green space expending to center 7580ms
   ClearMatrix();
   strip.Show();
 }
-
+float col=0;
 void Penis()
 {
   int mask[16][16] = {{0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0},
@@ -123,8 +123,11 @@ void Penis()
                      {0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0},
                      {0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0},
                      {0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0}};
-  for(float col = 0; col < 1; col+= 0.004)
-  {
+  
+  if(col > 1)
+    col = 0;
+    col+= 0.004;
+    ClearMatrix();
     for(int i = 0; i < 16; i++)
     {
       for(int j = 0; j < 26;j++)
@@ -134,7 +137,4 @@ void Penis()
     }
     strip.Show();
     Delay(100);
-    ClearMatrix();
-  }
-  Delay(1000);
 }
