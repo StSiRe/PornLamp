@@ -1,3 +1,6 @@
+var AnimationsEffects;
+var Brightness;
+var CurrentAnimation;
 function Animations()   {
     ClearElements();
     var main = document.getElementById("main");
@@ -6,18 +9,101 @@ function Animations()   {
         Separator(),
         CreateImage("Animations"),
         Separator(),
-        CreateText("Power Mode:"),
-        CreateToogleButton("PowerMode","PowerModeButton()"),
+        CreateText("PowerState:"),
+        CreateToogleButton("PowerState","PowerStateButton()"),
         Separator(),
         
         CreateWrapper(
             CreateImage("Brightness"),
             CreateProgressBar("Brightness","SetBrightness()")
+        ),
+        Separator(),
+        CreateWrapper(
+            CreateButtonImage("previous","PreviousAnimation()"),
+            CreateSelect("AnimationsList","ChangeAnimation()",null),
+            CreateButtonImage("next","NextAnimation()")
         )
     ));    
     main.appendChild(fragment);
+    LoadData();
+
 }
 
+function ChangeAnimation()
+{
+    var div = document.getElementById("AnimationsList");
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/Animations/Animation?Animation=' + div.value, false);
+    xhr.send();
+}
+function NextAnimation()
+{
+    var div = document.getElementById("AnimationsList");
+    div.selectedIndex++;
+    if(div.value == "")
+    {
+        div.selectedIndex = 0;
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/Animations/Animation?Animation=' + div.value, false);
+    xhr.send();
+}
+function PreviousAnimation()
+{
+    var div = document.getElementById("AnimationsList");
+    div.selectedIndex--;
+    
+    if(div.value == "")
+    {
+        div.selectedIndex = AnimationsEffects.length - 1;
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/Animations/Animation?Animation=' + div.value, false);
+    xhr.send();
+}
+function LoadData()
+{
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (this.status == 200) {
+            var data = JSON.parse(this.responseText);
+            AnimationsEffects = data.AnimationsList;
+            Brightness = data.Brightness / 256 * 100;
+            CurrentAnimation = data.CurrentAnimation;
+            var div = document.getElementById("Brightness");
+            div.value = Brightness;
+
+            div = document.getElementById("PowerState");
+            if(Brightness > 0)
+            {                
+                div.control.checked = true;
+            }
+            else
+            {
+                div.control.checked = false;
+            }
+                        
+            div = document.getElementById("AnimationsList");
+            div.removeChild(div.childNodes[0]);
+            for(var i=0;i<AnimationsEffects.length;i++)
+            {
+                var option = document.createElement("option");
+                option.text = AnimationsEffects[i];
+                div.appendChild(option);
+            } 
+            for(var i=0;i<AnimationsEffects.length;i++)
+            {
+                if(CurrentAnimation == AnimationsEffects[i])
+                {
+                    div.selectedIndex = i;
+                }
+            }
+        }
+    };
+    xhr.open('GET', '/Animations/Data', false);
+
+    xhr.send();
+}
 function SetBrightness()
 {
     var element = document.getElementById("Brightness");
@@ -28,9 +114,9 @@ function SetBrightness()
 
     xhr.send();
 }
-function PowerModeButton()
+function PowerStateButton()
 {
-    var button = document.getElementById("PowerMode");
+    var button = document.getElementById("PowerState");
     var res = "";
     if(button.control.checked)
         res = "On";
@@ -39,19 +125,37 @@ function PowerModeButton()
     
     var xhr = new XMLHttpRequest();
 
-    xhr.open('GET', '/Animations/PowerMode?'+ "PowerMode" + '=' + res, false);
+    xhr.open('GET', '/Animations/PowerState?'+ "PowerState" + '=' + res, false);
 
     xhr.send();
 }
 
-
+function CreateSelect(id,onClickHandler,...options)
+{
+    var div = document.createElement("select");
+    div.classList.add("select");   
+    div.id = id; 
+    div.setAttribute("onchange",onClickHandler);
+    //if(options == undefined)
+    //    return div;
+    for(var i=0;i<options.length;i++)
+    {        
+        var doc = document.createElement("option");
+        doc.value = options[i];
+        div.classList.add("option");
+        div.appendChild(doc);
+    }
+    return div;
+}
 
 function CreateWrapper(...childs)
 {
     var div = document.createElement("div");
     div.classList.add("wrapper");
-    div.appendChild(childs[0]);
-    div.appendChild(childs[1]);
+    for(var i=0;i<childs.length;i++)
+    {        
+        div.appendChild(childs[i]);
+    }
     return div;
 }
 ///Очищает полностью экран от элементов
@@ -70,7 +174,7 @@ function CreateProgressBar(id,onClickHandler)
     var div = document.createElement("input");
     div.classList.add("progress");
     div.id = id;
-    div.setAttribute("oninput",onClickHandler);
+    div.setAttribute("onmouseup",onClickHandler);
     div.type = "range";
     div.min = "0";
     div.max = "100";
@@ -109,6 +213,18 @@ function CreateForm(...childs) {
             div.appendChild(childs[index]);            
         }
     }
+    return div;
+}
+function CreateButtonImage(path,onClick)  {
+    if(path == null){
+        return null;
+    }        
+    var div = document.createElement("div");
+    div.className="image";    
+    div.setAttribute("onclick",onClick);
+    var div1 = document.createElement("img");
+    div1.src = "Images/"+ path + ".png";
+    div.appendChild(div1);
     return div;
 }
 function CreateImage(path)  {

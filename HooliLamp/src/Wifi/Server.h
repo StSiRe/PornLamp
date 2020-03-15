@@ -1,12 +1,15 @@
 #include<ESPAsyncWebServer.h>
 #include<SPIFFS.h>
 #include <stdlib.h>
-
+#include<ArduinoJson.h>
 extern void ChangeAnimation(String animationName);
 extern void OnMatrix();
 extern void OffMatrix();
 extern void ChangeBrightness(int brightness);
 extern char* ToChar(String command);
+extern int GetBrightness();
+extern String AnimationModes[];
+extern String _currentAnimation;
 void AddImagesHandlers()
 {
     server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -37,11 +40,11 @@ void AddImagesHandlers()
 }
 void AddAnimationHandlers()
 {
-    server.on("/Animations/PowerMode", HTTP_GET, [](AsyncWebServerRequest *request){
+    server.on("/Animations/PowerState", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(200,"text/html","Ok");
         String result = "On";
-        if (request->hasParam("PowerMode")) {
-            result = request->getParam("PowerMode")->value();
+        if (request->hasParam("PowerState")) {
+            result = request->getParam("PowerState")->value();
         }
         if(result == "On")
         {
@@ -66,9 +69,44 @@ void AddAnimationHandlers()
         ChangeBrightness(res);
         //Serial.println(res);
     });
-    server.on("/Animations/Brightness.png", HTTP_GET, [](AsyncWebServerRequest *request){
+    server.on("/Animations/Data", HTTP_GET, [](AsyncWebServerRequest *request){
+        String json= "";
+        DynamicJsonDocument doc(512);
+        doc["Brightness"] = GetBrightness();
+        doc["CurrentAnimation"] = _currentAnimation;
+        JsonArray AnimationsList = doc.createNestedArray("AnimationsList");        
+        for(int i=0;i<9;i++)
+        {
+            //Serial.println(AnimationModes[i]);
+            AnimationsList.add(AnimationModes[i]);
+            //Serial.println(AnimationsList.size());
+            //Serial.println(AnimationsList.memoryUsage());
+        }
+        serializeJson(doc,json);
+        request->send(200,"text/json",json);
+        Serial.println(json);
+    });
+    server.on("/Images/Brightness.png", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/Main/Images/Brightness.png");
     });
+
+    server.on("/Images/previous.png", HTTP_GET, [](AsyncWebServerRequest *request){
+            request->send(SPIFFS, "/Main/Images/previous.png");
+        });
+    server.on("/Images/next.png", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/Main/Images/next.png");
+    });
+   
+
+    server.on("/Animations/Animation", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(200,"text/html","Ok");        
+        if (request->hasParam("Animation")) 
+        {
+            String s = request->getParam("Animation")->value();
+            ChangeAnimation(s);
+        }
+    });
+
 }
 void AddSoundHandlers()
 {

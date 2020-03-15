@@ -26,7 +26,7 @@ String AnimationModes[]  = {
     "WiFiConnectionSuccess",
     "Fire",
     "Rainbow",
-    "RainbowH"
+    "RainbowH",
     "Matrix",
     "Penis"
 };
