@@ -75,13 +75,9 @@ void AddAnimationHandlers()
         doc["Brightness"] = GetBrightness();
         doc["CurrentAnimation"] = _currentAnimation;
         JsonArray AnimationsList = doc.createNestedArray("AnimationsList");        
-        for(int i=0;i<9;i++)
-        {
-            //Serial.println(AnimationModes[i]);
+        for(int i=0;i<5;i++)
             AnimationsList.add(AnimationModes[i]);
-            //Serial.println(AnimationsList.size());
-            //Serial.println(AnimationsList.memoryUsage());
-        }
+            
         serializeJson(doc,json);
         request->send(200,"text/json",json);
         Serial.println(json);

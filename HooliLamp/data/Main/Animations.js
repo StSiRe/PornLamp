@@ -26,7 +26,6 @@ function Animations()   {
     ));    
     main.appendChild(fragment);
     LoadData();
-
 }
 
 function ChangeAnimation()

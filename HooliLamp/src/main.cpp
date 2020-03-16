@@ -30,17 +30,6 @@ void setup()
 }
 void loop()
 { 
-  //PlayAudio("/Startup.mp3");
-  ChangeAnimation("WiFiConnectionProcess");
-  Delay(5000);
-  ChangeAnimation("WiFiConnectionSuccess");
-  Delay(7580);
-  ChangeAnimation("Penis");
-  Delay(30000);
-  ChangeAnimation("Fire");
-  Delay(10000);
-  ChangeAnimation("Matrix");
-  Delay(10000);
 }
 
 //ToDO Голубой ветерок! Лава И Змею!
