@@ -87,6 +87,26 @@ void WiFiConnectionSuccess()//green space expending to center 7580ms
   ClearMatrix();
   strip.Show();
 }
+
+bool sunrise(byte step = 5)
+{
+  bool isDone = true;
+  for(int i = 0; i < 256; i++)
+  {
+    strip.SetPixelColor(i, RgbColor(
+      addByLimit(strip.GetPixelColor(i).R,step,255), 
+      addByLimit(strip.GetPixelColor(i).G,step,255), 
+      addByLimit(strip.GetPixelColor(i).B,step,170)));
+    isDone = (strip.GetPixelColor(i) == RgbColor(255,255,170));
+  }
+  return isDone;
+}
+
+byte addByLimit(int value, byte step, byte limit)
+{
+  return (value + step) - ((value + step)/limit) * ((value + step)%limit);
+}
+
 float col=0;
 void Penis()
 {

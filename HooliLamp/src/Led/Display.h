@@ -48,6 +48,7 @@ void ChangeBrightness(int brightness)
   Brightness = brightness;
   strip.SetBrightness(Brightness);
 }
+
 //Очищает экран заливая его указанным цветом
 void CrearMatrixTo(RgbColor color)
 {
@@ -57,6 +58,7 @@ void CrearMatrixTo(RgbColor color)
   }
   strip.Show();
 }
+
 //Очистить экран(на черный цвет)
 void ClearMatrix()
 {
