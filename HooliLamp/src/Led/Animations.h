@@ -20,13 +20,9 @@ String _previosAnimation = "";
 int currentAnimationNum =  10;
 xTaskHandle Animation;
 String AnimationModes[]  = {
-    "LampOn",
-    "LampOff",
-    "WiFiConnectionProcess",
-    "WiFiConnectionSuccess",
     "Fire",
     "Rainbow",
-    "RainbowH"
+    "RainbowH",
     "Matrix",
     "Penis"
 };

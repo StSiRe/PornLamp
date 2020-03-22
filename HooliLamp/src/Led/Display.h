@@ -75,3 +75,7 @@ void OnMatrix()
 {
   strip.SetBrightness(Brightness);
 }
+int GetBrightness()
+{
+  return (int)Brightness;
+}

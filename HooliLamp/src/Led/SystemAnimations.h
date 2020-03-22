@@ -6,26 +6,8 @@ extern void ClearMatrix();
 extern const int Height;
 extern const int Width;
 extern int XY(int x,int y);
+extern void ClearMatrixTo(RgbColor color);
 #define BRIGHT_SPEED 0.015
-
-
-
-/*void ToWhite()
-{
-    for(int k =0;k<16;k++)
-    {  
-        for(int i=0;i< Width * Height;i++)
-        {
-            if(strip.GetPixelColor(i).R >= 200 || strip.GetPixelColor(i).G >= 200 || strip.GetPixelColor(i).B >= 200) 
-                
-                leds[i].fadeLightBy(16);
-            else
-                leds[i] = CRGB::White;
-        }
-        FastLED.show();
-        Delay(10);
-    }
-}*/
 
 void LampOn()
 {
@@ -40,22 +22,23 @@ void LampOn()
   }
   Delay(2000);
 }
+
 //Анимация при выключении лампы
-// void LampOff()
-// {
-//   //ToWhite();
-//   for(int i = Height - 1; i >= 0; i--)
-//   {
-//     for(int j = 0; j < Width; j++)
-//     {
-//       leds[XY(i,j)] = CRGB::Black;
-//     }
-//     FastLED.show();
-//     vTaskDelay(150/portTICK_RATE_MS);
-//   }
-//   FastLED.clear();
-//   FastLED.show();
-// }
+void LampOff()
+{
+  ClearMatrixTo(RgbColor(255,255,255));
+  for(int i = Height - 1; i >= 0; i--)
+  {
+   for(int j = 0; j < Width; j++)
+    {
+      strip.SetPixelColor(XY(i,j),RgbColor(0,0,0));
+    }
+    strip.Show();
+    Delay(150);
+  }
+  strip.Show();
+}
+
 // //8*256 = 2048 ms = 2 s
 void WiFiConnectionProcess() //two blue stripes moves from border to center 8316ms
 {
@@ -145,16 +128,18 @@ void Penis()
                      {0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0}};
   
   if(col > 1)
+  {    
     col = 0;
-    col+= 0.004;
-    ClearMatrix();
-    for(int i = 0; i < 16; i++)
+  }
+  col+= 0.004;
+  ClearMatrix();
+  for(int i = 0; i < 16; i++)
+  {
+    for(int j = 0; j < 26;j++)
     {
-      for(int j = 0; j < 26;j++)
-      {
-        strip.SetPixelColor(XY(i,(j + (int)(col/0.004))%15), HsbColor(col,1,mask[15 - i][j%15] / 255));
-      }
+      strip.SetPixelColor(XY(i,(j + (int)(col/0.004))%15), HsbColor(col,1,mask[15 - i][j%15] / 255));
     }
-    strip.Show();
-    Delay(100);
+  }
+  strip.Show();
+  Delay(100);
 }
