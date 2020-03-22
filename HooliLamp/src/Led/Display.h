@@ -49,11 +49,6 @@ void ChangeBrightness(int brightness)
   strip.SetBrightness(Brightness);
 }
 
-//Очистить экран(на черный цвет)
-void ClearMatrix()
-{
-  CrearMatrixTo(RgbColor(0,0,0));
-}
 //Очищает экран заливая его указанным цветом
 void CrearMatrixTo(RgbColor color)
 {
@@ -63,6 +58,13 @@ void CrearMatrixTo(RgbColor color)
   }
   strip.Show();
 }
+
+//Очистить экран(на черный цвет)
+void ClearMatrix()
+{
+  CrearMatrixTo(RgbColor(0,0,0));
+}
+
 //Выключает матрицу(Яркость - 0)
 void OffMatrix()
 {
