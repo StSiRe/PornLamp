@@ -151,23 +151,25 @@ body {
    display:flex;
  }
  .leftElement{
-   float: left;
-   position: relative;
-    background: #FFFFFF;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-    border-radius: 10%;
-    margin-right: 7.5px;
-    padding: 20px;
+  float: left;
+  position: relative;
+  background: #FFFFFF;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  border-radius: 10%;
+  margin-right: 7.5px;
+  padding: 20px;    
+  text-align:center;
  }
 .rightElement{
   float: right;
-  width: 180px;
+  width: 300px;
   position: relative;
   background: #FFFFFF;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
   border-radius: 10%;
   margin-left: 7.5px;
-  padding: 20px;
+  padding: 20px;  
+  text-align:center;
 }
 .select{
   float:center;

@@ -2,13 +2,14 @@ var AnimationsEffects;
 var Brightness;
 var CurrentAnimation;
 var PowerState = false;
-function Animations()   {
+function CreateAnimationWindow()   {
     ClearElements();
     var main = document.getElementById("main");
     var fragment = document.createDocumentFragment();
     fragment.appendChild(CreateForm(
-        CreateImage("Animations"))
-    );    
+        CreateBackButton(),
+        CreateImage("Animations")
+    ));    
     fragment.appendChild(Separator());
     fragment.appendChild(    
         CreateWrapper(    
@@ -131,11 +132,13 @@ function PowerStateButton()
     //ClearChilds(div);
     if(PowerState)
     {                
-        div.firstChild = CreateImage("PowerOn");
+        div.removeChild(div.firstChild);
+        div.appendChild(CreateImage("PowerOn"));
     }
     else
     {
-        div.firstChild = CreateImage("PowerOff");
+        div.removeChild(div.firstChild);
+        div.appendChild(CreateImage("PowerOff"));
     }
     var xhr = new XMLHttpRequest();
 

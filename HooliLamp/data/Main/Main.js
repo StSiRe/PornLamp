@@ -5,12 +5,12 @@ function MainPage()   {
     main.appendChild(CreateForm(CreateImage("logo")));
     main.appendChild(Separator());
     main.appendChild(CreateWrapper(
-        CreateFormLeft(CreateButtonImage("Animations","Animations()")),
+        CreateFormLeft(CreateButtonImage("Animations","CreateAnimationWindow()")),
         CreateFormRight(CreateImage("Music"))
     ));  
     main.appendChild(Separator());
     main.appendChild(CreateWrapper(
-        CreateFormLeft(CreateImage("Alarm")),
+        CreateFormLeft(CreateButtonImage("Alarm","CreateAlarmWindow()")),
         CreateFormRight(CreateImage("Settings"))
      ));   
 }
