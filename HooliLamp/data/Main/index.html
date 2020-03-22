@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8"/>
     <title>Hooli Smart Lamp</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" src="Images/favicon.ico">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="Animations.js"></script>
+    <script src="Elements.js"></script>
     <script src="data.js"></script>
+    <script src="Animations.js"></script>
+    <script src="Main.js"></script>
   </head>
   <body>    
     <div class='page'>
@@ -21,12 +24,12 @@
 
 
         <div class='wrapper'>
-          <div class='rightElement' onclick="Animations();">
+          <div class='leftElement' onclick="Animations();">
             <div class = 'image'>
               <img src = "Images/Animations.png">
             </div>
           </div>
-          <div class='leftElement' onclick="location.href='/Music'">
+          <div class='rightElement' onclick="location.href='/Music'">
             <div class = 'image'>
               <img src = 'Images/Music.png'>
             </div>
@@ -36,12 +39,12 @@
         <p></p>
 
         <div class='wrapper'>
-          <div class='rightElement' onclick="location.href='/Alarm'">
+          <div class='leftElement' onclick="location.href='/Alarm'">
             <div class = 'image'>
               <img src = "Images/Alarm.png">
             </div>
           </div>
-          <div class='leftElement' onclick="location.href='/Settings'">
+          <div class='rightElement' onclick="location.href='/Settings'">
             <div class = 'image'>
               <img src = "Images/Settings.png">
             </div>

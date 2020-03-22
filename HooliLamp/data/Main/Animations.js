@@ -1,33 +1,35 @@
 var AnimationsEffects;
 var Brightness;
 var CurrentAnimation;
+var PowerState = false;
 function Animations()   {
     ClearElements();
     var main = document.getElementById("main");
     var fragment = document.createDocumentFragment();
     fragment.appendChild(CreateForm(
-        Separator(),
-        CreateImage("Animations"),
-        Separator(),
-        CreateText("PowerState:"),
-        CreateToogleButton("PowerState","PowerStateButton()"),
-        Separator(),
-        
-        CreateWrapper(
+        CreateImage("Animations"))
+    );    
+    fragment.appendChild(Separator());
+    fragment.appendChild(    
+        CreateWrapper(    
+        CreateFormLeft(
+            CreateButtonImageWithID("PowerOff","PowerStateButton()","PowerButton")),
+        CreateFormRight(
             CreateImage("Brightness"),
             CreateProgressBar("Brightness","SetBrightness()")
-        ),
-        Separator(),
+        )));
+
+    fragment.appendChild(Separator());
+    fragment.appendChild(
+        CreateForm(
         CreateWrapper(
             CreateButtonImage("previous","PreviousAnimation()"),
             CreateSelect("AnimationsList","ChangeAnimation()",null),
             CreateButtonImage("next","NextAnimation()")
-        )
-    ));    
+        )));
     main.appendChild(fragment);
-    LoadData();
+    LoadDataAnimations();
 }
-
 function ChangeAnimation()
 {
     var div = document.getElementById("AnimationsList");
@@ -60,7 +62,7 @@ function PreviousAnimation()
     xhr.open('GET', '/Animations/Animation?Animation=' + div.value, false);
     xhr.send();
 }
-function LoadData()
+function LoadDataAnimations()
 {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
@@ -72,14 +74,18 @@ function LoadData()
             var div = document.getElementById("Brightness");
             div.value = Brightness;
 
-            div = document.getElementById("PowerState");
+            div = document.getElementById("PowerButton");
             if(Brightness > 0)
             {                
-                div.control.checked = true;
+                div.removeChild[0];
+                div.appendChild(CreateButtonImageWithID("PowerOn","PowerStateButton()","PowerButton"));
+                PowerState=true;
             }
             else
             {
-                div.control.checked = false;
+                div.removeChild[0];
+                div.appendChild(CreateButtonImageWithID("PowerOff","PowerStateButton()","PowerButton"));
+                PowerState = false;
             }
                         
             div = document.getElementById("AnimationsList");
@@ -115,125 +121,25 @@ function SetBrightness()
 }
 function PowerStateButton()
 {
-    var button = document.getElementById("PowerState");
+    PowerState = !PowerState;
     var res = "";
-    if(button.control.checked)
-        res = "On";
+    if(PowerState)
+        res="On";
     else
-        res = "Off";
-    
+        res="Off";
+    div = document.getElementById("PowerButton");
+    //ClearChilds(div);
+    if(PowerState)
+    {                
+        div.firstChild = CreateImage("PowerOn");
+    }
+    else
+    {
+        div.firstChild = CreateImage("PowerOff");
+    }
     var xhr = new XMLHttpRequest();
 
     xhr.open('GET', '/Animations/PowerState?'+ "PowerState" + '=' + res, false);
 
     xhr.send();
-}
-
-function CreateSelect(id,onClickHandler,...options)
-{
-    var div = document.createElement("select");
-    div.classList.add("select");   
-    div.id = id; 
-    div.setAttribute("onchange",onClickHandler);
-    //if(options == undefined)
-    //    return div;
-    for(var i=0;i<options.length;i++)
-    {        
-        var doc = document.createElement("option");
-        doc.value = options[i];
-        div.classList.add("option");
-        div.appendChild(doc);
-    }
-    return div;
-}
-
-function CreateWrapper(...childs)
-{
-    var div = document.createElement("div");
-    div.classList.add("wrapper");
-    for(var i=0;i<childs.length;i++)
-    {        
-        div.appendChild(childs[i]);
-    }
-    return div;
-}
-///Очищает полностью экран от элементов
-function ClearElements()
-{
-    var main = document.getElementById("main");
-    main.remove();
-    var doc = document.createElement("div");
-    doc.setAttribute("id","main");
-    var page = document.getElementsByClassName("page");
-    page[0].appendChild(doc);
-}
-
-function CreateProgressBar(id,onClickHandler)
-{
-    var div = document.createElement("input");
-    div.classList.add("progress");
-    div.id = id;
-    div.setAttribute("onmouseup",onClickHandler);
-    div.type = "range";
-    div.min = "0";
-    div.max = "100";
-    return div;
-}
-function CreateText(text)   {
-    var div = document.createElement("text");
-    div.innerText = text;
-    return div
-}
-
-function Separator()   {
-    var div = document.createElement("p");
-    return div
-}
-//Получает свой собственный id, и ссылку на обработкик взаимодействия
-function CreateToogleButton(id,onClickHandler) {
-    var div = document.createElement("label");
-    div.classList.add("switch");
-    div.id = id;
-    
-    var div1 = document.createElement("input");
-    div1.type = "checkbox";
-    div1.setAttribute("onclick",onClickHandler);
-    var div2 = document.createElement("span");
-    div2.classList.add("slider","round");
-    div.appendChild(div1);
-    div.appendChild(div2);
-    return div;
-}
-function CreateForm(...childs) {
-    var div = document.createElement("div");
-    div.className="form";
-    if(childs != null){
-        for (let index = 0; index < childs.length; index++) {
-            div.appendChild(childs[index]);            
-        }
-    }
-    return div;
-}
-function CreateButtonImage(path,onClick)  {
-    if(path == null){
-        return null;
-    }        
-    var div = document.createElement("div");
-    div.className="image";    
-    div.setAttribute("onclick",onClick);
-    var div1 = document.createElement("img");
-    div1.src = "Images/"+ path + ".png";
-    div.appendChild(div1);
-    return div;
-}
-function CreateImage(path)  {
-    if(path == null){
-        return null;
-    }        
-    var div = document.createElement("div");
-    div.className="image";
-    var div1 = document.createElement("img");
-    div1.src = "Images/"+ path + ".png";
-    div.appendChild(div1);
-    return div;
 }
