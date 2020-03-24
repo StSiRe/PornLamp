@@ -43,7 +43,7 @@ void setup()
 void loop()
 { 
   Delay(10000);
-  saveSettings();
+  SaveData();
 }
 
 //ToDO Голубой ветерок! Лава И Змею!

@@ -145,7 +145,7 @@ void setWiFiSettings(String ssid,String password)
     Ssid = ssid;
     Password = password;
 }
-void saveSettings()
+void SaveData()
 {
     File settings = SPIFFS.open("/Settings.json","w");
     if(!settings)

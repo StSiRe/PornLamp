@@ -1,4 +1,4 @@
-extern void saveSettings();
+extern void SaveData();
 extern void CloseFS();
 bool Debug = true;
 //Выводит текст в консоль,если отладка разрешена

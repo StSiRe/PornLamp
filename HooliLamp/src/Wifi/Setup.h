@@ -28,7 +28,7 @@ void CreateAP(String ssid,String password)
     }  
 }
 
-void SaveData(void *pv)
+void SaveWiFiSetupData(void *pv)
 {
     WriteLine("Saving ssid and password started");
     Delay(1000);
@@ -59,7 +59,7 @@ void InitServer()
         }
         WriteLine(_password);   
         
-        xTaskCreatePinnedToCore(SaveData,"WiFi Initialization",8192,NULL,1,NULL,0);
+        xTaskCreatePinnedToCore(SaveWiFiSetupData,"WiFi Initialization",8192,NULL,1,NULL,0);
     });
 
     server.begin();
