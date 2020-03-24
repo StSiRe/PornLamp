@@ -88,6 +88,10 @@ void WiFiConnectionSuccess()//green space expending to center 7580ms
   strip.Show();
 }
 
+byte addByLimit(int value, byte step, byte limit)
+{
+  return (value + step) - ((value + step)/limit) * ((value + step)%limit);
+}
 bool sunrise(byte step = 5)
 {
   bool isDone = true;
@@ -101,12 +105,6 @@ bool sunrise(byte step = 5)
   }
   return isDone;
 }
-
-byte addByLimit(int value, byte step, byte limit)
-{
-  return (value + step) - ((value + step)/limit) * ((value + step)%limit);
-}
-
 float col=0;
 void Penis()
 {

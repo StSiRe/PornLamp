@@ -7,9 +7,10 @@ function CreateAnimationWindow()   {
     var main = document.getElementById("main");
     var fragment = document.createDocumentFragment();
     fragment.appendChild(CreateForm(
+        CreateWrapper(
         CreateBackButton(),
         CreateImage("Animations")
-    ));    
+        )));    
     fragment.appendChild(Separator());
     fragment.appendChild(    
         CreateWrapper(    

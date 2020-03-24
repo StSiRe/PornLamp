@@ -7,7 +7,7 @@ extern char* ToChar(String command);
 extern String Ssid,Password;
 extern void Reset();
 extern void ChangeAnimation(String animationName);
-
+extern bool getWiFiConfigState();
 TaskHandle_t TaskWiFiViewer;
 
 //Выполняет отслеживание состояния WiFi подключения
