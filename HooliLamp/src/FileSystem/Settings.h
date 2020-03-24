@@ -173,12 +173,11 @@ void SaveData()
         obj["Repeat"] = AlarmClocks[i].Repeat;
         obj["Music"] = AlarmClocks[i].Music;
         
-        JsonArray days = doc.createNestedArray();
+        JsonArray days = obj.createNestedArray("Days");
         for(int j=0;j<AlarmClocks[i].Days.size();j++)
         {
             days.add(AlarmClocks[i].Days[j]);
         }
-        obj["Days"] = days;
     }  
     doc.add(alarm);
 

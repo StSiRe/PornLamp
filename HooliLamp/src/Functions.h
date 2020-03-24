@@ -29,7 +29,7 @@ void Delay(int milliseconds)
 void Reset()
 {
   WriteLine("Functions:Starting reboot procedure");
-  saveSettings();
+  SaveData();
   CloseFS();
   Delay(1000);
   ESP.restart();
