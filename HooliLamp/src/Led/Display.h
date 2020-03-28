@@ -43,7 +43,7 @@ void InitMatrix()
 }
 
 //Установить абсолютную яркость для всей матрицы
-void ChangeBrightness(int brightness)
+void SetBrightness(int brightness)
 {
   Brightness = brightness;
   strip.SetBrightness(Brightness);

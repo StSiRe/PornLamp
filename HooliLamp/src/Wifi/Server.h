@@ -5,7 +5,7 @@
 extern void ChangeAnimation(String animationName);
 extern void OnMatrix();
 extern void OffMatrix();
-extern void ChangeBrightness(int brightness);
+extern void SetBrightness(int brightness);
 extern char* ToChar(String command);
 extern int GetBrightness();
 extern String AnimationModes[];
@@ -75,7 +75,7 @@ void AddAnimationHandlers()
         }
         res *=255;
         res /=100;
-        ChangeBrightness(res);
+        SetBrightness(res);
         //Serial.println(res);
     });
     server.on("/Animations/Data", HTTP_GET, [](AsyncWebServerRequest *request){

@@ -16,6 +16,8 @@
 
 #include<System/Time.h>
 #include<System/Alarm/Dawn.h>
+#include<System/Status.h>
+#include<System/DeepSleep.h>
 
 String Ssid="Hooli.Lamp",Password="12345678";
 
@@ -29,7 +31,11 @@ void InitLamp()
 
   InitWiFi();
   Delay(500);
+  
   InitTime();
+  InitAlarmClock();
+  
+  InitSystemWD();
 }
 
 
@@ -38,7 +44,6 @@ void setup()
 {
   Serial.begin(115200);
   InitLamp();
-  InitAlarmClock();
 }
 
 

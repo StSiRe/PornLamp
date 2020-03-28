@@ -1,4 +1,3 @@
-
 #include<Led/Fire.h>
 #include<Led/SystemAnimations.h>
 #include<Led/Rainbow.h>
@@ -10,8 +9,10 @@ extern const int Height;
 extern const int Width;
 extern int XY(int x,int y);
 
+extern void UpdateTimeTimer();
 extern void WriteLine(String text);
 extern void Delay(int milliseconds);
+extern int GetBrightness();
 
 bool _updateReqied = false;
 
@@ -81,6 +82,10 @@ void TaskAnimation(void *pvParameter)
             LampOn();
         }
         Delay(1);
+        if(GetBrightness() != 0)
+        {
+            UpdateTimeTimer();
+        }
     }
     vTaskDelete(NULL);
 }

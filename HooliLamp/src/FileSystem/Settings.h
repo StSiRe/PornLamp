@@ -1,52 +1,20 @@
 #include<SPIFFS.h>
 #include<ArduinoJson.h>
 #include<System/Alarm/AlarmClock.h>
+#include<FileSystem/FuncFS.h>
+#include<FileSystem/Settings/Timeout.h>
+#include<FileSystem/Settings/UTC.h>
 extern void WriteLine(String text);
+//-------WiFI--------
 extern String Ssid,Password;
-extern String _currentAnimation;
-
 bool ConfigState = false;
-int _utcCorrection = 3;
+//----------Led -----------
+extern String _currentAnimation;
+extern int GetBrightness();
+extern void SetBrightness(int brightness);
 
 
 std::vector<AlarmClock> AlarmClocks;
-
-
-
-void SetValue(String value,String &result,String wrong)
-{
-    if(value != NULL && value != "" && value != "null")
-    {
-        result = value;
-    }
-    else
-    {        
-        result = wrong;
-    }
-}
-void SetValue(int value,int &result,int wrong)
-{
-    if(value != NULL)
-    {
-        result = value;
-    }
-    else
-    {        
-        result = wrong;
-    }
-}
-void SetValue(bool value,bool &result,bool wrong)
-{
-    if(value != NULL)
-    {
-        result = value;
-    }
-    else
-    {        
-        result = wrong;
-    }
-}
-
 
 void LoadData()
 {
@@ -86,6 +54,11 @@ void LoadData()
     SetValue(doc["WiFiPassword"],Password,Password);
     SetValue(doc["CurrentAnimation"],_currentAnimation,"Fire");
     SetValue(doc["UTC"],_utcCorrection,0);
+    SetValue(doc["Timeout"],Timeout,60*30);
+
+    int temp;
+    SetValue(doc["Brightness"],temp,64);
+    SetBrightness(temp);
 
 
 
@@ -130,10 +103,7 @@ bool getWiFiConfigState()
     return ConfigState;
 }
 
-int GetUTC()
-{
-    return _utcCorrection;
-}
+
 
 //0- non initialization; 1- setup complete
 void setWiFiConfigState(bool state)
@@ -160,8 +130,9 @@ void SaveData()
     doc["WiFiSsid"] = Ssid;
     doc["UTC"] = _utcCorrection;
     doc["CurrentAnimation"] = _currentAnimation;
-    //----------Save Alarm Data ---------------------   
-    
+    doc["Timeout"] = GetTimeout();
+    doc["Brightness"] = GetBrightness();
+    //----------Save Alarm Data ---------------------       
     JsonArray alarm = doc.createNestedArray("AlarmClock");   
     for (size_t i = 0; i < AlarmClocks.size(); i++)
     {
@@ -179,8 +150,6 @@ void SaveData()
         }
     }  
     doc.add(alarm);
-
-
     //-----------------------------------------------
     String json;
     serializeJson(doc,json);
