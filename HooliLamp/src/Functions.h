@@ -2,7 +2,49 @@ extern void SaveData();
 extern void CloseFS();
 bool Debug = true;
 //Выводит текст в консоль,если отладка разрешена
+void Write(String text)
+{
+  if(Debug == true)
+  {
+    Serial.print(text);
+  }
+}
+void Write(int text)
+{
+  if(Debug == true)
+  {
+    Serial.print(text);
+  }
+}
+void Write(bool text)
+{
+  if(Debug == true)
+  {
+    Serial.print(text);
+  }
+}
 void WriteLine(String text)
+{
+  if(Debug == true)
+  {
+    Serial.println(text);
+  }
+}
+void WriteLine(int text)
+{
+  if(Debug == true)
+  {
+    Serial.println(text);
+  }
+}
+void WriteLine(bool text)
+{
+  if(Debug == true)
+  {
+    Serial.println(text);
+  }
+}
+void WriteLine(size_t text)
 {
   if(Debug == true)
   {

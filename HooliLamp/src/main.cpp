@@ -15,6 +15,7 @@
 #include<Led/Animations.h>
 
 #include<System/Time.h>
+#include<System/Alarm/Dawn.h>
 
 String Ssid="Hooli.Lamp",Password="12345678";
 
@@ -37,13 +38,12 @@ void setup()
 {
   Serial.begin(115200);
   InitLamp();
+  InitAlarmClock();
 }
 
 
 void loop()
 { 
-  Delay(10000);
-  SaveData();
 }
 
 //ToDO Голубой ветерок! Лава И Змею!
