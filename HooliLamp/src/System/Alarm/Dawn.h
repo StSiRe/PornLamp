@@ -6,10 +6,11 @@ extern void SaveData();
 extern tm GetTime();
 //Prototypes
 void InitAlarmClock();
-void CheckTimeForAlarmClock();
+void CheckTimeForAlarmClock(void *pc);
 void AddAlarmClock(AlarmClock alarm);
-
-
+xTaskHandle AlarmClockTask;
+bool isAlarmWorking = false;
+void StopAlarm();
 
 void InitAlarmClock()
 {
@@ -49,10 +50,26 @@ void InitAlarmClock()
         Serial.println("");
     }
     Serial.println("Alarm Clock: End of loaded alarm clocks");
+    //xTaskCreatePinnedToCore(CheckTimeForAlarmClock,"AlarmClock",2048,NULL,1,&AlarmClockTask,0);
 }
-void CheckTimeForAlarmClock()
+void CheckTimeForAlarmClock(void *pc)
 {
+    while(true)
+    {
+        tm time = GetTime();
+        for(int i = 0;i < AlarmClocks.size(); i++)
+        {
+            AlarmClock alarm = AlarmClocks[i];
+            if(alarm.Enabled)//Проверяем,активирован ли он
+            {
+                
 
+
+
+            }
+        }
+        Delay(30*1000);//30s
+    }
 }
 void AddAlarmClock(AlarmClock alarm)
 {
@@ -60,5 +77,9 @@ void AddAlarmClock(AlarmClock alarm)
     AlarmClocks.push_back(alarm);
     SaveData();
     WriteLine("Alarm Clock: All alarm clock`s saved");
+}
+void StopAlarm()
+{
+    
 }
 

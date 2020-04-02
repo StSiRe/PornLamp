@@ -14,7 +14,9 @@
         "sstream": "cpp",
         "streambuf": "cpp",
         "regex": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "bitset": "cpp",
+        "algorithm": "cpp"
     },
     "git.ignoreLimitWarning": true
 }

@@ -45,6 +45,10 @@ void InitMatrix()
 //Установить абсолютную яркость для всей матрицы
 void SetBrightness(int brightness)
 {
+  if(brightness > 255)
+    brightness = 255;
+  if(brightness < 0)
+    brightness =0;
   Brightness = brightness;
   strip.SetBrightness(Brightness);
 }

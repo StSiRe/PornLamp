@@ -19,6 +19,9 @@
 #include<System/Status.h>
 #include<System/DeepSleep.h>
 
+
+#include<Button/Button.h>
+
 String Ssid="Hooli.Lamp",Password="12345678";
 
 void InitLamp()
@@ -36,6 +39,8 @@ void InitLamp()
   InitAlarmClock();
   
   InitSystemWD();
+
+  InitButton();
 }
 
 

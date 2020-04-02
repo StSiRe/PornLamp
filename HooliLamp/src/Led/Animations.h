@@ -20,6 +20,7 @@ String _currentAnimation = "";
 String _previosAnimation = "";
 int currentAnimationNum =  10;
 xTaskHandle Animation;
+int AnimationCount =5;
 String AnimationModes[]  = {
     "Fire",
     "Rainbow",
