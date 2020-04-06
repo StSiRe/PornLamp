@@ -1,3 +1,4 @@
+#include<System/Alarm/TimeConverter.h>
 extern std::vector<AlarmClock> AlarmClocks;
 extern void Delay(int milliseconds);
 extern void WriteLine();
@@ -50,8 +51,9 @@ void InitAlarmClock()
         Serial.println("");
     }
     Serial.println("Alarm Clock: End of loaded alarm clocks");
-    //xTaskCreatePinnedToCore(CheckTimeForAlarmClock,"AlarmClock",2048,NULL,1,&AlarmClockTask,0);
+    xTaskCreatePinnedToCore(CheckTimeForAlarmClock,"AlarmClock",2048,NULL,1,&AlarmClockTask,0);
 }
+
 void CheckTimeForAlarmClock(void *pc)
 {
     while(true)
@@ -59,13 +61,35 @@ void CheckTimeForAlarmClock(void *pc)
         tm time = GetTime();
         for(int i = 0;i < AlarmClocks.size(); i++)
         {
+            Serial.print("Clock #");
+            Serial.println(i);
             AlarmClock alarm = AlarmClocks[i];
             if(alarm.Enabled)//Проверяем,активирован ли он
             {
-                
+                for(int j = 0; j < alarm.Days.size(); j++)
+                {
+                    int day = ConvertDayToInt(alarm.Days[j]);
+                    Serial.println("Day:");
+                    Serial.println(day);
+                    Serial.println(time.tm_wday);
+                    if(time.tm_wday == day || day == 7)//Если день совпадает
+                    {
+                        int hm = time.tm_hour*60 + time.tm_min - alarm.Hour* 60 - alarm.Minute;
+                        Serial.println("HM: ");
+                        Serial.println(hm);
+                        if(hm > 0)//Если текущее время больше чем назначенное,то выходим
+                            break;
+                        hm = -hm;
+                        int freeTime = hm - alarm.Sunrise;
+                        Serial.println("FreeTime: ");
+                        Serial.println(freeTime);
+                        if(freeTime > 0)
+                            break;
 
-
-
+                        //Вот здесь и начнется рассвет
+                        Serial.println("Sunrise!!!!!");
+                    }
+                }
             }
         }
         Delay(30*1000);//30s

@@ -34,7 +34,7 @@ bool InitTime()
         WriteLine("Time can`t be install");
         return false;
     }
-    configTime(3600*GetUTC(),3600*GetUTC(), ntpServer);
+    configTime(3600*GetUTC(),0, ntpServer);
     WriteLine("NTP configurated.Updating time...");
     printLocalTime();
     Delay(10);

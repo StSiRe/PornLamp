@@ -2,19 +2,21 @@
 	"WiFiSsid": "520",
 	"WiFiPassword": "intel5689",
 	"ConfigState": true,
+	"UTC": 3,
 	"AlarmClock": [{
-			"Days": ["Monday", "2"],
+			"Days": ["Saturday"],
 			"Hour": 15,
-			"Minute": 30,
-			"Enabled": false,
+			"Minute": 20,
+			"Sunrise": 30,
+			"Enabled": true,
 			"Repeat": 0,
 			"Music": "Startup.mp3"
-		},
-		{
-			"Days": ["Monday", "2"],
-			"Hour": 15,
-			"Minute": 30,
-			"Enabled": false,
+		},{
+			"Days": ["Sunday"],
+			"Hour": 0,
+			"Minute": 20,
+			"Sunrise": 50,
+			"Enabled": true,
 			"Repeat": 0,
 			"Music": "Startup.mp3"
 		}

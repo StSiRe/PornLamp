@@ -28,6 +28,7 @@ void InitLamp()
 {
   InitMatrix();
   InitAnimations();
+  OnMatrix();
 
   ConfigFS();
   LoadData();

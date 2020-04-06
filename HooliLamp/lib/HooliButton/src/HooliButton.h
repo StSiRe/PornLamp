@@ -52,7 +52,7 @@ class  HooliButton
 
         unsigned int counter = 0;
 
-        unsigned int debounceMS = 50;
+        unsigned int debounceMS = 61;
 
         unsigned int clickMS = 150;
 

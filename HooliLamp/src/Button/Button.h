@@ -1,5 +1,5 @@
 #include<HooliButton.h>
-#define ButtonPin 4
+#define ButtonPin 14
 
 extern void Delay(int milliseconds);
 extern void WriteLine(String text);
@@ -98,7 +98,7 @@ void Tick(void *pv)
     for(;;)
     {
         button.Tick();
-        Delay(15);
+        Delay(15);//Возможно стоит уменьшить
     }
 }
 void InitButton()

@@ -66,7 +66,7 @@ void LoadData()
     int alarms = doc["AlarmClock"].size();
     for(int i = 0; i < alarms; i++)
     {
-        int hour = 0,minute = 0,repeat = 0;
+        int hour = 0,minute = 0,repeat = 0,sunrise =0;
         bool Enabled = false;
         String music = "";
         SetValue(doc["AlarmClock"][i]["Hour"],hour,0);
@@ -74,6 +74,7 @@ void LoadData()
         SetValue(doc["AlarmClock"][i]["Enabled"],Enabled,false);
         SetValue(doc["AlarmClock"][i]["Repeat"],repeat,0);
         SetValue(doc["AlarmClock"][i]["Music"],music,"Sound/Notification.mp3");
+        SetValue(doc["AlarmClock"][i]["Sunrise"],sunrise,15);
         std::vector<String> AlarmDays;
         int days = doc["AlarmClock"][i]["Days"].size();
         for(int j = 0; j < days; j++)
@@ -89,6 +90,7 @@ void LoadData()
         alarm.Music = music;
         alarm.Repeat = repeat;
         alarm.Days = AlarmDays;
+        alarm.Sunrise = sunrise;
         AlarmClocks.push_back(alarm);
     }
     //---------------------------------------
@@ -142,7 +144,7 @@ void SaveData()
         obj["Enabled"] = AlarmClocks[i].Enabled;
         obj["Repeat"] = AlarmClocks[i].Repeat;
         obj["Music"] = AlarmClocks[i].Music;
-        
+        obj["Sunrise"] = AlarmClocks[i].Sunrise;
         JsonArray days = obj.createNestedArray("Days");
         for(int j=0;j<AlarmClocks[i].Days.size();j++)
         {
