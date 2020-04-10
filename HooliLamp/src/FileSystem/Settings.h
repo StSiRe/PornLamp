@@ -1,8 +1,21 @@
 #include<SPIFFS.h>
 #include<ArduinoJson.h>
-bool ConfigState = false;
+#include<System/Alarm/AlarmClock.h>
+#include<FileSystem/FuncFS.h>
+#include<FileSystem/Settings/Timeout.h>
+#include<FileSystem/Settings/UTC.h>
 extern void WriteLine(String text);
+//-------WiFI--------
 extern String Ssid,Password;
+bool ConfigState = false;
+//----------Led -----------
+extern String _currentAnimation;
+extern int GetBrightness();
+extern void SetBrightness(int brightness);
+
+
+std::vector<AlarmClock> AlarmClocks;
+
 void LoadData()
 {
     if(!SPIFFS.exists("/Settings.json"))
@@ -26,13 +39,9 @@ void LoadData()
         return;
     }
 
-
-    //WriteLine(settings.readString());
-
-
     String json = settings.readString();
     WriteLine("Data: " + json);
-    DynamicJsonDocument doc(1024);
+    DynamicJsonDocument doc(4096);
     auto error = deserializeJson(doc, json);
     if(error)
     {
@@ -40,17 +49,51 @@ void LoadData()
         Serial.println(error.c_str());
     }
 
-    bool _ConfigState = doc["ConfigState"];
-    ConfigState = _ConfigState;
+    SetValue(doc["ConfigState"],ConfigState,false);
+    SetValue(doc["WiFiSsid"],Ssid,Ssid);
+    SetValue(doc["WiFiPassword"],Password,Password);
+    SetValue(doc["CurrentAnimation"],_currentAnimation,"Fire");
+    SetValue(doc["UTC"],_utcCorrection,0);
+    SetValue(doc["Timeout"],Timeout,60*30);
 
-    String _ssid = doc["WiFiSsid"];
-    if(_ssid != NULL && _ssid != "" && _ssid != "null")
-        Ssid = _ssid;
+    int temp;
+    SetValue(doc["Brightness"],temp,64);
+    SetBrightness(temp);
 
-    String _password = doc["WiFiPassword"];
-    if(_password != NULL && _password != "" && _password != "null")
-        Password = _password;
-    WriteLine(_password + " " + _ssid);
+
+
+    //------Loading alarm settings-----------
+    int alarms = doc["AlarmClock"].size();
+    for(int i = 0; i < alarms; i++)
+    {
+        int hour = 0,minute = 0,repeat = 0,sunrise =0;
+        bool Enabled = false;
+        String music = "";
+        SetValue(doc["AlarmClock"][i]["Hour"],hour,0);
+        SetValue(doc["AlarmClock"][i]["Minute"],minute,0);
+        SetValue(doc["AlarmClock"][i]["Enabled"],Enabled,false);
+        SetValue(doc["AlarmClock"][i]["Repeat"],repeat,0);
+        SetValue(doc["AlarmClock"][i]["Music"],music,"Sound/Notification.mp3");
+        SetValue(doc["AlarmClock"][i]["Sunrise"],sunrise,15);
+        std::vector<String> AlarmDays;
+        int days = doc["AlarmClock"][i]["Days"].size();
+        for(int j = 0; j < days; j++)
+        {
+            String day = "";
+            SetValue(doc["AlarmClock"][i]["Days"][j],day,"-1");
+            AlarmDays.push_back(day);
+        }
+        AlarmClock alarm;
+        alarm.Enabled = Enabled;
+        alarm.Hour = hour;
+        alarm.Minute = minute;
+        alarm.Music = music;
+        alarm.Repeat = repeat;
+        alarm.Days = AlarmDays;
+        alarm.Sunrise = sunrise;
+        AlarmClocks.push_back(alarm);
+    }
+    //---------------------------------------
 
 
 }
@@ -63,10 +106,6 @@ bool getWiFiConfigState()
 }
 
 
-int GetUTC()
-{
-    return 3;
-}
 
 //0- non initialization; 1- setup complete
 void setWiFiConfigState(bool state)
@@ -78,21 +117,42 @@ void setWiFiSettings(String ssid,String password)
     Ssid = ssid;
     Password = password;
 }
-
-void saveSettings()
+void SaveData()
 {
     File settings = SPIFFS.open("/Settings.json","w");
     if(!settings)
     {
-        WriteLine("System can`t open settings file");
+       WriteLine("System can`t open settings file");
         return;
     }
 
-    DynamicJsonDocument doc(256);
+    DynamicJsonDocument doc(4096);
     doc["ConfigState"] = ConfigState;
     doc["WiFiPassword"] = Password;
     doc["WiFiSsid"] = Ssid;
-
+    doc["UTC"] = _utcCorrection;
+    doc["CurrentAnimation"] = _currentAnimation;
+    doc["Timeout"] = GetTimeout();
+    doc["Brightness"] = GetBrightness();
+    //----------Save Alarm Data ---------------------       
+    JsonArray alarm = doc.createNestedArray("AlarmClock");   
+    for (size_t i = 0; i < AlarmClocks.size(); i++)
+    {
+        JsonObject obj = alarm.createNestedObject();
+        obj["Hour"] = AlarmClocks[i].Hour;
+        obj["Minute"] = AlarmClocks[i].Minute;
+        obj["Enabled"] = AlarmClocks[i].Enabled;
+        obj["Repeat"] = AlarmClocks[i].Repeat;
+        obj["Music"] = AlarmClocks[i].Music;
+        obj["Sunrise"] = AlarmClocks[i].Sunrise;
+        JsonArray days = obj.createNestedArray("Days");
+        for(int j=0;j<AlarmClocks[i].Days.size();j++)
+        {
+            days.add(AlarmClocks[i].Days[j]);
+        }
+    }  
+    doc.add(alarm);
+    //-----------------------------------------------
     String json;
     serializeJson(doc,json);
     if(settings.print(json))

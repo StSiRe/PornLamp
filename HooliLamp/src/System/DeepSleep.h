@@ -1,38 +1,40 @@
+#include<Esp.h>
 #include<time.h>
-
-long _secondsToWakeUp = 0;
-#define uS_TO_S 1000000
-
+extern void WriteLine(String text);
+extern void SaveData();
+long long unsigned int _secondsToWakeUp = 0;
+#define uS_TO_S_FACTOR 1000000ULL
+long long unsigned int SecondsToSleep(tm current,tm wakeUp)
+{
+    long long unsigned int Wake,Now,seconds;
+    Wake = wakeUp.tm_mday*24*60*60 + wakeUp.tm_hour*60*60 + wakeUp.tm_min*60 + wakeUp.tm_sec;
+    Now = current.tm_mday*24*60*60 + current.tm_hour*60*60 + current.tm_min*60 + current.tm_sec;
+    return Wake - Now;    
+}
+void StartDeepSleep()
+{
+    esp_deep_sleep_start();
+}
+void InitDeepSleep()
+{
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_4,1); //1 = High, 0 = Low
+    WriteLine("Going to deep sleep");
+    SaveData();
+    StartDeepSleep();
+}
 void InitDeepSleep(tm current,tm wakeTime)
 {
-    _secondsToWakeUp = SecondsToSleep(current,wakeTime); 
+    _secondsToWakeUp = SecondsToSleep(current,wakeTime);     
+    esp_sleep_enable_timer_wakeup(_secondsToWakeUp * uS_TO_S_FACTOR);
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_4,1); //1 = High, 0 = Low
+    WriteLine("Going to deep sleep");
+    StartDeepSleep();   
 }
-
-long SecondsToSleep(tm current,tm wakeUp)
+void InitDeepSleep(int seconds)
 {
-    int year = wakeUp.tm_year - current.tm_year;
-    int month = wakeUp.tm_mon - current.tm_mon;
-    int day = wakeUp.tm_mday - current.tm_mday;
-    int hour = wakeUp.tm_hour - current.tm_hour;
-    int min = wakeUp.tm_min - current.tm_min;
-    int seconds = wakeUp.tm_sec - current.tm_sec;
-    if(year >= 0)
-    {
-        if(month>=0)
-        {
-            if(day>=0)
-            {
-                if(hour>=0)
-                {
-                    if(min>=0)
-                    {
-                        if(seconds>=0)
-                        {
-                            
-                        }
-                    }
-                }
-            }
-        }
-    }
+    _secondsToWakeUp = seconds; 
+    esp_sleep_enable_timer_wakeup(_secondsToWakeUp * uS_TO_S_FACTOR);
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_4,1); //1 = High, 0 = Low
+    WriteLine("Going to deep sleep");
+    StartDeepSleep();
 }

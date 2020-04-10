@@ -1,6 +1,5 @@
 #include<WiFi.h>
 #include<SPIFFS.h>
-#include<FileSystem/Settings.h>
 #include<ESPAsyncWebServer.h>
 AsyncWebServer server(80);
 String _ssid,_password;
@@ -11,6 +10,7 @@ extern bool Debug;
 extern void setWiFiSettings(String ssid,String password);
 extern void Reset();
 extern void Delay(int milliseconds);
+extern void setWiFiConfigState(bool state);
 //Создает точку доступа для первичной настройки
 void CreateAP(String ssid,String password)
 {
@@ -28,11 +28,11 @@ void CreateAP(String ssid,String password)
     }  
 }
 
-void SaveData(void *pv)
+void SaveWiFiSetupData(void *pv)
 {
     WriteLine("Saving ssid and password started");
     Delay(1000);
-    setWiFiConfigState(1);
+    setWiFiConfigState(true);
     setWiFiSettings(_ssid,_password);
     Reset();
     vTaskDelete(NULL);//Нахуй не сделаось,но пусть будет
@@ -59,7 +59,7 @@ void InitServer()
         }
         WriteLine(_password);   
         
-        xTaskCreatePinnedToCore(SaveData,"WiFi Initialization",8192,NULL,1,NULL,0);
+        xTaskCreatePinnedToCore(SaveWiFiSetupData,"WiFi Initialization",8192,NULL,1,NULL,0);
     });
 
     server.begin();

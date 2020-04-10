@@ -5,7 +5,7 @@
 extern void ChangeAnimation(String animationName);
 extern void OnMatrix();
 extern void OffMatrix();
-extern void ChangeBrightness(int brightness);
+extern void SetBrightness(int brightness);
 extern char* ToChar(String command);
 extern int GetBrightness();
 extern String AnimationModes[];
@@ -30,12 +30,21 @@ void AddImagesHandlers()
     server.on("/Images/Alarm.png", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/Main/Images/Alarm.png");
     });
+    server.on("/Images/Return.svg", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/Main/Images/Return.svg");
+    });
     //js files
     server.on("/Animations.js", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/Main/Animations.js");
     });
     server.on("/data.js", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/Main/data.js");
+    });
+    server.on("/Main.js", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/Main/Main.js");
+    });
+    server.on("/Elements.js", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/Main/Elements.js");
     });
 }
 void AddAnimationHandlers()
@@ -66,7 +75,7 @@ void AddAnimationHandlers()
         }
         res *=255;
         res /=100;
-        ChangeBrightness(res);
+        SetBrightness(res);
         //Serial.println(res);
     });
     server.on("/Animations/Data", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -77,7 +86,7 @@ void AddAnimationHandlers()
         JsonArray AnimationsList = doc.createNestedArray("AnimationsList");        
         for(int i=0;i<5;i++)
             AnimationsList.add(AnimationModes[i]);
-            
+
         serializeJson(doc,json);
         request->send(200,"text/json",json);
         Serial.println(json);
@@ -108,6 +117,10 @@ void AddSoundHandlers()
 {
     
 }
+void AddAlarmHandlers()
+{
+
+}
 void AddSettingsHandlers()
 {
     
@@ -126,6 +139,6 @@ void ConfigServer()
     AddAnimationHandlers();
     AddSettingsHandlers();
     AddSoundHandlers();
-
+    AddAlarmHandlers();
     server.begin();
 }

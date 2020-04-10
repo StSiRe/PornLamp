@@ -2,7 +2,7 @@
 //Общее количество пикселей
 const uint16_t PixelCount = 256;
 //Пин подключения матрицы к мк
-const uint16_t PixelPin = 12;
+const uint16_t PixelPin = 27;
 //Яркость для всей ленты
 int Brightness = 64;
 
@@ -43,8 +43,12 @@ void InitMatrix()
 }
 
 //Установить абсолютную яркость для всей матрицы
-void ChangeBrightness(int brightness)
+void SetBrightness(int brightness)
 {
+  if(brightness > 255)
+    brightness = 255;
+  if(brightness < 0)
+    brightness =0;
   Brightness = brightness;
   strip.SetBrightness(Brightness);
 }
@@ -64,16 +68,19 @@ void ClearMatrix()
 {
   CrearMatrixTo(RgbColor(0,0,0));
 }
-
+#define MatrixPowerPin 13
 //Выключает матрицу(Яркость - 0)
 void OffMatrix()
 {
   strip.SetBrightness(0);
+  digitalWrite(MatrixPowerPin,LOW);
 }
 //Включает матрицу(ставит предыдущее значение яркости)
 void OnMatrix()
 {
   strip.SetBrightness(Brightness);
+  pinMode(MatrixPowerPin,OUTPUT);
+  digitalWrite(MatrixPowerPin,HIGH);
 }
 int GetBrightness()
 {

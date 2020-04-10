@@ -88,12 +88,18 @@ void WiFiConnectionSuccess()//green space expending to center 7580ms
   strip.Show();
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> af1a309e6df1db964a43d5459bd2f0dd1c7198ba
 byte addByLimit(int value, byte step, byte limit)
 {
   return (value + step) - ((value + step)/limit) * ((value + step)%limit);
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> af1a309e6df1db964a43d5459bd2f0dd1c7198ba
 bool sunrise(byte step = 5)
 {
   bool isDone = true;
@@ -107,8 +113,11 @@ bool sunrise(byte step = 5)
   }
   return isDone;
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> af1a309e6df1db964a43d5459bd2f0dd1c7198ba
 float col=0;
 void Penis()
 {
