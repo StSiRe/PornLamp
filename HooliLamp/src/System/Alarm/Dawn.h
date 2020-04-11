@@ -53,7 +53,7 @@ void InitAlarmClock()
     Serial.println("Alarm Clock: End of loaded alarm clocks");
     xTaskCreatePinnedToCore(CheckTimeForAlarmClock,"AlarmClock",2048,NULL,1,&AlarmClockTask,0);
 }
-
+void Sunrise(tm current,AlarmClock alarm,int time);
 void CheckTimeForAlarmClock(void *pc)
 {
     while(true)
@@ -88,12 +88,50 @@ void CheckTimeForAlarmClock(void *pc)
 
                         //Вот здесь и начнется рассвет
                         Serial.println("Sunrise!!!!!");
+                        if(!alarm.Used)
+                        {
+                            AlarmClocks[i].Used = true;                          
+                            Sunrise(time,alarm,freeTime);
+                        }
                     }
                 }
             }
         }
         Delay(30*1000);//30s
     }
+}
+extern bool sunrise(byte step);
+extern void SetBrightness(int brightness);
+extern int GetBrightness();
+extern void StopAnimations();
+extern void InitAnimations();
+void Sunrise(tm current,AlarmClock alarm,int time)
+{
+    StopAnimations();
+    while(!sunrise(5))
+    {
+        Delay(1000);
+    }
+    Serial.println("Sun 1");
+    //Пришли к цвету 255.255.170
+    //Теперь начинается алгоритм поднятия яркости
+    int startBrightness = GetBrightness();
+    Serial.println("Sun 2");
+    while((alarm.Hour* 60 - alarm.Minute - current.tm_hour*60 - current.tm_min) > (time/2))//Выполняем пока не пройдет половина заданного времени
+    {
+        current = GetTime();
+        if((startBrightness + 10) < 256)
+            SetBrightness(startBrightness + 10);
+        else
+        {
+            break;
+        }
+        Delay(1000);
+    }
+    Delay(10000);
+    Serial.println("Sun 3");
+    InitAnimations();
+
 }
 void AddAlarmClock(AlarmClock alarm)
 {

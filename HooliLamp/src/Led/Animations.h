@@ -78,6 +78,15 @@ void TaskAnimation(void *pvParameter)
         {
             Penis();
         }
+        else if(_currentAnimation == "LampWhite")
+        {
+            for(int i =0;i < 256;i++)
+            {
+                strip.SetPixelColor(i,RgbColor(255,255,255));
+            }
+            strip.Show();
+            Delay(100);
+        }
         else
         {
             LampOn();

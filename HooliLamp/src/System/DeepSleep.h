@@ -17,7 +17,7 @@ void StartDeepSleep()
 }
 void InitDeepSleep()
 {
-    esp_sleep_enable_ext0_wakeup(GPIO_NUM_4,1); //1 = High, 0 = Low
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_14,1); //1 = High, 0 = Low
     WriteLine("Going to deep sleep");
     SaveData();
     StartDeepSleep();
@@ -26,7 +26,7 @@ void InitDeepSleep(tm current,tm wakeTime)
 {
     _secondsToWakeUp = SecondsToSleep(current,wakeTime);     
     esp_sleep_enable_timer_wakeup(_secondsToWakeUp * uS_TO_S_FACTOR);
-    esp_sleep_enable_ext0_wakeup(GPIO_NUM_4,1); //1 = High, 0 = Low
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_14,1); //1 = High, 0 = Low
     WriteLine("Going to deep sleep");
     StartDeepSleep();   
 }
@@ -34,7 +34,7 @@ void InitDeepSleep(int seconds)
 {
     _secondsToWakeUp = seconds; 
     esp_sleep_enable_timer_wakeup(_secondsToWakeUp * uS_TO_S_FACTOR);
-    esp_sleep_enable_ext0_wakeup(GPIO_NUM_4,1); //1 = High, 0 = Low
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_14,1); //1 = High, 0 = Low
     WriteLine("Going to deep sleep");
     StartDeepSleep();
 }

@@ -12,10 +12,10 @@
 			"Repeat": 0,
 			"Music": "Startup.mp3"
 		},{
-			"Days": ["Sunday"],
-			"Hour": 0,
-			"Minute": 20,
-			"Sunrise": 50,
+			"Days": ["Tuesday"],
+			"Hour": 11,
+			"Minute": 25,
+			"Sunrise": 30,
 			"Enabled": true,
 			"Repeat": 0,
 			"Music": "Startup.mp3"
