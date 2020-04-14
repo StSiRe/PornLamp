@@ -9,19 +9,19 @@ extern int XY(int x,int y);
 extern void ClearMatrixTo(RgbColor color);
 #define BRIGHT_SPEED 0.015
 
-void LampOn()
-{
-  for(int i = 0; i < Height; i++)
+  void LampOn()//включение
   {
-    for(int j = 0; j < Width; j++)
+    for(int i = 0; i < Height; i++)//цикл бегущий по строкам матрицы снизу вверх
     {
-      strip.SetPixelColor(XY(i,j), RgbColor(255,255,255));
+      for(int j = 0; j < Width; j++)//цикл бегущий по столбцам матрицы слева направо
+      {
+        strip.SetPixelColor(XY(i,j), RgbColor(255,255,255));//изменение цвета пикселя на белый
+      }
+      strip.Show();//отображение изменений на матрицу
+      Delay(150);//задержка для лучшего визуального восприятия
     }
-    strip.Show();
-    Delay(150);
+    Delay(2000);//задержка для лучшего визуального восприятия
   }
-  Delay(2000);
-}
 
 //Анимация при выключении лампы
 void LampOff()
@@ -88,18 +88,16 @@ void WiFiConnectionSuccess()//green space expending to center 7580ms
   strip.Show();
 }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> af1a309e6df1db964a43d5459bd2f0dd1c7198ba
-byte addByLimit(int value, byte step, byte limit)
+byte addByLimit(byte value, byte step, byte limit)
 {
-  return (value + step) - ((value + step)/limit) * ((value + step)%limit);
+    if(value > limit)
+    {
+        return (value -  step) + (limit/(value -  step)) * (limit%(value -  step));
+    }
+    return (value +  step) - ((value +  step)/limit) * ((value +  step)%limit);
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> af1a309e6df1db964a43d5459bd2f0dd1c7198ba
 bool sunrise(byte step = 5)
 {
   bool isDone = true;
@@ -113,11 +111,8 @@ bool sunrise(byte step = 5)
   }
   return isDone;
 }
-<<<<<<< HEAD
 
 
-=======
->>>>>>> af1a309e6df1db964a43d5459bd2f0dd1c7198ba
 float col=0;
 void Penis()
 {
