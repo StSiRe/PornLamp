@@ -26,7 +26,8 @@ String AnimationModes[]  = {
     "Rainbow",
     "RainbowH",
     "Matrix",
-    "Penis"
+    "Sparks",
+    "LampWhite"
 };
 void TaskAnimation(void *pvParameter)
 {
@@ -85,7 +86,7 @@ void TaskAnimation(void *pvParameter)
                 strip.SetPixelColor(i,RgbColor(255,255,255));
             }
             strip.Show();
-            Delay(100);
+            Delay(50);
         }
         else
         {

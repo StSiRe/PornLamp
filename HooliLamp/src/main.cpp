@@ -26,12 +26,14 @@ String Ssid="Hooli.Lamp",Password="12345678";
 
 void InitLamp()
 {
+  
   InitMatrix();
+  SetBrightness(64);
   InitAnimations();
-  OnMatrix();
 
   ConfigFS();
   LoadData();
+  SetBrightness(64);
 
   InitWiFi();
   Delay(500);
@@ -50,6 +52,7 @@ void setup()
 {
   Serial.begin(115200);
   InitLamp();
+  OnMatrix();
 }
 
 
