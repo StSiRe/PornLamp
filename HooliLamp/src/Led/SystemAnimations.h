@@ -109,6 +109,7 @@ bool sunrise(byte step = 5)
       addByLimit(strip.GetPixelColor(i).B,step,170)));
     isDone = (strip.GetPixelColor(i) == RgbColor(255,255,170));
   }
+  strip.Show();
   return isDone;
 }
 

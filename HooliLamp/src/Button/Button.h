@@ -40,6 +40,7 @@ void Click()
 void DoubleClick()
 {
     Serial.println("DoubleClick");
+    ChangeAnimation("LampWhite");
 }
 
 
