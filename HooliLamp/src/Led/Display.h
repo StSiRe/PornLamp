@@ -4,7 +4,10 @@ const uint16_t PixelCount = 256;
 //Пин подключения матрицы к мк
 const uint16_t PixelPin = 27;
 //Яркость для всей ленты
-int Brightness = 64;
+int _brightness = 64;
+//Максимальная допустима яркость ленты
+//Использовать для ограничения потребления тока
+int _maxBrightness = 255;
 
 NeoPixelBrightnessBus<NeoGrbFeature, NeoEsp32I2s1800KbpsMethod> strip(PixelCount, PixelPin);
 
@@ -38,19 +41,35 @@ int XY( int x, int y)
 void InitMatrix()
 {
   strip.Begin();
-  strip.SetBrightness(Brightness);
+  strip.SetBrightness(_brightness);
   strip.Show();  
 }
-
-//Установить абсолютную яркость для всей матрицы
-void SetBrightness(int brightness)
-{
+int CheckNewBrightness(int brightness)
+{  
   if(brightness > 255)
     brightness = 255;
   if(brightness < 0)
     brightness =0;
-  Brightness = brightness;
-  strip.SetBrightness(Brightness);
+    return brightness;
+}
+void SetMaxBrightness(int newBrightness)
+{
+  _maxBrightness = CheckNewBrightness(newBrightness);
+  if(_brightness > _maxBrightness) SetBrightness(_maxBrightness);
+}
+int GetMaxBrightness()
+{
+  return _maxBrightness;
+}
+//Установить абсолютную яркость для всей матрицы
+void SetBrightness(int brightness)
+{
+  brightness = CheckNewBrightness(brightness);
+  if(brightness != _brightness)
+  {    
+    _brightness = brightness;
+    strip.SetBrightness(_brightness);
+  }
 }
 
 //Очищает экран заливая его указанным цветом
@@ -68,21 +87,20 @@ void ClearMatrix()
 {
   CrearMatrixTo(RgbColor(0,0,0));
 }
-#define MatrixPowerPin 13
+//Значение яркости до момента выключения матрицы,не использовать нигде
+int _lastBrightness = 0;
 //Выключает матрицу(Яркость - 0)
 void OffMatrix()
 {
-  strip.SetBrightness(0);
-  digitalWrite(MatrixPowerPin,LOW);
+  _lastBrightness = _brightness;
+  SetBrightness(_brightness);
 }
 //Включает матрицу(ставит предыдущее значение яркости)
 void OnMatrix()
 {
-  strip.SetBrightness(Brightness);
-  pinMode(MatrixPowerPin,OUTPUT);
-  digitalWrite(MatrixPowerPin,HIGH);
+  SetBrightness(_lastBrightness);
 }
 int GetBrightness()
 {
-  return (int)Brightness;
+  return (int)_brightness;
 }

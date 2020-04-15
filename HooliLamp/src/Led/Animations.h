@@ -9,7 +9,7 @@ extern const int Height;
 extern const int Width;
 extern int XY(int x,int y);
 
-extern void UpdateTimeTimer();
+extern void ClearTimeoutTimer();
 extern void WriteLine(String text);
 extern void Delay(int milliseconds);
 extern int GetBrightness();
@@ -93,10 +93,6 @@ void TaskAnimation(void *pvParameter)
             LampOn();
         }
         Delay(1);
-        if(GetBrightness() != 0)
-        {
-            UpdateTimeTimer();
-        }
     }
     vTaskDelete(NULL);
 }
@@ -107,6 +103,7 @@ void ChangeAnimation(String animationName)
     _previosAnimation = _currentAnimation;
     _currentAnimation=animationName;
     _updateReqied = true;
+    ClearTimeoutTimer();
 }
 
 //Инициализирует и запускает поток для анимаций

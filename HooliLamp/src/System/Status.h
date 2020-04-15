@@ -2,6 +2,7 @@
 #include<string.h>
 extern void InitDeepSleep();
 extern void WriteLine(String text);
+extern void Write(String text);
 extern void Delay(int milliseconds);
 extern int GetTimeout();
 void TaskSWD(void *pvParametr);
@@ -14,33 +15,35 @@ void InitSystemWD()
 }
 
 
-int timeCounterSleep = 0;
-int timeCounterSave = 0;
+int timeoutCounterSleep = 0;
+int timerSave = 0;
 void TaskSWD(void *pvParametr)
-{
-    
+{    
     for(;;)
     {
         Delay(10000);
-        timeCounterSleep+=10000;
-        timeCounterSave+=10;
+        timeoutCounterSleep+=10;
+        timerSave+=10;
         uint32_t freeRam = ESP.getFreeHeap();
+        
+        Write("Current ram free heap:");
         WriteLine(String(freeRam));
-        WriteLine("Current time without upd:" + timeCounterSleep);
-        if(timeCounterSleep > GetTimeout() * 1000)
+        
+        WriteLine("Current time without upd:" + timerSave);
+        if(timeoutCounterSleep > GetTimeout())
         {
-            timeCounterSleep = 0;
+            timeoutCounterSleep = 0;
             InitDeepSleep();
         }
-        if(timeCounterSave == 60)
+        if(timerSave == 60)
         {
-            timeCounterSave = 0;
+            timerSave = 0;
             SaveData();
         }
     }
     vTaskDelay(NULL);
 }
-void UpdateTimeTimer()
+void ClearTimeoutTimer()
 {
-    timeCounterSleep=0;
+    timeoutCounterSleep=0;
 }

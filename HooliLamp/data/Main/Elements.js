@@ -5,7 +5,7 @@ function CreateButtonImage(path,onClick)  {
     var div = document.createElement("div");
     div.setAttribute("onclick",onClick);
     var div1 = document.createElement("img");
-    div1.src = "Images/"+ path + ".png";
+    div1.src = "Images/"+ path + ".svg";
     div.appendChild(div1);
     return div;
 }
@@ -17,7 +17,7 @@ function CreateButtonImageWithID(path,onClick,id)  {
     div.id = id;
     div.setAttribute("onclick",onClick);
     var div1 = document.createElement("img");
-    div1.src = "Images/"+ path + ".png";
+    div1.src = "Images/"+ path + ".svg";
     div.appendChild(div1);
     return div;
 }
@@ -26,7 +26,7 @@ function CreateImage(path)  {
         return null;
     }        
     var div1 = document.createElement("img");
-    div1.src = "Images/"+ path + ".png";
+    div1.src = "Images/"+ path + ".svg";
     return div1;
 }
 function CreateImageWithID(path,id)  {
@@ -35,7 +35,7 @@ function CreateImageWithID(path,id)  {
     }        
     var div1 = document.createElement("img");
     div1.id = id;
-    div1.src = "Images/"+ path + ".png";
+    div1.src = "Images/"+ path + ".svg";
     return div1;
 }
 function CreateProgressBar(id,onClickHandler)

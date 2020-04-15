@@ -22,7 +22,6 @@ void WiFiViewer(void *pvParameter)
         {
             waitingTimer= 0;
             WriteLine("WiFi viewer task deleted");
-            ChangeAnimation("WiFiConnectionSuccess");
             vTaskDelete(NULL);//Удаляем эту задачу
         }
         else
