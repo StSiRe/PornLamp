@@ -13,6 +13,7 @@ extern String _currentAnimation;
 extern int GetBrightness();
 extern void SetBrightness(int brightness);
 
+extern bool PowerMode;
 
 std::vector<AlarmClock> AlarmClocks;
 
@@ -55,7 +56,7 @@ void LoadData()
     SetValue(doc["CurrentAnimation"],_currentAnimation,"Fire");
     SetValue(doc["UTC"],_utcCorrection,0);
     SetValue(doc["Timeout"],Timeout,60*30);
-
+    SetValue(doc["PowerMode"],PowerMode,true);
     int temp;
     SetValue(doc["Brightness"],temp,64);
     SetBrightness(temp);
@@ -134,6 +135,7 @@ void SaveData()
     doc["CurrentAnimation"] = _currentAnimation;
     doc["Timeout"] = GetTimeout();
     doc["Brightness"] = GetBrightness();
+    doc["PowerMode"] = PowerMode;
     //----------Save Alarm Data ---------------------       
     JsonArray alarm = doc.createNestedArray("AlarmClock");   
     for (size_t i = 0; i < AlarmClocks.size(); i++)

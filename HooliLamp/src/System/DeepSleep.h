@@ -2,6 +2,8 @@
 #include<time.h>
 extern void WriteLine(String text);
 extern void SaveData();
+extern void OffMatrix();
+extern void StopAnimations();
 long long unsigned int _secondsToWakeUp = 0;
 #define uS_TO_S_FACTOR 1000000ULL
 long long unsigned int SecondsToSleep(tm current,tm wakeUp)
@@ -20,6 +22,8 @@ void InitDeepSleep()
     esp_sleep_enable_ext0_wakeup(GPIO_NUM_14,1); //1 = High, 0 = Low
     WriteLine("Going to deep sleep");
     SaveData();
+    StopAnimations();
+    OffMatrix();
     StartDeepSleep();
 }
 void InitDeepSleep(tm current,tm wakeTime)

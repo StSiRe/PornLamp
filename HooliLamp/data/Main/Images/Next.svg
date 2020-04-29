@@ -1,16 +1,6 @@
-<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
- "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="32.000000pt" height="32.000000pt" viewBox="0 0 32.000000 32.000000"
- preserveAspectRatio="xMidYMid meet">
-<metadata>
-Created by potrace 1.15, written by Peter Selinger 2001-2017
-</metadata>
-<g transform="translate(0.000000,32.000000) scale(0.100000,-0.100000)"
-fill="#000000" stroke="none">
-<path d="M65 309 c-13 -21 6 -57 53 -102 l49 -45 -54 -54 c-41 -40 -53 -59
--51 -78 2 -18 10 -26 27 -28 18 -3 40 13 97 69 41 41 74 81 74 90 0 9 -33 49
--73 88 -69 68 -106 86 -122 60z"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32pt" height="32pt" viewBox="0 0 32 32" version="1.1">
+<g id="surface1">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 17.308594 16.03125 C 11.410156 21.929688 8.128906 25.210938 7.480469 25.871094 C 4.019531 29.191406 9.140625 34.308594 12.460938 30.851562 C 13.679688 29.621094 23.488281 19.820312 24.710938 18.589844 C 26.371094 16.941406 25.828125 14.578125 24.359375 13.121094 C 23.171875 11.929688 13.648438 2.398438 12.460938 1.210938 C 9.261719 -2.289062 3.839844 2.558594 7.480469 6.191406 C 7.480469 6.191406 10.761719 9.46875 17.308594 16.03125 Z M 17.308594 16.03125 "/>
 </g>
 </svg>

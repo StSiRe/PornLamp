@@ -91,7 +91,6 @@ void HoldEnd()
     Serial.print("HoldEnd: ");
     Serial.println(button.GetPressedMS());    
     brighntnessWheel = !brighntnessWheel;
-
 }
 
 void Tick(void *pv)

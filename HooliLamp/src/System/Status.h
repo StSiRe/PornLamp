@@ -1,5 +1,6 @@
 #include<Esp.h>
 #include<string.h>
+
 extern void InitDeepSleep();
 extern void WriteLine(String text);
 extern void Write(String text);
@@ -14,7 +15,7 @@ void InitSystemWD()
     xTaskCreatePinnedToCore(TaskSWD,"WatchDog",8096,NULL,1,&wdHandle,0);
 }
 
-
+bool timeoutEnabled = true;
 int timeoutCounterSleep = 0;
 int timerSave = 0;
 void TaskSWD(void *pvParametr)
@@ -22,6 +23,7 @@ void TaskSWD(void *pvParametr)
     for(;;)
     {
         Delay(10000);
+        if(timeoutEnabled)
         timeoutCounterSleep+=10;
         timerSave+=10;
         uint32_t freeRam = ESP.getFreeHeap();
@@ -46,4 +48,12 @@ void TaskSWD(void *pvParametr)
 void ClearTimeoutTimer()
 {
     timeoutCounterSleep=0;
+}
+void PauseTimeoutTimer()
+{
+    timeoutEnabled=false;
+}
+void ResumeTimeoutTimer()
+{
+    timeoutEnabled=true;
 }

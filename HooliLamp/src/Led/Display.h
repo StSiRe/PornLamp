@@ -52,24 +52,33 @@ int CheckNewBrightness(int brightness)
     brightness =0;
     return brightness;
 }
+//Установка максимальной яркости для диодов
 void SetMaxBrightness(int newBrightness)
 {
   _maxBrightness = CheckNewBrightness(newBrightness);
   if(_brightness > _maxBrightness) SetBrightness(_maxBrightness);
 }
+
+//Возвращает установленную максимальную яркость
 int GetMaxBrightness()
 {
   return _maxBrightness;
 }
-//Установить абсолютную яркость для всей матрицы
+
+//Установка яркости для диодов
 void SetBrightness(int brightness)
 {
   brightness = CheckNewBrightness(brightness);
-  if(brightness != _brightness)
+  if(brightness != _brightness && brightness <= _maxBrightness)//Проверяем не совпадает ли новаяч яркость и меньше ли она разрешенной
   {    
     _brightness = brightness;
     strip.SetBrightness(_brightness);
   }
+}
+//Возвращяет текущую яркость диодов
+int GetBrightness()
+{
+  return (int)_brightness;
 }
 
 //Очищает экран заливая его указанным цветом
@@ -86,21 +95,4 @@ void CrearMatrixTo(RgbColor color)
 void ClearMatrix()
 {
   CrearMatrixTo(RgbColor(0,0,0));
-}
-//Значение яркости до момента выключения матрицы,не использовать нигде
-int _lastBrightness = 0;
-//Выключает матрицу(Яркость - 0)
-void OffMatrix()
-{
-  _lastBrightness = _brightness;
-  SetBrightness(_brightness);
-}
-//Включает матрицу(ставит предыдущее значение яркости)
-void OnMatrix()
-{
-  SetBrightness(_lastBrightness);
-}
-int GetBrightness()
-{
-  return (int)_brightness;
 }

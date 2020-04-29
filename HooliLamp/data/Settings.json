@@ -4,17 +4,17 @@
 	"ConfigState": true,
 	"UTC": 3,
 	"AlarmClock": [{
-			"Days": ["Saturday"],
-			"Hour": 15,
+			"Days": ["1"],
+			"Hour": 11,
 			"Minute": 20,
 			"Sunrise": 30,
 			"Enabled": true,
 			"Repeat": 0,
 			"Music": "Startup.mp3"
 		},{
-			"Days": ["Tuesday"],
-			"Hour": 11,
-			"Minute": 25,
+			"Days": ["All"],
+			"Hour": 21,
+			"Minute": 50,
 			"Sunrise": 30,
 			"Enabled": true,
 			"Repeat": 0,

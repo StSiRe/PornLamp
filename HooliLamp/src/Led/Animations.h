@@ -12,6 +12,7 @@ extern int XY(int x,int y);
 extern void ClearTimeoutTimer();
 extern void WriteLine(String text);
 extern void Delay(int milliseconds);
+extern void SetBrightness(int brightness);
 extern int GetBrightness();
 
 bool _updateReqied = false;
@@ -103,6 +104,7 @@ void ChangeAnimation(String animationName)
     _previosAnimation = _currentAnimation;
     _currentAnimation=animationName;
     _updateReqied = true;
+    //SetBrightness(64);
     ClearTimeoutTimer();
 }
 

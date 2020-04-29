@@ -5,14 +5,25 @@ extern void WriteLine();
 extern void Write();
 extern void SaveData();
 extern tm GetTime();
-//Prototypes
+extern bool sunrise(byte step);
+extern void SetBrightness(int brightness);
+extern int GetBrightness();
+extern void StopAnimations();
+extern void InitAnimations();
+extern void PlayAudio(String name);
+extern void StopAudio();
+extern void PauseTimeoutTimer();
+extern void ResumeTimeoutTimer();
 void InitAlarmClock();
 void CheckTimeForAlarmClock(void *pc);
 void AddAlarmClock(AlarmClock alarm);
+//Поток будильников
 xTaskHandle AlarmClockTask;
+//Работает ли сейчас будильник
 bool isAlarmWorking = false;
 void StopAlarm();
 
+void Sunrise(tm current,AlarmClock alarm);
 void InitAlarmClock()
 {
     Serial.println("Initializating Alarm Clock");
@@ -53,9 +64,9 @@ void InitAlarmClock()
     Serial.println("Alarm Clock: End of loaded alarm clocks");
     xTaskCreatePinnedToCore(CheckTimeForAlarmClock,"AlarmClock",2048,NULL,1,&AlarmClockTask,0);
 }
-void Sunrise(tm current,AlarmClock alarm,int time);
 void CheckTimeForAlarmClock(void *pc)
 {
+    Delay(10000);//Небольшая задержка для стабильности
     while(true)
     {
         tm time = GetTime();
@@ -90,8 +101,8 @@ void CheckTimeForAlarmClock(void *pc)
                         Serial.println("Sunrise!!!!!");
                         if(!alarm.Used)
                         {
-                            AlarmClocks[i].Used = true;                          
-                            Sunrise(time,alarm,freeTime);
+                            AlarmClocks[i].Used = true;
+                            Sunrise(time,alarm);
                         }
                     }
                 }
@@ -100,48 +111,50 @@ void CheckTimeForAlarmClock(void *pc)
         Delay(30*1000);//30s
     }
 }
-extern bool sunrise(byte step);
-extern void SetBrightness(int brightness);
-extern int GetBrightness();
-extern void StopAnimations();
-extern void InitAnimations();
-void Sunrise(tm current,AlarmClock alarm,int time)
+void Sunrise(tm current,AlarmClock alarm)
 {
-    StopAnimations();
-    while(!sunrise(5))
-    {
-        Delay(1000);
-    }
-    Serial.println("Sun 1");
-    //Пришли к цвету 255.255.170
-    //Теперь начинается алгоритм поднятия яркости
-    int startBrightness = GetBrightness();
-    Serial.println("Sun 2");
-    while((alarm.Hour* 60 - alarm.Minute - current.tm_hour*60 - current.tm_min) > (time/2))//Выполняем пока не пройдет половина заданного времени
-    {
-        current = GetTime();
-        if((startBrightness + 10) < 256)
-            SetBrightness(startBrightness + 10);
-        else
-        {
-            break;
-        }
-        Delay(1000);
-    }
-    Delay(10000);
-    Serial.println("Sun 3");
-    InitAnimations();
+    isAlarmWorking=true;
+    PauseTimeoutTimer();
+    Delay(10000); // Делаем задержку для стабильности
+    StopAnimations();// Останавилваем отрисовку анимаций
 
+    while(!sunrise(5))// Приводим экран к необходимому цвету
+    {
+        Delay(100);
+    }
+    //Теперь начинается алгоритм поднятия яркости
+    int timeToAlarm = alarm.Hour* 60 - alarm.Minute - current.tm_hour*60 - current.tm_min;//Оставшиеся время до рассвета
+    int changeBrt = GetMaxBrightness() - GetBrightness();
+    int delayTime = timeToAlarm/2*60 /*time to alarm in seconds*/;//Половина времни до рассвета в секудах
+    int brightnessStep =  delayTime / changeBrt;// Изменение яркости за секунду
+    Serial.println(brightnessStep);
+    int timeCounter = 0;
+    Serial.println(delayTime);
+    for(int timeCounter =0;timeCounter < delayTime;timeCounter++)
+    {
+        Delay(1000);
+        SetBrightness(GetBrightness() + brightnessStep);
+    }
+    Delay(delayTime*1000);//Ждем оставшиеся время
+    //PlayAudio(alarm.Music);
+    Delay(10000);
+    InitAnimations();
+    isAlarmWorking=false;
+    ResumeTimeoutTimer();
 }
 void AddAlarmClock(AlarmClock alarm)
 {
-    WriteLine("Alarm Clock: Addinh new alarm clock");
     AlarmClocks.push_back(alarm);
-    SaveData();
-    WriteLine("Alarm Clock: All alarm clock`s saved");
+    SaveData();//Сохраняем для безопасности данных
 }
 void StopAlarm()
 {
-    
+    Serial.println("Stopping AlarmClock");
+    if(AlarmClockTask)
+    {
+        vTaskDelete(AlarmClockTask);
+        Delay(500);
+    }        
+    xTaskCreatePinnedToCore(CheckTimeForAlarmClock,"AlarmClock",2048,NULL,1,&AlarmClockTask,0);
 }
 

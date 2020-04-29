@@ -107,8 +107,9 @@ bool sunrise(byte step = 5)
       addByLimit(strip.GetPixelColor(i).R,step,255), 
       addByLimit(strip.GetPixelColor(i).G,step,255), 
       addByLimit(strip.GetPixelColor(i).B,step,170)));
-    isDone = (strip.GetPixelColor(i) == RgbColor(255,255,170));
+    isDone = (strip.GetPixelColor(i) == RgbColor(252,252,169));
   }
+  Delay(1);//Для стабильности
   strip.Show();
   return isDone;
 }
@@ -117,7 +118,7 @@ bool sunrise(byte step = 5)
 float col=0;
 void Penis()
 {
-  int mask[16][16] = {{0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0},
+    int mask[16][16] = {{0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0},
                      {0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0},
                      {0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0},
                      {0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0},
@@ -134,19 +135,19 @@ void Penis()
                      {0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0},
                      {0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0}};
   
-  if(col > 1)
-  {    
-    col = 0;
-  }
-  col+= 0.004;
-  ClearMatrix();
-  for(int i = 0; i < 16; i++)
-  {
-    for(int j = 0; j < 26;j++)
+    if(col > 1)
+   {    
+      col = 0;
+   }
+    col+= 0.004;
+    ClearMatrix();
+    for(int i = 0; i < 16; i++)
     {
-      strip.SetPixelColor(XY(i,(j + (int)(col/0.004))%15), HsbColor(col,1,mask[15 - i][j%15] / 255));
+      for(int j = 0; j < 26;j++)
+      {
+        strip.SetPixelColor(XY(i,(j + (int)(col/0.004))%15), HsbColor(col,1,mask[15 - i][j%15] / 255));
+      }
     }
-  }
-  strip.Show();
-  Delay(100);
+    strip.Show();
+    Delay(100);
 }

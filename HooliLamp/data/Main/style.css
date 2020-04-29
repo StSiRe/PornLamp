@@ -10,7 +10,6 @@ body {
   }
   .form {
     position: relative;
-    z-index: 1;
     background: #FFFFFF;
     max-width: 360px;
     margin: 0;
@@ -195,4 +194,112 @@ body {
   position: relative;
   top: 5px;
   padding: 5px;
+}
+.alarm{
+  position: relative;
+  background: #FFFFFF;
+  max-width: 360px;
+  height: 80px;
+  margin: 0;
+  padding: 20px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  border-radius: 3.5%;
+}
+/*
+.alarm:hover{
+  transform: scale(1.1);
+}
+Делает дополнительный акцент
+Но кликать не удобно
+(
+*/
+.alarmSelected{
+  position: relative;
+  background: #FFFFFF;
+  
+  max-width: 360px;
+  height: 360px;
+  margin: 0;
+  padding: 20px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  border-radius: 3.5%;
+  transition: all .2s ease-in-out;
+}
+.alarmTime{
+  position: absolute;
+  font-size: 250%;
+  left:20%;
+}
+.alarmDays{
+  position: absolute;;
+  left:20%;
+  top: 70%;
+}
+
+.alarmEditButton{
+  position: relative;
+  top:35%;
+}
+.alarmEditButton:hover{
+  transform: scale(1.1);
+}
+
+.alarmNewButton{
+  position: relative;
+  text-align: center;
+}
+.alarmNewButton:hover{
+  transform: scale(1.1);
+}
+
+.alarmDeleteButton{
+  position: relative;
+  top:0px;
+  text-align: center;  
+}
+.alarmDeleteButton:hover{
+  transform: scale(1.05);
+}
+
+.alarmSaveButton{
+  position: relative;
+  top:120px;
+  text-align: center;
+}
+.alarmSaveButton:hover{
+  transform: scale(1.05);
+}
+.alarmToogleButton{
+  position: absolute;
+  top:35%;
+  left:70%;
+}
+.timePicker{
+  display:flex;
+  align-items:center;
+  margin:0 auto;
+  width:150px;
+  height: 30px;
+  justify-content:space-evenly;
+  border:1px solid #ccc;
+  border-radius:10px;
+  padding:25px;
+}
+.timePicker_Hour,.timePicker_Minute{
+  border:1px solid #ccc;
+  padding:4px 4px ;
+  border-radius:4px;
+  width:25px;
+  text-align:center;
+  font-size:15pt;
+}
+.timePicker_Col{
+  display:flex;
+  flex-direction:column;
+  align-items: inherit;
+}
+.timePicker_Arrow{
+  cursor:pointer;
+  width:15px;
+  height:15px;
 }

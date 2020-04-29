@@ -11,7 +11,7 @@ function CreateAnimationWindow()   {
         CreateBackButton(),
         CreateImage("Animations")
         )));    
-    fragment.appendChild(Separator());
+        fragment.appendChild(Separator());
     fragment.appendChild(    
         CreateWrapper(    
         CreateFormLeft(
@@ -25,9 +25,9 @@ function CreateAnimationWindow()   {
     fragment.appendChild(
         CreateForm(
         CreateWrapper(
-            CreateButtonImage("previous","PreviousAnimation()"),
+            CreateButtonImage("Previous","PreviousAnimation()"),
             CreateSelect("AnimationsList","ChangeAnimation()",null),
-            CreateButtonImage("next","NextAnimation()")
+            CreateButtonImage("Next","NextAnimation()")
         )));
     main.appendChild(fragment);
     LoadDataAnimations();
@@ -79,13 +79,13 @@ function LoadDataAnimations()
             div = document.getElementById("PowerButton");
             if(Brightness > 0)
             {                
-                div.removeChild[0];
+                div.removeChild(div.firstChild);
                 div.appendChild(CreateButtonImageWithID("PowerOn","PowerStateButton()","PowerButton"));
                 PowerState=true;
             }
             else
             {
-                div.removeChild[0];
+                div.removeChild(div.firstChild);
                 div.appendChild(CreateButtonImageWithID("PowerOff","PowerStateButton()","PowerButton"));
                 PowerState = false;
             }

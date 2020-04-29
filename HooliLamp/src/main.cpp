@@ -18,6 +18,7 @@
 #include<System/Alarm/Dawn.h>
 #include<System/Status.h>
 #include<System/DeepSleep.h>
+#include<System/Battery.h>
 
 
 #include<Button/Button.h>
@@ -25,25 +26,32 @@
 String Ssid="Hooli.Lamp",Password="12345678";
 
 void InitLamp()
-{
-  
+{  
   InitMatrix();
-  SetBrightness(64);
-  InitAnimations();
+  SetMaxBrightness(64);
 
   ConfigFS();
   LoadData();
-  SetBrightness(64);
+  
+  
+  InitAnimations();
 
   InitWiFi();
   Delay(500);
   
+  
+  //SetBrightness(64);
   InitTime();
+  
   InitAlarmClock();
   
   InitSystemWD();
 
   InitButton();
+  
+  //InitBattery(true);
+  //SetBrightness(64);
+  SetMaxBrightness(192);
 }
 
 
@@ -52,7 +60,6 @@ void setup()
 {
   Serial.begin(115200);
   InitLamp();
-  OnMatrix();
 }
 
 

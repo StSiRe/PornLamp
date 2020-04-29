@@ -53,7 +53,7 @@ function CreateText(text)   {
     var div = document.createElement("text");
     div.classList.add("text");
     div.innerText = text;
-    return div
+    return div;
 }
 
 function Separator()   {
@@ -61,13 +61,17 @@ function Separator()   {
     return div
 }
 //Получает свой собственный id, и ссылку на обработкик взаимодействия
-function CreateToogleButton(id,onClickHandler) {
+function CreateToogleButton(id,onClickHandler,state) {
     var div = document.createElement("label");
     div.classList.add("switch");
     div.id = id;
     
     var div1 = document.createElement("input");
     div1.type = "checkbox";
+    if(state)
+        div1.checked = true;
+    else
+        div1.checked = false;
     div1.setAttribute("onclick",onClickHandler);
     var div2 = document.createElement("span");
     div2.classList.add("slider","round");
@@ -75,9 +79,27 @@ function CreateToogleButton(id,onClickHandler) {
     div.appendChild(div2);
     return div;
 }
+function AddClass(className,child)
+{
+    var div =  document.createElement("div");
+    div.classList.add(className);
+    div.appendChild(child);
+    return div;
+}
 function CreateForm(...childs) {
     var div = document.createElement("div");
     div.className="form";
+    if(childs != null){
+        for (let index = 0; index < childs.length; index++) {
+            div.appendChild(childs[index]);            
+        }
+    }
+    return div;
+}
+function CreateAlarmForm(id,...childs) {
+    var div = document.createElement("div");
+    div.className="alarm";
+    div.id = id;
     if(childs != null){
         for (let index = 0; index < childs.length; index++) {
             div.appendChild(childs[index]);            

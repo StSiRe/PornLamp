@@ -36,8 +36,8 @@ void PauseAudio()
     //isAudioPaused == true;
     //isEnabled = false;
 }
-//void StopAudio()
-//{
+void StopAudio()
+{
 //    isAudioPaused == true;
 //    mp3_stop();
-//}
+}

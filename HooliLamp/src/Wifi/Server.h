@@ -103,11 +103,11 @@ void AddAnimationHandlers()
         request->send(SPIFFS, "/Main/Images/Brightness.svg");
     });
 
-    server.on("/Images/previous.svg", HTTP_GET, [](AsyncWebServerRequest *request){
-            request->send(SPIFFS, "/Main/Images/previous.svg");
+    server.on("/Images/Previous.svg", HTTP_GET, [](AsyncWebServerRequest *request){
+            request->send(SPIFFS, "/Main/Images/Previous.svg");
         });
-    server.on("/Images/next.svg", HTTP_GET, [](AsyncWebServerRequest *request){
-        request->send(SPIFFS, "/Main/Images/next.svg");
+    server.on("/Images/Next.svg", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/Main/Images/Next.svg");
     });
    
 
