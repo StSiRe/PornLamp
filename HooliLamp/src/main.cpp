@@ -49,7 +49,7 @@ void InitLamp()
 
   InitButton();
   
-  //InitBattery(true);
+  InitBattery(true);
   //SetBrightness(64);
   SetMaxBrightness(192);
 }

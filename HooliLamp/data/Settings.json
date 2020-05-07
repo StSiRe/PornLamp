@@ -4,7 +4,7 @@
 	"ConfigState": true,
 	"UTC": 3,
 	"AlarmClock": [{
-			"Days": ["1"],
+			"Days": ["1","2"],
 			"Hour": 11,
 			"Minute": 20,
 			"Sunrise": 30,

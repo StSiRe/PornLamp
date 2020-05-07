@@ -10,20 +10,79 @@ function CreateAlarmWindow()
     ));
     main.appendChild(Separator());
     main.appendChild(CreateNewAlarmBlock()); 
-    main.appendChild(Separator());
-    main.appendChild(CreateTestAlarm()); 
-    main.appendChild(Separator());
-    main.appendChild(CreateTestAlarm());
     LoadAlarmData();
 }
+//Сохранить все будильники
 function SaveAlarmData()
 {
+    var text = JSON.stringify(alarms);
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('GET', '/Alarm/SaveAll?'+ "SaveAll" + '=' + text, false);
+
+    xhr.send();
+}
+//Сохранить один определенный будильник
+function SaveAlarmData(id)
+{
+    var data = alarms[id]; 
+    data.id = id;   
+    var text = JSON.stringify(data);
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('GET', '/Alarm/Save?'+ "Save" + '=' + text, false);
+
+    xhr.send();
+}
+function SaveButtonClick(id)
+{
+    var div = document.getElementById("AlarmForm:" + id);
+    SaveAlarmData(id);
+    if(div == undefined || div == null) return;
+
+    //-----Чистим предыдущие элементы
+    var counter = div.childNodes.length;
+    for(var i=counter -1;i>= 0;i--){
+        div.removeChild(div.childNodes[i]);
+    }
+    //---Изменяем класс и размер окна
+    div.className = "alarm";
+    var days = alarms[id].Days;//Дни недели
+    var rDays = "";
+    if(days[1] == 1) rDays+= "Пн,";    
+    if(days[2] == 1) rDays+= "Вт,";    
+    if(days[3] == 1) rDays+= "Ср,";    
+    if(days[4] == 1) rDays+= "Чт,";    
+    if(days[5] == 1) rDays+= "Пт,";    
+    if(days[6] == 1) rDays+= "Сб,";    
+    if(days[0] == 1) rDays+= "Вс";
+    var hour = alarms[id].Hour;
+    var minute = alarms[id].Minute;
+    var state = alarms[id].Enabled;
+    div.appendChild(CreateAlarmClock(hour + ":" + minute));
+    div.appendChild(CreateAlarmDays(rDays));
+    div.appendChild(CreateAlarmSettingsImage("MiniSettings","AlarmSettingsClick("+ id +")"));
+    var button = document.createElement("div");
+    button.classList.add("alarmToogleButton");
+    button.appendChild(CreateToogleButton("Alarm:" + id +"Button","StateButtonClick("+ id +")",state));
+    div.appendChild(button);
 
 }
 function DeleteButtonClick(id)
 {
     //В случае если выбранный будильник надо удалить
+    alarms[id] = null;
+    var div = document.getElementById("AlarmForm:"+id);
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('GET', '/Alarm/Delete?'+ "Delete" + '=' + id, false);
+
+    xhr.send();
+    if(div == undefined || div == null) return;
+    div.remove();
 }
+
+//TimePicker Code
 function ArrowUpClick(id,type)
 {
     if(type)
@@ -33,6 +92,7 @@ function ArrowUpClick(id,type)
         if(time < 23) time++;
         else time = 0;
         div.innerText = time;    
+        alarms[id].Hour = time; 
     }
     else
     {
@@ -41,8 +101,11 @@ function ArrowUpClick(id,type)
         if(time < 59) time++;
         else time = 0;
         div.innerText = time;    
+        
+        alarms[id].Minute = time;
     }
 }
+//TimePicker Code
 function ArrowDownClick(id,type)
 {
     if(type)
@@ -51,7 +114,8 @@ function ArrowDownClick(id,type)
         var time = Number(div.innerText);
         if(time > 0) time--;
         else time = 23;
-        div.innerText = time;    
+        div.innerText = time; 
+        alarms[id].Hour = time;   
     }
     else
     {
@@ -60,12 +124,55 @@ function ArrowDownClick(id,type)
         if(time > 0) time--;
         else time = 59;
         div.innerText = time;    
+        alarms[id].Minute = time;
     }
 }
 
-
-
-
+let DayOfWeek = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+function CreateDaysPicker(id,current)
+{
+    var div = document.createElement("div");
+    div.classList.add("dayPicker");
+    var text = document.createElement("div");
+    text.innerText = "Выберите дни:";
+    text.classList.add("dayPicker_instruction");
+    div.appendChild(text);
+    div.appendChild(Separator());  
+    var div1 = document.createElement("div");
+    div1.classList.add("dayPicker_box");
+    for(var i=0;i<7;i++)
+    {
+        var box = document.createElement("div");
+        if(current[i] == 0)
+            box.classList.add("dayPicker_day"); 
+        else                   
+            box.classList.add("dayPicker_day_clicked"); 
+        box.id = "DayPicker_day:"+id+":" + i;
+        box.setAttribute("onclick","DayPicker_dayClick("+id+","+i+")");
+        var element = document.createElement("text");
+        element.classList.add("dayPicker_text");
+        element.innerText = DayOfWeek[i];
+        box.appendChild(element);
+        div1.appendChild(box);
+    }
+    div.appendChild(div1);
+    return div;
+}
+function DayPicker_dayClick(id,i)
+{
+    var div = document.getElementById("DayPicker_day:"+id+":" + i);
+    if(div.className == "dayPicker_day")
+    {
+        alarms[id].Days[i] = 1;
+        div.className = "dayPicker_day_clicked";
+    }
+    else
+    {        
+        alarms[id].Days[i] = 0;
+        div.className = "dayPicker_day";
+    }
+    
+}
 
 function CreateNewAlarmBlock()
 {
@@ -79,7 +186,7 @@ function CreateAlarmSaveButton(id)
     div.appendChild(CreateImage("Save"));
     return div;
 }
-function CreateTimePicker(id)
+function CreateTimePicker(id,hour_t,minute_t)
 {
     var div = document.createElement("div");
     div.classList.add("timePicker");
@@ -87,7 +194,7 @@ function CreateTimePicker(id)
     var box = document.createElement("div");
     var hour = document.createElement("span");
     hour.classList.add("timePicker_Hour");
-    hour.innerText = "00";
+    hour.innerText = hour_t;
     hour.id = "HourPicker:"+ id+ ":Hour";
     var arrowUp = document.createElement("img");
     arrowUp.src = "https://image.flaticon.com/icons/svg/2089/2089643.svg";
@@ -116,7 +223,7 @@ function CreateTimePicker(id)
 
     var min = document.createElement("span");
     min.classList.add("timePicker_Minute");
-    min.innerText = "00";
+    min.innerText = minute_t;
     min.id = "MinutePicker:"+ id+ ":Minute";
     var arrowUp1 = document.createElement("img");
     arrowUp1.src = "https://image.flaticon.com/icons/svg/2089/2089643.svg";
@@ -137,7 +244,21 @@ function CreateTimePicker(id)
 }
 function CreateNewAlarm()
 {
-    alert("ХУнйя");
+    var div = document.getElementById("main");
+    div.appendChild(Separator());
+    var id = alarms.length;
+    div.appendChild(CreateAlarm("0","0",true,alarms.length));
+    var newArr = new Array(id+1);
+    for(var i=0;i<id;i++)
+    newArr[i] = alarms[i];
+    alarms = newArr;
+    //Work when in array has min one element
+    alarms[id] = alarms[id - 1];
+    alarms[id].Hour = 0;
+    alarms[id].Minute =0;
+    alarms[id].Days = [0,0,0,0,0,0,0];
+    alarms[id].Enabled = true;
+    AlarmSettingsClick(id);
 }
 function AlarmSettingsClick(id)
 {
@@ -156,14 +277,40 @@ function AlarmSettingsClick(id)
 
     //---Начинаем добавлять элементы
     div.appendChild(CreateAlarmDeleteButton(id));
-    div.appendChild(CreateTimePicker(id));
+    div.appendChild(CreateTimePicker(id,alarms[id].Hour,alarms[id].Minute));
+    div.appendChild(Separator());
+    div.appendChild(CreateDaysPicker(id,alarms[id].Days));
     div.appendChild(CreateAlarmSaveButton(id));
+}
+function ParseDaysToLogic(day)
+{
+    var result = [0,0,0,0,0,0,0];
+    for(var i=0;i< day.length;i++)
+    {
+        if(day[i] == 0)
+            result[6] = 1;
+        else if(day[i] == 1)
+            result[0] = 1;
+        else if(day[i] == 2)
+            result[1] = 1;
+        else if(day[i] == 3)
+            result[2] = 1;
+        else if(day[i] == 4)
+            result[3] = 1;
+        else if(day[i] == 5)
+            result[4] = 1;
+        else if(day[i] == 6)
+            result[5] = 1;
+        else if(day[i] == "All")
+            result = [1,1,1,1,1,1,1];
+    }
+    return result;
 }
 function StateButtonClick(id)
 {  
     var button = document.getElementById("Alarm:" + id +"Button");
     alarms[id].Enabled = button.control.checked;
-    SendAlarmData();
+    SaveAlarmData(id);
 }
 function CreateAlarm(time,days,enabled,id)
 {
@@ -173,7 +320,7 @@ function CreateAlarm(time,days,enabled,id)
     div.appendChild(CreateAlarmSettingsImage("MiniSettings","AlarmSettingsClick("+ id +")"));
     var button = document.createElement("div");
     button.classList.add("alarmToogleButton");
-    button.appendChild(CreateToogleButton(id+"Button","StateButtonClick("+ id +")",enabled));
+    button.appendChild(CreateToogleButton("Alarm:" + id +"Button","StateButtonClick("+ id +")",enabled));
     div.appendChild(button);
 
     return div;
@@ -210,10 +357,37 @@ function CreateAlarmSettingsImage(path,onClickHandler)  {
     div1.src = "Images/"+ path + ".svg";
     return div1;
 }
-function CreateTestAlarm()
+function ParseDays(day)
 {
-    var div = CreateAlarm("12.55","1234",true,1);
-    return div;
+    var result = "";
+    for(var i=0;i< day.length;i++)
+    {
+        if(day[i] == 0)
+            result+="Вс";
+        else if(day[i] == 1)
+            result+= "Пн";
+        else if(day[i] == 2)
+            result+= "Вт";
+        else if(day[i] == 3)
+            result+= "Ср";
+        else if(day[i] == 4)
+            result+= "Чт";
+        else if(day[i] == 5)
+            result+= "Пт";
+        else if(day[i] == 6)
+            result+= "Сб";
+    }
+
+
+    var res1 = "";
+    for(var i = 0;i < result.length;i++)
+    {
+        if(i!=0)
+            if(i%2 == 0)
+                res1+= ",";
+        res1 +=result[i];
+    }
+    return res1;
 }
 function LoadAlarmData()
 {
@@ -224,7 +398,7 @@ function LoadAlarmData()
             alarms = data.Alarms;
 
             var doc = document.getElementById("main");
-            for(var i =0;i< alarms,length;i++)
+            for(var i =0;i< alarms.length;i++)
             {                
                 var days = alarms[i].Days;//Дни недели
                 var hour = alarms[i].Hour;
@@ -233,9 +407,11 @@ function LoadAlarmData()
                 var repeat = alarms[i].Repeat;
                 var SunriseTime = alarms[i].Sunrise;
                 var music = alarms[i].Music;
-                doc.appendChild(CreateAlarm(hour + ":" + minute,days,state,"Alarm:"+i));
+                
+                doc.appendChild(Separator());
+                doc.appendChild(CreateAlarm(hour + ":" + minute,ParseDays(days),state,i));
+                alarms[i].Days = ParseDaysToLogic(days);
             }
-
         }
     };
     xhr.open('GET', '/Alarm/Data', false);

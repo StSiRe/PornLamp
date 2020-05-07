@@ -263,7 +263,7 @@ body {
 
 .alarmSaveButton{
   position: relative;
-  top:120px;
+  top:60px;
   text-align: center;
 }
 .alarmSaveButton:hover{
@@ -278,6 +278,8 @@ body {
   display:flex;
   align-items:center;
   margin:0 auto;
+  margin-top: 10px;
+  margin-bottom: 5px;
   width:150px;
   height: 30px;
   justify-content:space-evenly;
@@ -302,4 +304,49 @@ body {
   cursor:pointer;
   width:15px;
   height:15px;
+}
+.dayPicker_day{
+  position:relative;
+  width:30px;
+  height:30px;
+  border-radius:50%;  
+  text-align: center;
+}
+.dayPicker_day:hover{
+  transform:scale(1.1);  
+  background: #5181b8;
+}
+.dayPicker_day_clicked{
+  position:relative;
+  width:30px;
+  height:30px;
+  border-radius:50%;  
+  text-align: center;
+  background: #2196F3;
+}
+.dayPicker_day:active{
+  background: #2196F3;
+}
+.dayPicker_instruction{
+  text-align: center;
+}
+.dayPicker_text{
+  position:absolute;
+  text-align: center;
+  left:20%;
+  top:20%;
+}
+.dayPicker_box{
+  display:flex;
+  align-items:center;
+  width:250px;
+  justify-content:space-evenly;
+}
+.dayPicker{
+  position: relative;
+  height: 70px;
+  margin: 0 auto;
+  width: 250px;
+  border:1px solid #ccc;
+  border-radius:10px;
 }

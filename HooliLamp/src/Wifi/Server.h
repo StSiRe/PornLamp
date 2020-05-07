@@ -40,6 +40,22 @@ void AddImagesHandlers()
     server.on("/Images/PowerOff.svg", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/Main/Images/PowerOff.svg");
     });
+    
+    server.on("/Images/Plus.svg", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/Main/Images/Plus.svg");
+    });
+    
+    server.on("/Images/Delete.svg", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/Main/Images/Delete.svg");
+    });
+    
+    server.on("/Images/Save.svg", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/Main/Images/Save.svg");
+    });
+    
+    server.on("/Images/MiniSettings.svg", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/Main/Images/MiniSettings.svg");
+    });
     //js files
     server.on("/Animations.js", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/Main/Animations.js");
@@ -52,6 +68,10 @@ void AddImagesHandlers()
     });
     server.on("/Elements.js", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/Main/Elements.js");
+    });
+    
+    server.on("/Alarm.js", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(SPIFFS, "/Main/Alarm.js");
     });
 }
 void AddAnimationHandlers()
@@ -125,9 +145,79 @@ void AddSoundHandlers()
 {
     
 }
+extern std::vector<AlarmClock> AlarmClocks;
 void AddAlarmHandlers()
-{
+{    
+    server.on("/Alarm/Data", HTTP_GET, [](AsyncWebServerRequest *request){
+        String json= "";
+        DynamicJsonDocument doc(512);
+        JsonArray Alarms = doc.createNestedArray("Alarms");    
+        for(int i=0;i < AlarmClocks.size();i++)
+        {
+            JsonObject alarm = Alarms.createNestedObject();
+            alarm["Hour"]  = AlarmClocks[i].Hour;
+            alarm["Minute"] = AlarmClocks[i].Minute;
+            alarm["Sunrise"] = AlarmClocks[i].Sunrise;
+            alarm["Enabled"] = AlarmClocks[i].Enabled;
+            JsonArray days = alarm.createNestedArray("Days");
+            for(int j=0;j < AlarmClocks[i].Days.size();j++)
+            {
+                days.add(AlarmClocks[i].Days[j]);
+            }       
+        }
+        serializeJson(doc,json);
+        request->send(200,"text/json",json);
+        Serial.println(json);
+    });
 
+
+    server.on("/Alarm/Delete", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(200,"text/html","Ok");
+        String result = "";
+        if (request->hasParam("Delete")) 
+        {
+            result = request->getParam("Delete")->value();
+        }
+        int id = atoi(ToChar(result));
+        AlarmClocks.erase(AlarmClocks.begin() + id);
+    });
+    server.on("/Alarm/SaveAll", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(200,"text/html","Ok");
+        String result = "";
+        if (request->hasParam("SaveAll")) 
+        {
+            result = request->getParam("SaveAll")->value();
+        }
+        Serial.println(result);
+    });
+    server.on("/Alarm/Save", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(200,"text/html","Ok");
+        String result = "";
+        if (request->hasParam("Save")) 
+        {
+            result = request->getParam("Save")->value();
+        }
+        DynamicJsonDocument doc(4096);
+        deserializeJson(doc,result);
+        auto id = doc["id"];        
+        Serial.println(result);
+        SetValue(doc["Hour"],AlarmClocks[id].Hour,0);
+        SetValue(doc["Minute"],AlarmClocks[id].Minute,0);
+        SetValue(doc["Enabled"],AlarmClocks[id].Enabled,false);
+        int days = doc["Days"].size();
+        Serial.println(days);
+        std::vector<String> AlarmDays;
+        for(int j = 0; j < days; j++)
+        {
+            String day = doc["Days"][j];
+            if(j == 6)
+                AlarmDays.push_back("0");
+            if(day == "1" && j!=6)
+                AlarmDays.push_back(String(j+1));
+            Serial.println(day);
+        }
+        AlarmClocks[id].Days = AlarmDays;
+    });
 }
 void AddSettingsHandlers()
 {
