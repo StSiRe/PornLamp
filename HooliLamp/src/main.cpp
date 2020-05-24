@@ -25,6 +25,18 @@
 
 String Ssid="Hooli.Lamp",Password="12345678";
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+uint8_t temprature_sens_read();
+
+#ifdef __cplusplus
+}
+#endif
+
+uint8_t temprature_sens_read();
+
 void InitLamp()
 {  
   InitMatrix();
@@ -49,7 +61,7 @@ void InitLamp()
 
   InitButton();
   
-  InitBattery(true);
+  //InitBattery(true);
   //SetBrightness(64);
   SetMaxBrightness(192);
 }
@@ -65,6 +77,12 @@ void setup()
 
 void loop()
 { 
+  Serial.print("Temperature: ");
+
+  // Convert raw temperature in F to Celsius degrees
+  Serial.print((temprature_sens_read() - 32) / 1.8);
+  Serial.println(" C");
+  Delay(1000);
 }
 
 //ToDO Голубой ветерок! Лава И Змею!

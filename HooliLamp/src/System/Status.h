@@ -27,7 +27,7 @@ void TaskSWD(void *pvParametr)
         timeoutCounterSleep+=10;
         timerSave+=10;
         uint32_t freeRam = ESP.getFreeHeap();
-        
+        Serial.println(ESP.getCpuFreqMHz());
         Write("Current ram free heap:");
         WriteLine(String(freeRam));
         

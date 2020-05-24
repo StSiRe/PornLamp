@@ -3,6 +3,7 @@
 #include<Led/Rainbow.h>
 #include<Led/Sparks.h>
 #include<Led/MatrixAnimation.h>
+#include<Led/Firework.h>
 
 #include<string.h>
 extern const int Height;
@@ -28,6 +29,7 @@ String AnimationModes[]  = {
     "RainbowH",
     "Matrix",
     "Sparks",
+    "Firework",
     "LampWhite"
 };
 void TaskAnimation(void *pvParameter)
@@ -79,6 +81,10 @@ void TaskAnimation(void *pvParameter)
         else if(_currentAnimation == "Penis" || currentAnimationNum == 6)
         {
             Penis();
+        }
+        else if(_currentAnimation == "Firework" || currentAnimationNum == 7)
+        {
+            Firework();
         }
         else if(_currentAnimation == "LampWhite")
         {

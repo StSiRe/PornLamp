@@ -9,6 +9,34 @@ extern int XY(int x,int y);
 extern void ClearMatrixTo(RgbColor color);
 #define BRIGHT_SPEED 0.015
 
+//Full circle 240ms
+void fadeScreen()
+{ 
+    for(int k =0;k<16;k++)
+    {  
+        for(int i=0;i< Width * Height;i++)
+        {
+            int r = strip.GetPixelColor(i).R;
+            int g = strip.GetPixelColor(i).G;
+            int b = strip.GetPixelColor(i).B;
+            if(r >= 40 || g >= 40 || b >= 40) 
+            {
+                if(r>16)
+                r -= 16;
+                if(b>16)
+                b -= 16;
+                if(g>16)
+                g -= 16;
+
+                strip.SetPixelColor(i,RgbColor(r,g,b));
+            }
+            else
+                strip.SetPixelColor(i,RgbColor(0,0,0));
+        }
+        strip.Show();
+        Delay(1);
+    }
+}
   void LampOn()//включение
   {
     for(int i = 0; i < Height; i++)//цикл бегущий по строкам матрицы снизу вверх

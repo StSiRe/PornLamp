@@ -9,7 +9,7 @@ HooliButton::HooliButton(int pin,bool pullup,bool isEnabledDebounce,int core)
     }        
     else
     {
-        pinMode(ButtonPin,INPUT);
+        pinMode(ButtonPin,INPUT_PULLDOWN);
     }        
     HooliButton::isEnabledDebounce = isEnabledDebounce;
 }
