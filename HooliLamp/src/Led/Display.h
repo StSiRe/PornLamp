@@ -2,7 +2,7 @@
 //Общее количество пикселей
 const uint16_t PixelCount = 256;
 //Пин подключения матрицы к мк
-const uint16_t PixelPin = 27;
+const uint16_t PixelPin = 33;
 //Яркость для всей ленты
 int _brightness = 64;
 //Максимальная допустима яркость ленты

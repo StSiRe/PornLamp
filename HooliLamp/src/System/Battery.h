@@ -1,5 +1,5 @@
-#define PowerPin 13
-#define PowerMatrixRelayPin 5
+#define PowerPin 27
+#define PowerMatrixRelayPin 22
 extern void Delay(int milliseconds);
 extern void SetBrightness(int br);
 extern void WriteLine(String text);

@@ -1,5 +1,5 @@
 #include<HooliButton.h>
-#define ButtonPin 14
+#define ButtonPin 25
 
 extern void Delay(int milliseconds);
 extern void WriteLine(String text);
