@@ -1,13 +1,10 @@
-#include<ESPAsyncWebServer.h>
-#include<SPIFFS.h>
-#include <stdlib.h>
+#include<stdlib.h>
 #include<ArduinoJson.h>
 extern void ChangeAnimation(String animationName);
 extern void OnMatrix();
 extern void OffMatrix();
 extern void SetBrightness(int brightness);
 extern int GetMaxBrightness();
-extern char* ToChar(String command);
 extern int GetBrightness();
 extern String AnimationModes[];
 extern String _currentAnimation;
@@ -117,7 +114,7 @@ void AddAnimationHandlers()
         }
         serializeJson(doc,json);
         request->send(200,"text/json",json);
-        Serial.println(json);
+        WriteLine(json);
     });
     server.on("/Images/Brightness.svg", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/Main/Images/Brightness.svg");
@@ -167,7 +164,7 @@ void AddAlarmHandlers()
         }
         serializeJson(doc,json);
         request->send(200,"text/json",json);
-        Serial.println(json);
+        WriteLine(json);
     });
 
 
@@ -188,7 +185,7 @@ void AddAlarmHandlers()
         {
             result = request->getParam("SaveAll")->value();
         }
-        Serial.println(result);
+        WriteLine(result);
     });
     server.on("/Alarm/Save", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(200,"text/html","Ok");
@@ -200,12 +197,12 @@ void AddAlarmHandlers()
         DynamicJsonDocument doc(4096);
         deserializeJson(doc,result);
         auto id = doc["id"];        
-        Serial.println(result);
+        WriteLine(result);
         SetValue(doc["Hour"],AlarmClocks[id].Hour,0);
         SetValue(doc["Minute"],AlarmClocks[id].Minute,0);
         SetValue(doc["Enabled"],AlarmClocks[id].Enabled,false);
         int days = doc["Days"].size();
-        Serial.println(days);
+        WriteLine(days);
         std::vector<String> AlarmDays;
         for(int j = 0; j < days; j++)
         {
@@ -214,7 +211,7 @@ void AddAlarmHandlers()
                 AlarmDays.push_back("0");
             if(day == "1" && j!=6)
                 AlarmDays.push_back(String(j+1));
-            Serial.println(day);
+            WriteLine(day);
         }
         AlarmClocks[id].Days = AlarmDays;
     });
@@ -227,7 +224,7 @@ void ConfigServer()
 {
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/Main/index.html", "text/html");
-        Serial.println(xPortGetCoreID());
+        WriteLine(xPortGetCoreID());
     });
     server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(SPIFFS, "/Main/style.css", "text/css");
@@ -239,4 +236,5 @@ void ConfigServer()
     AddSoundHandlers();
     AddAlarmHandlers();
     server.begin();
+    Log.addLog("Main server was started succesfuly", "Server.h",1);
 }

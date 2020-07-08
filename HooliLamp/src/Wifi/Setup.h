@@ -1,16 +1,7 @@
-#include<WiFi.h>
-#include<SPIFFS.h>
 #include<ESPAsyncWebServer.h>
 AsyncWebServer server(80);
 String _ssid,_password;
 
-extern void WriteLine(String text);
-extern char* ToChar(String command);
-extern bool Debug;
-extern void setWiFiSettings(String ssid,String password);
-extern void Reset();
-extern void Delay(int milliseconds);
-extern void setWiFiConfigState(bool state);
 //Создает точку доступа для первичной настройки
 void CreateAP(String ssid,String password)
 {
@@ -22,10 +13,8 @@ void CreateAP(String ssid,String password)
     WriteLine("AP Configurated");
     WriteLine("AP IP:");
     IPAddress IP = WiFi.softAPIP();
-    if(Debug)
-    {
-        Serial.println(IP);
-    }  
+    WriteLine(IP);
+    Log.addLog("AP created with parametrs (Ssid: " + ssid + ", Password: " + password + ")");
 }
 
 void SaveWiFiSetupData(void *pv)

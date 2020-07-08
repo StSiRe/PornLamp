@@ -1,21 +1,12 @@
 #include<HooliButton.h>
 #define ButtonPin 25
 
-extern void Delay(int milliseconds);
-extern void WriteLine(String text);
 
 HooliButton button(ButtonPin);
 
-
-extern String _currentAnimation;
-extern String AnimationModes[];
-extern int AnimationCount;
-extern bool isAlarmWorking;
-extern void StopAlarm();
-extern void ChangeAnimation(String animationName);
 void Click()
 {
-    Serial.println("Click");
+    WriteLine("Click");
     if(!isAlarmWorking)
     {
         int anim =0;
@@ -39,7 +30,7 @@ void Click()
 
 void DoubleClick()
 {
-    Serial.println("DoubleClick");
+    WriteLine("DoubleClick");
     ChangeAnimation("LampWhite");
 }
 
@@ -50,7 +41,7 @@ extern void OnMatrix();
 bool powerState = false;
 void TripleClick()
 {
-    Serial.println("TripleClick");
+    WriteLine("TripleClick");
     powerState = !powerState;
     if(powerState)
     {        
@@ -69,11 +60,11 @@ bool brighntnessWheel = false;
 int lastCurr = 0;
 void HoldStart()
 {   
-    Serial.println("HoldStart");
+    WriteLine("HoldStart");
     int curr = button.GetPressedMS();
-    Serial.println(curr);
+    WriteLine(curr);
     curr /= 250;
-    Serial.println(curr);
+    WriteLine(curr);
     if(brighntnessWheel)
     {
         SetBrightness(GetBrightness() - curr);
@@ -82,14 +73,14 @@ void HoldStart()
     {
         SetBrightness(GetBrightness() + curr);
     }
-    Serial.println(GetBrightness());
+    WriteLine(GetBrightness());
     lastCurr = curr;
 }
 
 void HoldEnd()
 {
-    Serial.print("HoldEnd: ");
-    Serial.println(button.GetPressedMS());    
+    Write("HoldEnd: ");
+    WriteLine(button.GetPressedMS());    
     brighntnessWheel = !brighntnessWheel;
 }
 

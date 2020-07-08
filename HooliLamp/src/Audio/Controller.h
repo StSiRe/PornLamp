@@ -1,6 +1,4 @@
-#include<SPIFFS.h>
 #include<Audio/mp3.h>
-extern void Delay(int millisecons);
 xTaskHandle AudioControllerTask;
 
 
@@ -22,7 +20,7 @@ void PlayAudio(String path)
     mp3_setup(audioFilePath);
     if(AudioControllerTask != NULL)
         vTaskDelete(AudioControllerTask);
-    isAudioPaused == false;
+    //isAudioPaused == false;
     isEnabled = true;
     xTaskCreatePinnedToCore(Controller,"Audio Controller Task",8192,NULL,3,&AudioControllerTask,1);
 }

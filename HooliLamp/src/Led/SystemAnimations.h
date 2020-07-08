@@ -1,12 +1,3 @@
-#include <NeoPixelBrightnessBus.h>
-extern NeoPixelBrightnessBus<NeoGrbFeature, NeoEsp32I2s1800KbpsMethod> strip;
-extern int XY(int x,int y);
-extern void Delay(int milliseconds);
-extern void ClearMatrix();
-extern const int Height;
-extern const int Width;
-extern int XY(int x,int y);
-extern void ClearMatrixTo(RgbColor color);
 #define BRIGHT_SPEED 0.015
 
 //Full circle 240ms
@@ -132,9 +123,9 @@ bool sunrise(byte step = 5)
   for(int i = 0; i < 256; i++)
   {
     strip.SetPixelColor(i, RgbColor(
-      addByLimit(strip.GetPixelColor(i).R,step,255), 
-      addByLimit(strip.GetPixelColor(i).G,step,255), 
-      addByLimit(strip.GetPixelColor(i).B,step,170)));
+      addByLimit(strip.GetPixelColor(i).R,step,252), 
+      addByLimit(strip.GetPixelColor(i).G,step,252), 
+      addByLimit(strip.GetPixelColor(i).B,step,169)));
     isDone = (strip.GetPixelColor(i) == RgbColor(252,252,169));
   }
   Delay(1);//Для стабильности

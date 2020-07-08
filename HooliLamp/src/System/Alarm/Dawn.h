@@ -1,67 +1,53 @@
 #include<System/Alarm/TimeConverter.h>
 extern std::vector<AlarmClock> AlarmClocks;
-extern void Delay(int milliseconds);
-extern void WriteLine();
-extern void Write();
-extern void SaveData();
-extern tm GetTime();
-extern bool sunrise(byte step);
-extern void SetBrightness(int brightness);
-extern int GetBrightness();
-extern void StopAnimations();
-extern void InitAnimations();
-extern void PlayAudio(String name);
-extern void StopAudio();
 extern void PauseTimeoutTimer();
 extern void ResumeTimeoutTimer();
-void InitAlarmClock();
 void CheckTimeForAlarmClock(void *pc);
-void AddAlarmClock(AlarmClock alarm);
 //Поток будильников
 xTaskHandle AlarmClockTask;
 //Работает ли сейчас будильник
 bool isAlarmWorking = false;
-void StopAlarm();
 
 void Sunrise(tm current,AlarmClock alarm);
 void InitAlarmClock()
 {
-    Serial.println("Initializating Alarm Clock");
-    Serial.print("Alarm Clock count:");    
+    WriteLine("Initializating Alarm Clock");
+    Write("Alarm Clock count:");    
     int alarms = AlarmClocks.size();
-    Serial.println(alarms);
+    WriteLine(alarms);
 
     if(alarms == 0) return;
 
-    Serial.println("Loaded Alarm Clocks:");
+    WriteLine("Loaded Alarm Clocks:");
     for(int i = 0;i < alarms; i++)
     {
-        Serial.print("Alarm Clock №");
-        Serial.println(i);
+        Write("Alarm Clock №");
+        WriteLine(i);
 
-        Serial.print("Time: ");
-        Serial.print(AlarmClocks[i].Hour);
-        Serial.print(":");
-        Serial.println(AlarmClocks[i].Minute);
+        Write("Time: ");
+        Write(AlarmClocks[i].Hour);
+        Write(":");
+        WriteLine(AlarmClocks[i].Minute);
 
-        Serial.print("Enabled: ");
-        Serial.println(AlarmClocks[i].Enabled);
+        Write("Enabled: ");
+        WriteLine(AlarmClocks[i].Enabled);
 
-        Serial.print("Repeat: ");
-        Serial.println(AlarmClocks[i].Repeat);
+        Write("Repeat: ");
+        WriteLine(AlarmClocks[i].Repeat);
 
-        Serial.print("Music: ");
-        Serial.println(AlarmClocks[i].Music);
+        Write("Music: ");
+        WriteLine(AlarmClocks[i].Music);
 
-        Serial.print("Days: ");
+        Write("Days: ");
         for(int j = 0;j < AlarmClocks[i].Days.size(); j++)
         {
-            Serial.print(AlarmClocks[i].Days[j]);
-            Serial.print("; ");
+            Write(AlarmClocks[i].Days[j]);
+            Write("; ");
         }
-        Serial.println("");
+        WriteLine("");
     }
-    Serial.println("Alarm Clock: End of loaded alarm clocks");
+    WriteLine("Alarm Clock: End of loaded alarm clocks");
+    Log.addLog("Alarm Clock initialized", "Dawn.h");
     xTaskCreatePinnedToCore(CheckTimeForAlarmClock,"AlarmClock",2048,NULL,1,&AlarmClockTask,0);
 }
 void CheckTimeForAlarmClock(void *pc)
@@ -72,33 +58,33 @@ void CheckTimeForAlarmClock(void *pc)
         tm time = GetTime();
         for(int i = 0;i < AlarmClocks.size(); i++)
         {
-            Serial.print("Clock #");
-            Serial.println(i);
+            Write("Clock #");
+            WriteLine(i);
             AlarmClock alarm = AlarmClocks[i];
             if(alarm.Enabled)//Проверяем,активирован ли он
             {
                 for(int j = 0; j < alarm.Days.size(); j++)
                 {
                     int day = ConvertDayToInt(alarm.Days[j]);
-                    Serial.println("Day:");
-                    Serial.println(day);
-                    Serial.println(time.tm_wday);
+                    WriteLine("Day:");
+                    WriteLine(day);
+                    WriteLine(time.tm_wday);
                     if(time.tm_wday == day || day == 7)//Если день совпадает
                     {
                         int hm = time.tm_hour*60 + time.tm_min - alarm.Hour* 60 - alarm.Minute;
-                        Serial.println("HM: ");
-                        Serial.println(hm);
+                        WriteLine("HM: ");
+                        WriteLine(hm);
                         if(hm > 0)//Если текущее время больше чем назначенное,то выходим
                             break;
                         hm = -hm;
                         int freeTime = hm - alarm.Sunrise;
-                        Serial.println("FreeTime: ");
-                        Serial.println(freeTime);
+                        WriteLine("FreeTime: ");
+                        WriteLine(freeTime);
                         if(freeTime > 0)
                             break;
 
                         //Вот здесь и начнется рассвет
-                        Serial.println("Sunrise!!!!!");
+                        WriteLine("Sunrise!!!!!");
                         if(!alarm.Used)
                         {
                             AlarmClocks[i].Used = true;
@@ -117,7 +103,7 @@ void Sunrise(tm current,AlarmClock alarm)
     PauseTimeoutTimer();
     Delay(10000); // Делаем задержку для стабильности
     StopAnimations();// Останавилваем отрисовку анимаций
-
+    Log.addLog("AlarmClock started", "Dawn.h");
     while(!sunrise(5))// Приводим экран к необходимому цвету
     {
         Delay(100);
@@ -127,10 +113,9 @@ void Sunrise(tm current,AlarmClock alarm)
     int changeBrt = GetMaxBrightness() - GetBrightness();
     int delayTime = timeToAlarm/2*60 /*time to alarm in seconds*/;//Половина времни до рассвета в секудах
     int brightnessStep =  delayTime / changeBrt;// Изменение яркости за секунду
-    Serial.println(brightnessStep);
-    int timeCounter = 0;
-    Serial.println(delayTime);
-    for(int timeCounter =0;timeCounter < delayTime;timeCounter++)
+    WriteLine(brightnessStep);
+    WriteLine(delayTime);
+    for(int timeCounter = 0; timeCounter < delayTime; timeCounter++)
     {
         Delay(1000);
         SetBrightness(GetBrightness() + brightnessStep);
@@ -149,7 +134,7 @@ void AddAlarmClock(AlarmClock alarm)
 }
 void StopAlarm()
 {
-    Serial.println("Stopping AlarmClock");
+    Log.addLog("AlarmClock stopped", "Dawn.h");
     if(AlarmClockTask)
     {
         vTaskDelete(AlarmClockTask);

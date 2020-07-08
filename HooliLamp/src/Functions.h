@@ -1,79 +1,51 @@
+#ifndef SYSTEM_FUNCTIONS
+#define SYSTEM_FUNCTIONS
 extern void SaveData();
 extern void CloseFS();
-bool Debug = true;
+bool Debug = false;
+
 //Выводит текст в консоль,если отладка разрешена
-void Write(String text)
+template <class T>
+void Write(T data)
 {
-  if(Debug == true)
+  if(Debug)
   {
-    Serial.print(text);
-  }
-}
-void Write(int text)
-{
-  if(Debug == true)
-  {
-    Serial.print(text);
-  }
-}
-void Write(bool text)
-{
-  if(Debug == true)
-  {
-    Serial.print(text);
-  }
-}
-void WriteLine(String text)
-{
-  if(Debug == true)
-  {
-    Serial.println(text);
-  }
-}
-void WriteLine(int text)
-{
-  if(Debug == true)
-  {
-    Serial.println(text);
-  }
-}
-void WriteLine(bool text)
-{
-  if(Debug == true)
-  {
-    Serial.println(text);
-  }
-}
-void WriteLine(size_t text)
-{
-  if(Debug == true)
-  {
-    Serial.println(text);
+    Serial.print(data);
   }
 }
 
-char* ToChar(String command){
+template <class T>
+void WriteLine(T text)
+{
+  if(Debug)
+  {
+    Serial.println(text);
+  }
+}
+//преобразование string -> char
+char* ToChar(String command)
+{
     if(command.length()!=0){
         char *p = const_cast<char*>(command.c_str());
         return p;
     }
-    return NULL;
+    return nullptr;
 }
 
-//Ожидание в некоторое время
+//Ожидание некоторое время
 //Used vTaskDelay()
 void Delay(int milliseconds)
 {
   vTaskDelay(milliseconds/portTICK_PERIOD_MS);
 }
 
-//Reboot with animation and saving data
+//Перезагрузак с сохранением данных
 void Reset()
 {
-  WriteLine("Functions:Starting reboot procedure");
+  Log.addLog("Starting reboot procedure","Functions.h");
   SaveData();
   CloseFS();
   Delay(1000);
   ESP.restart();
 }
-
+#endif

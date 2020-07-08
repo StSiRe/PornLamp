@@ -1,7 +1,5 @@
 #include<SPIFFS.h>
 
-extern void WriteLine(String text);
-
 //Инициализирует файловое хранилище,и если не получается - пытается починить
 void ConfigFS()
 {
@@ -9,12 +7,12 @@ void ConfigFS()
     bool tmp = SPIFFS.begin();
     if (tmp)
     {
-        WriteLine("FileSystem is mounted without errors");
+        Log.addLog("FileSystem is mounted succesfuly", "FileSys.h", 1);
         float percentage  = (float)SPIFFS.usedBytes()/(float)SPIFFS.totalBytes()*100;
         WriteLine(String(percentage)+ " Free space");
         return;
     }
-    WriteLine("FileSystem is mounted with error");
+    Log.addLog("FileSystem is mounted with error", "FileSys.h",-1);
     WriteLine("System will be try repair FS");
     SPIFFS.format();
     WriteLine("FS formatted");
@@ -26,5 +24,5 @@ void CloseFS()
 {
     WriteLine("Closing FS");
     SPIFFS.end();
-    WriteLine("FS is closed");
+    Log.addLog("FS is closed", "FileSys.h");
 }

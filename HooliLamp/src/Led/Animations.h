@@ -4,15 +4,9 @@
 #include<Led/Sparks.h>
 #include<Led/MatrixAnimation.h>
 #include<Led/Firework.h>
-
 #include<string.h>
-extern const int Height;
-extern const int Width;
-extern int XY(int x,int y);
 
 extern void ClearTimeoutTimer();
-extern void WriteLine(String text);
-extern void Delay(int milliseconds);
 extern void SetBrightness(int brightness);
 extern int GetBrightness();
 
@@ -120,7 +114,7 @@ void InitAnimations()
 {
     WriteLine("Animations is initializing....");
     xTaskCreatePinnedToCore(TaskAnimation,"Animation",8192,NULL,100,&Animation,1);
-    WriteLine("Animation Task was initializated.");
+    Log.addLog("Animation Task was initializated succesfuly", "Animations.h", 1);
 }
 
 //Удаляет поток анимаций.После этого требуется заново проинициализировать анимации
@@ -128,7 +122,7 @@ void StopAnimations()
 {
     if(Animation!= NULL)
     {        
-        WriteLine("Warning: Stopping animations");
+        Log.addLog("Animation Task was stopped", "Animations.h");
         vTaskDelete(Animation);
     }
 }

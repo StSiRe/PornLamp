@@ -1,14 +1,8 @@
-#include<Esp.h>
-#include<string.h>
 
 extern void InitDeepSleep();
-extern void WriteLine(String text);
-extern void Write(String text);
-extern void Delay(int milliseconds);
 extern int GetTimeout();
 void TaskSWD(void *pvParametr);
 xTaskHandle wdHandle;
-extern void SaveData();
 //System WatchDog следит за памятью,и выводит ее состояние в консоль
 void InitSystemWD()
 {
@@ -27,9 +21,9 @@ void TaskSWD(void *pvParametr)
         timeoutCounterSleep+=10;
         timerSave+=10;
         uint32_t freeRam = ESP.getFreeHeap();
-        Serial.println(ESP.getCpuFreqMHz());
+        WriteLine(ESP.getCpuFreqMHz());
         Write("Current ram free heap:");
-        WriteLine(String(freeRam));
+        WriteLine(freeRam);
         
         WriteLine("Current time without upd:" + timerSave);
         if(timeoutCounterSleep > GetTimeout())

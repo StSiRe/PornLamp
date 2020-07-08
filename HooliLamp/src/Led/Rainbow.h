@@ -1,7 +1,3 @@
-#include <NeoPixelBrightnessBus.h>
-extern NeoPixelBrightnessBus<NeoGrbFeature, NeoEsp32I2s1800KbpsMethod> strip;
-extern int XY(int x,int y);
-extern void Delay(int milliseconds);
 RgbColor Wheel(uint8_t WheelPos) 
 {
   WheelPos = 255 - WheelPos;

@@ -1,9 +1,3 @@
-#include <NeoPixelBrightnessBus.h>
-extern NeoPixelBrightnessBus<NeoGrbFeature, NeoEsp32I2s1800KbpsMethod> strip;
-//extern int XY(int x,int y);
-extern void Delay(int milliseconds);
-extern const int Height;
-extern const int Width;
 int ledCount= Height*Width;
 const int lines = 16;
 //200 - красивый синий 256(нежный голубой с зелеными угольками)

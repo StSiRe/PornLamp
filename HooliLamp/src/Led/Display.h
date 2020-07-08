@@ -43,6 +43,7 @@ void InitMatrix()
   strip.Begin();
   strip.SetBrightness(_brightness);
   strip.Show();  
+  Log.addLog("Matrix was initialized succesfuly", "Display.h",1);
 }
 int CheckNewBrightness(int brightness)
 {  
@@ -82,7 +83,7 @@ int GetBrightness()
 }
 
 //Очищает экран заливая его указанным цветом
-void CrearMatrixTo(RgbColor color)
+void ClearMatrixTo(RgbColor color)
 {
   for(int i = 0; i < Height * Width; ++i)
   {
@@ -94,5 +95,5 @@ void CrearMatrixTo(RgbColor color)
 //Очистить экран(на черный цвет)
 void ClearMatrix()
 {
-  CrearMatrixTo(RgbColor(0,0,0));
+  ClearMatrixTo(RgbColor(0,0,0));
 }

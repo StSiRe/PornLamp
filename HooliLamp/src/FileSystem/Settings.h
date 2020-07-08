@@ -1,10 +1,8 @@
-#include<SPIFFS.h>
 #include<ArduinoJson.h>
 #include<System/Alarm/AlarmClock.h>
 #include<FileSystem/FuncFS.h>
 #include<FileSystem/Settings/Timeout.h>
 #include<FileSystem/Settings/UTC.h>
-extern void WriteLine(String text);
 //-------WiFI--------
 extern String Ssid,Password;
 bool ConfigState = false;
@@ -21,7 +19,7 @@ void LoadData()
 {
     if(!SPIFFS.exists("/Settings.json"))
     {
-        WriteLine("File not exists.System`ll create new file");
+        Log.addLog("File not exists.System`ll create new settings file", "Settings.h");
         File set = SPIFFS.open("/Settings.json","w");
         set.print("");
         WriteLine("File created");
@@ -30,13 +28,13 @@ void LoadData()
     File settings = SPIFFS.open("/Settings.json");
     if(!settings)
     {
-        WriteLine("System can`t open settings file");
+        Log.addLog("System can`t open settings file", "Settings.h", -1);
         return;
     }
 
     size_t size =  settings.size();
     if(size > 1024) {
-        WriteLine("File is so big"); 
+        Log.addLog("Settings file is too big", "Settings.h", -1); 
         return;
     }
 
@@ -47,7 +45,7 @@ void LoadData()
     if(error)
     {
         WriteLine("Have problem with ");
-        Serial.println(error.c_str());
+        WriteLine(error.c_str());
     }
 
     SetValue(doc["ConfigState"],ConfigState,false);
@@ -95,7 +93,7 @@ void LoadData()
         AlarmClocks.push_back(alarm);
     }
     //---------------------------------------
-
+    Log.addLog("All data was succesfuly uploaded", "Settings.h",1);
 
 }
 
@@ -115,6 +113,7 @@ void setWiFiConfigState(bool state)
 }
 void setWiFiSettings(String ssid,String password)
 {
+    Log.addLog("WiFi settings was changed", "Settings.h");
     Ssid = ssid;
     Password = password;
 }
@@ -159,7 +158,7 @@ void SaveData()
     serializeJson(doc,json);
     if(settings.print(json))
     {
-        WriteLine("Success saving data!");
+        Log.addLog("Success saving data!", "Settings.h");
     }
     WriteLine(settings.readString());
     WriteLine(json);
