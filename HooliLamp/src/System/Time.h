@@ -31,15 +31,12 @@ bool InitTime()
 {
     if(!getWiFiConfigState())
     {
-      WriteLine("WiFi not connected....");
       Log.addLog("Time can`t be install", "Time.h",-1);
       // WriteLine("WiFi not connected....");
       // WriteLine("Time can`t be install");
       return false;
     }
     configTime(3600*GetUTC(),0, ntpServer);
-    WriteLine("NTP configurated.Updating time...");
-    //WriteLine("NTP configurated.Updating time...");
     printLocalTime();
     Delay(10);
     Log.addLog("Time was configurated succesfuly", "Time.h",1);
