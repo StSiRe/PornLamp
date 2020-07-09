@@ -52,7 +52,7 @@ void HooliButton::Tick()
             }
             if(counter == 3)
             {
-                Serial.println("Trip");
+                //Serial.println("Trip");
                 if(tripleClickFunc)
                 {
                     tripleClickFunc();
@@ -71,8 +71,8 @@ void HooliButton::Tick()
         //if(pressTime < debounceMS)//Очен спорная хуйня,но делать нечего до 30 числа - Даже не купить новый датчик
         //    return;
         counter++;
-        Serial.println("Button unholded");
-        Serial.println(pressTime);
+        //Serial.println("Button unholded");
+        //Serial.println(pressTime);
         //pressStart = 0;
         //pressStop = 0;
         if(pressTime > pressMS)

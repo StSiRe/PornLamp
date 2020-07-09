@@ -79,7 +79,7 @@ void setup()
 
 void loop()
 { 
-  Log.addLog("Temperature: " + (String)((temprature_sens_read() - 32) / 1.8) + " C", "main.cpp");
+  WriteLine("Temperature: " + (String)((temprature_sens_read() - 32) / 1.8) + " C");
   Delay(1000);
 }
 
