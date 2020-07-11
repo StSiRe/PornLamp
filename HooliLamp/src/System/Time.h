@@ -42,6 +42,7 @@ bool InitTime()
     //WriteLine("NTP configurated.Updating time...");
     printLocalTime();
     Delay(10);
+    Log.updateTime();
     Log.addLog("Time was configurated succesfuly", "Time.h",1);
     return true;
 }

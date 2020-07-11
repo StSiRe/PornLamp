@@ -11,20 +11,21 @@ class LogHandler
 {
     friend void LogNode::print();
 public:
-    LogHandler(bool debugMode);
+    LogHandler(bool debugMode); // ctor с возможностью запрета печати 
     
     void addLog(String action, String source, int state = 0);
     void addLog(String action, int state = 0);
 
+    void updateTime(); // синхронизация времени ESP и библиотеки
+
 private:
-    std::queue<LogNode> logsList;
-    unsigned int queueSize;
+    std::queue<LogNode> logsList; // очередь логов
+    unsigned int queueSize; // подсчет кол-ва логов
     
     bool _debug;
     
     // For time counting
-    tm timeInfo;
-    Clock start;
+    unsigned long timeOffset; // добавочное значение 
 };
 
 #endif

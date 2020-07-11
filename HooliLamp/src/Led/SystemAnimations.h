@@ -1,4 +1,4 @@
-#define BRIGHT_SPEED 0.015
+#define BRIGHT_SPEED 0.03
 
 //Full circle 240ms
 void fadeScreen()
@@ -90,7 +90,7 @@ void WiFiConnectionSuccess()//green space expending to center 7580ms
 {
   for(int i = 0; i < Width/2; i++)
   {
-    for(float bright = 0; bright < 1; bright += BRIGHT_SPEED)
+    for(float bright = 0; bright < 1; bright *= BRIGHT_SPEED)
     {
       for(int j = 0; j < Height; j++)
       {
